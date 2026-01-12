@@ -1,16 +1,21 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import Navbar from "./components/layout/Navbar.jsx";
+import Hero from "./sections/Hero.jsx";
+import About from "./sections/About.jsx";
+import Skills from "./sections/Skills.jsx";
+import Projects from "./sections/Projects.jsx";
+import Contact from "./sections/Contact.jsx";
 
 function App() {
-  const [count, setCount] = useState(0)
-
   return (
     <>
-      <h1>Dinesh Portflio App</h1>
+      <Navbar />
+      <Hero />
+      <About />
+      <Skills />
+      <Projects />
+      <Contact />
     </>
-  )
+  );
 }
 
-export default App
+export default App;
