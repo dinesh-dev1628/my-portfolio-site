@@ -1,14 +1,21 @@
 import { AppBar, Toolbar, Typography, Button, Box, Container } from "@mui/material";
+import { Description } from "@mui/icons-material"; // Added for a modern look
 
 const Navbar = () => {
   const scrollToSection = (id) => {
     const element = document.getElementById(id);
     if (!element) return;
 
-    const yOffset = -80; // Adjusted for the floating navbar gap
+    const yOffset = -80; 
     const y = element.getBoundingClientRect().top + window.pageYOffset + yOffset;
 
     window.scrollTo({ top: y, behavior: "smooth" });
+  };
+
+  // Function to open Resume
+  const handleResumeClick = () => {
+    // Replace the string below with your actual Google Drive or Dropbox link
+    window.open("https://dineshofficial28.github.io/my_resume/", "_blank");
   };
 
   const navItems = ["About", "Skills", "Projects", "Contact"];
@@ -18,16 +25,16 @@ const Navbar = () => {
       position="fixed"
       elevation={0}
       sx={{
-        background: "transparent", // Background starts transparent
-        pt: 2, // Gives it a "floating" look
+        background: "transparent",
+        pt: 2,
       }}
     >
       <Container maxWidth="lg">
         <Toolbar
           sx={{
-            borderRadius: "50px", // Capsule shape
-            backgroundColor: "rgba(15, 23, 42, 0.8)", // Dark slate with transparency
-            backdropFilter: "blur(12px)", // Glassmorphism
+            borderRadius: "50px",
+            backgroundColor: "rgba(15, 23, 42, 0.8)",
+            backdropFilter: "blur(12px)",
             border: "1px solid rgba(255, 255, 255, 0.1)",
             px: { xs: 2, sm: 4 },
             display: "flex",
@@ -74,25 +81,29 @@ const Navbar = () => {
             ))}
           </Box>
 
-          {/* Mobile "Let's Talk" Button or Icon */}
+          {/* Updated Resume Button */}
           <Button
             variant="contained"
             size="small"
-            onClick={() => scrollToSection("contact")}
+            startIcon={<Description />} // Modern Resume Icon
+            onClick={handleResumeClick}
             sx={{
               display: { xs: "none", sm: "inline-flex" },
               borderRadius: "20px",
               textTransform: "none",
               fontWeight: 600,
+              px: 3,
               background: "linear-gradient(90deg, #3b82f6, #8b5cf6)",
+              boxShadow: "0 4px 15px rgba(59, 130, 246, 0.4)",
               "&:hover": {
                 opacity: 0.9,
-                transform: "translateY(-1px)",
+                transform: "translateY(-2px)",
+                boxShadow: "0 6px 20px rgba(59, 130, 246, 0.6)",
               },
-              transition: "all 0.2s",
+              transition: "all 0.3s",
             }}
           >
-            Hire Me
+            See Resume
           </Button>
         </Toolbar>
       </Container>
