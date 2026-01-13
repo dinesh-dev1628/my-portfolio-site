@@ -18,7 +18,7 @@ const projects = [
 
 const Projects = () => {
   return (
-    <Box id="projects" sx={{ py: 20, backgroundColor: "#020617" }}>
+    <Box className="project-card" id="projects" sx={{ py: 20, backgroundColor: "#020617" }}>
       <Container maxWidth="lg">
         {/* Section Header */}
         <Box sx={{ mb: 10, borderLeft: "4px solid #3b82f6", pl: 3 }}>

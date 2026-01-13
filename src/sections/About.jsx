@@ -18,22 +18,6 @@ const About = () => {
           <Grid item xs={12} md={4}>
             <Box sx={{ position: "sticky", top: "100px" }}>
               <Typography
-                variant="h2"
-                fontWeight={900}
-                sx={{
-                  color: "rgba(255, 255, 255, 0.05)", // Ghost text effect
-                  lineHeight: 0.8,
-                  fontSize: "6rem",
-                  position: "absolute",
-                  top: -40,
-                  left: -10,
-                  zIndex: 0,
-                  userSelect: "none",
-                }}
-              >
-                01
-              </Typography>
-              <Typography
                 variant="h3"
                 fontWeight={800}
                 sx={{

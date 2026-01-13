@@ -11,17 +11,19 @@ const Hero = () => {
         justifyContent: "center",
         position: "relative",
         overflow: "hidden",
-        backgroundColor: "#020617", // Matches your other sections
+        backgroundColor: "#020617",
+        // Added padding for mobile to prevent content touching edges
+        px: { xs: 2, sm: 0 },
       }}
     >
-      {/* Background Glow Orbs */}
+      {/* Background Glow Orbs - Made sizes relative to viewport for better scaling */}
       <Box
         sx={{
           position: "absolute",
           top: "20%",
           left: "10%",
-          width: "300px",
-          height: "300px",
+          width: { xs: "200px", md: "300px" },
+          height: { xs: "200px", md: "300px" },
           background: "radial-gradient(circle, rgba(59, 130, 246, 0.15) 0%, transparent 70%)",
           filter: "blur(50px)",
           zIndex: 0,
@@ -32,8 +34,8 @@ const Hero = () => {
           position: "absolute",
           bottom: "20%",
           right: "10%",
-          width: "350px",
-          height: "350px",
+          width: { xs: "250px", md: "350px" },
+          height: { xs: "250px", md: "350px" },
           background: "radial-gradient(circle, rgba(168, 85, 247, 0.15) 0%, transparent 70%)",
           filter: "blur(60px)",
           zIndex: 0,
@@ -53,7 +55,7 @@ const Hero = () => {
               borderRadius: "50px",
               backgroundColor: "rgba(255, 255, 255, 0.05)",
               border: "1px solid rgba(255, 255, 255, 0.1)",
-              mb: 4,
+              mb: { xs: 3, md: 4 }, // Reduced margin for mobile
             }}
           >
             <Box
@@ -70,16 +72,16 @@ const Hero = () => {
             </Typography>
           </Box>
 
-          {/* Main Title */}
+          {/* Main Title - Responsive sizes */}
           <Typography
             variant="h1"
             sx={{
-              fontSize: { xs: "3rem", md: "5rem" },
+              fontSize: { xs: "2.5rem", sm: "4rem", md: "5rem" }, // Fluid typography
               fontWeight: 800,
-              lineHeight: 1.1,
+              lineHeight: { xs: 1.2, md: 1.1 },
               mb: 3,
               color: "#fff",
-              letterSpacing: -2,
+              letterSpacing: { xs: -1, md: -2 },
             }}
           >
             Hi, I’m{" "}
@@ -94,12 +96,12 @@ const Hero = () => {
             </span>
           </Typography>
 
-          {/* Subtitle */}
+          {/* Subtitle - Responsive width and font */}
           <Typography
             sx={{
-              fontSize: { xs: "1.1rem", md: "1.5rem" },
+              fontSize: { xs: "1rem", md: "1.5rem" },
               color: "#94a3b8",
-              maxWidth: "600px",
+              maxWidth: { xs: "100%", md: "600px" },
               mx: "auto",
               mb: 5,
               fontWeight: 300,
@@ -110,10 +112,19 @@ const Hero = () => {
             and <span style={{ color: "#fff", fontWeight: 500 }}>Automation</span> workflows with React & Python.
           </Typography>
 
-          {/* Buttons */}
-          <Box sx={{ display: "flex", gap: 2, justifyContent: "center" }}>
+          {/* Buttons - Stack on mobile, Row on desktop */}
+          <Box 
+            sx={{ 
+              display: "flex", 
+              flexDirection: { xs: "column", sm: "row" }, // Key responsive change
+              gap: 2, 
+              justifyContent: "center",
+              alignItems: "center"
+            }}
+          >
             <Button
               variant="contained"
+              fullWidth={{ xs: true, sm: false }} // Full width only on mobile
               onClick={() => document.getElementById("projects").scrollIntoView({ behavior: "smooth" })}
               sx={{
                 px: 4,
@@ -132,6 +143,7 @@ const Hero = () => {
             </Button>
             <Button
               variant="outlined"
+              fullWidth={{ xs: true, sm: false }} // Full width only on mobile
               onClick={() => document.getElementById("contact").scrollIntoView({ behavior: "smooth" })}
               sx={{
                 px: 4,
@@ -152,7 +164,7 @@ const Hero = () => {
         </Box>
       </Container>
 
-      {/* Scroll Down Indicator */}
+      {/* Scroll Down Indicator - Hidden on extra small mobile to save space */}
       <Box
         sx={{
           position: "absolute",
@@ -160,6 +172,7 @@ const Hero = () => {
           left: "50%",
           transform: "translateX(-50%)",
           color: "rgba(255,255,255,0.3)",
+          display: { xs: "none", sm: "block" }, // Only show on tablets/desktop
           animation: "bounce 2s infinite",
           "@keyframes bounce": {
             "0%, 20%, 50%, 80%, 100%": { transform: "translateX(-50%) translateY(0)" },
