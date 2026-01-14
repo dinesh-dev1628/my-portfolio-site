@@ -1,137 +1,153 @@
-import { Box, Typography, Container, Grid, Button } from "@mui/material";
-import { ArrowForward, GitHub, Launch } from "@mui/icons-material";
-
-const projects = [
-  {
-    title: "AI Automation Suite",
-    desc: "A full-stack automation tool using Python and FastAPI to streamline workflow tasks.",
-    tech: ["Python", "Docker", "FastAPI"],
-    color: "#60a5fa",
-  },
-  {
-    title: "Modern React Dashboard",
-    desc: "A clean, high-performance UI kit built with React and Material UI for data visualization.",
-    tech: ["React", "MUI", "Chart.js"],
-    color: "#a855f7",
-  },
-];
+import React from "react";
+import { Box, Typography, Container, Grid, Button, Stack, Chip, IconButton } from "@mui/material";
+import { GitHub, Launch, LockClock, AutoGraph, TrendingUp } from "@mui/icons-material";
+import { motion, useScroll, useTransform } from "framer-motion";
 
 const Projects = () => {
+  const { scrollYProgress } = useScroll();
+  const xMove = useTransform(scrollYProgress, [0, 1], [0, -600]);
+
+  // GitHub Link Variable
+  const githubRepo = "https://github.com/dinesh-dev1628/expense_tracker_app";
+
   return (
-    <Box className="project-card" id="projects" sx={{ py: 20, backgroundColor: "#020617" }}>
-      <Container maxWidth="lg">
-        {/* Section Header */}
-        <Box sx={{ mb: 10, borderLeft: "4px solid #3b82f6", pl: 3 }}>
-          <Typography variant="overline" sx={{ color: "#94a3b8", fontWeight: 600, letterSpacing: 2 }}>
-            SELECTED WORKS
-          </Typography>
-          <Typography variant="h3" fontWeight={800} sx={{ color: "#fff", mt: 1 }}>
-            Building digital <span style={{ color: "#3b82f6" }}>solutions.</span>
-          </Typography>
+    <Box 
+      id="projects" 
+      sx={{ 
+        py: { xs: 8, md: 15 }, 
+        backgroundColor: "#020617", 
+        position: "relative", 
+        overflow: "hidden" 
+      }}
+    >
+      {/* ANIMATED BACKGROUND TEXT */}
+      <motion.div style={{ x: xMove, whiteSpace: "nowrap", position: "absolute", top: "10%", left: 0, zIndex: 0 }}>
+        <Typography
+          sx={{
+            fontSize: { xs: "5rem", md: "12rem" },
+            fontWeight: 900,
+            color: "rgba(255, 255, 255, 0.02)",
+            letterSpacing: 10,
+            userSelect: "none"
+          }}
+        >
+          SELECTED WORKS SELECTED WORKS SELECTED WORKS
+        </Typography>
+      </motion.div>
+
+      <Container maxWidth="lg" sx={{ position: "relative", zIndex: 1 }}>
+        
+        {/* SECTION HEADER */}
+        <Box sx={{ mb: 8 }}>
+          <motion.div
+            initial={{ opacity: 0, x: -20 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.6 }}
+          >
+            <Stack direction="row" alignItems="center" spacing={2}>
+              <Box sx={{ width: 40, height: 2, bgcolor: "#3b82f6" }} />
+              <Typography variant="overline" sx={{ color: "#3b82f6", fontWeight: 900, letterSpacing: 3 }}>
+                PORTFOLIO
+              </Typography>
+            </Stack>
+            <Typography variant="h2" sx={{ color: "#fff", fontWeight: 900, mt: 1, fontSize: { xs: "2rem", md: "3.5rem" } }}>
+              Proven <span style={{ color: "#3b82f6" }}>Solutions.</span>
+            </Typography>
+          </motion.div>
         </Box>
 
-        <Grid container spacing={6}>
-          {projects.map((project, index) => (
-            <Grid item xs={12} md={index === 0 ? 7 : 5} key={index}>
+        <Grid container spacing={3}>
+          {/* FEATURED PROJECT: EXPENSE TRACKER */}
+          <Grid item xs={12} md={7}>
+            <motion.div
+              whileHover={{ y: -10, scale: 1.01 }}
+              transition={{ type: "spring", stiffness: 300 }}
+            >
               <Box
                 sx={{
                   position: "relative",
-                  borderRadius: 6,
-                  overflow: "hidden",
-                  height: "400px",
-                  backgroundColor: "rgba(255,255,255,0.03)",
-                  border: "1px solid rgba(255,255,255,0.05)",
-                  transition: "all 0.5s cubic-bezier(0.4, 0, 0.2, 1)",
+                  borderRadius: "24px",
+                  p: { xs: 4, md: 5 },
+                  height: "450px",
+                  background: "linear-gradient(135deg, #064e3b 0%, #020617 100%)",
+                  border: "1px solid rgba(16, 185, 129, 0.2)",
                   display: "flex",
                   flexDirection: "column",
-                  justifyContent: "flex-end",
-                  p: 4,
-                  "&:hover": {
-                    transform: "scale(0.98)",
-                    borderColor: project.color,
-                  },
-                  "&:hover .project-content": {
-                    transform: "translateY(0)",
-                  },
+                  justifyContent: "space-between",
+                  overflow: "hidden",
+                  boxShadow: "0 20px 40px rgba(0,0,0,0.4)",
+                  cursor: "pointer"
+                }}
+                onClick={() => window.open(githubRepo, "_blank")}
+              >
+                <Box sx={{ zIndex: 2 }}>
+                  <Stack direction="row" justifyContent="space-between" alignItems="flex-start">
+                    <Box sx={{ p: 1.5, bgcolor: "rgba(16, 185, 129, 0.1)", borderRadius: "12px", color: "#10b981" }}>
+                      <TrendingUp fontSize="large" />
+                    </Box>
+                    <IconButton 
+                      href={githubRepo} 
+                      target="_blank"
+                      onClick={(e) => e.stopPropagation()} // Prevents double-triggering card click
+                      sx={{ color: "rgba(255,255,255,0.3)", "&:hover": { color: "#fff" } }}
+                    >
+                      <GitHub />
+                    </IconButton>
+                  </Stack>
+                  
+                  <Typography variant="h3" sx={{ color: "#fff", fontWeight: 900, mt: 3, mb: 1, fontSize: "2.2rem" }}>
+                    Expense Tracker
+                  </Typography>
+                  <Typography sx={{ color: "#94a3b8", fontSize: "1rem", maxWidth: "380px", lineHeight: 1.7 }}>
+                    Precision-built Python core for automated finance management. 
+                    Real-time PostgreSQL analytics wrapped in a minimalist logic layer.
+                  </Typography>
+                </Box>
+
+                <Stack direction="row" spacing={1.5} alignItems="center" sx={{ zIndex: 2 }}>
+                  <Chip label="Python" size="small" sx={{ bgcolor: "rgba(16, 185, 129, 0.2)", color: "#10b981", fontWeight: 700 }} />
+                  <Chip label="PostgreSQL" size="small" sx={{ bgcolor: "rgba(255,255,255,0.05)", color: "#94a3b8" }} />
+                  <Button 
+                    variant="contained" 
+                    size="small" 
+                    href={githubRepo}
+                    target="_blank"
+                    onClick={(e) => e.stopPropagation()}
+                    endIcon={<Launch />}
+                    sx={{ ml: "auto", bgcolor: "#10b981", borderRadius: "8px", fontWeight: 700, px: 3 }}
+                  >
+                    Source Code
+                  </Button>
+                </Stack>
+
+                <AutoGraph sx={{ position: "absolute", bottom: -20, right: -20, fontSize: "18rem", color: "#10b981", opacity: 0.03 }} />
+              </Box>
+            </motion.div>
+          </Grid>
+
+          {/* COMING SOON CARD */}
+          <Grid item xs={12} md={5}>
+            <motion.div whileHover={{ scale: 0.98 }} transition={{ type: "spring", stiffness: 300 }}>
+              <Box
+                sx={{
+                  borderRadius: "24px", p: 4, height: "450px", display: "flex", flexDirection: "column",
+                  alignItems: "center", justifyContent: "center", textAlign: "center",
+                  backgroundColor: "rgba(255,255,255,0.01)", border: "1px dashed rgba(59, 130, 246, 0.2)",
+                  backdropFilter: "blur(12px)",
                 }}
               >
-                {/* Image Placeholder / Gradient Overlay */}
-                <Box
-                  sx={{
-                    position: "absolute",
-                    top: 0,
-                    left: 0,
-                    right: 0,
-                    bottom: 0,
-                    background: `linear-gradient(180deg, transparent 0%, ${project.color}22 100%)`,
-                    zIndex: 1,
-                  }}
-                />
-
-                {/* Content */}
-                <Box className="project-content" sx={{ position: "relative", zIndex: 2, transition: "0.4s" }}>
-                  <Box sx={{ display: "flex", gap: 1, mb: 2 }}>
-                    {project.tech.map((t) => (
-                      <Typography
-                        key={t}
-                        variant="caption"
-                        sx={{
-                          color: project.color,
-                          backgroundColor: `${project.color}15`,
-                          px: 1.5,
-                          py: 0.5,
-                          borderRadius: 1,
-                          fontWeight: 700,
-                        }}
-                      >
-                        {t}
-                      </Typography>
-                    ))}
-                  </Box>
-                  <Typography variant="h4" fontWeight={800} sx={{ color: "#fff", mb: 2 }}>
-                    {project.title}
-                  </Typography>
-                  <Typography sx={{ color: "#cbd5e1", mb: 3, maxWidth: "400px" }}>
-                    {project.desc}
-                  </Typography>
-                  
-                  <Box sx={{ display: "flex", gap: 2 }}>
-                    <Button
-                      startIcon={<Launch />}
-                      sx={{ color: "#fff", textTransform: "none", fontWeight: 600 }}
-                    >
-                      Live Demo
-                    </Button>
-                    <Button
-                      startIcon={<GitHub />}
-                      sx={{ color: "rgba(255,255,255,0.5)", textTransform: "none" }}
-                    >
-                      Source
-                    </Button>
-                  </Box>
+                <motion.div animate={{ rotate: 360 }} transition={{ duration: 10, repeat: Infinity, ease: "linear" }}>
+                  <LockClock sx={{ color: "#3b82f6", fontSize: 50, mb: 2, opacity: 0.5 }} />
+                </motion.div>
+                <Typography variant="h5" sx={{ color: "#fff", fontWeight: 800, mb: 1 }}>Project Zero</Typography>
+                <Typography variant="body2" sx={{ color: "#475569", maxWidth: "200px", mb: 4 }}>My Next one.</Typography>
+                <Box sx={{ px: 3, py: 0.5, borderRadius: "100px", background: "linear-gradient(90deg, #3b82f6, #8b5cf6)", color: "#fff", fontSize: "0.7rem", fontWeight: 900, letterSpacing: 2 }}>
+                  IN DEVELOPMENT
                 </Box>
               </Box>
-            </Grid>
-          ))}
+            </motion.div>
+          </Grid>
         </Grid>
-
-        {/* View All Button */}
-        <Box sx={{ textAlign: "center", mt: 10 }}>
-          <Button
-            endIcon={<ArrowForward />}
-            sx={{
-              color: "#fff",
-              fontSize: "1.1rem",
-              textTransform: "none",
-              borderBottom: "2px solid #3b82f6",
-              borderRadius: 0,
-              pb: 0.5,
-              "&:hover": { background: "transparent", color: "#3b82f6" },
-            }}
-          >
-            See all projects
-          </Button>
-        </Box>
       </Container>
     </Box>
   );

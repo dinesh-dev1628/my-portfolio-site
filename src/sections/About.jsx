@@ -1,83 +1,141 @@
-import { Box, Typography, Container, Grid } from "@mui/material";
+import React from "react";
+import { Box, Typography, Container, Grid, Stack } from "@mui/material";
+import { motion } from "framer-motion";
+import MyProfilePic from "../components/asset/IMG-20240604-WA0002.jpg";
 
 const About = () => {
   return (
     <Box
       id="about"
       sx={{
-        minHeight: "70vh",
+        minHeight: "80vh",
+        backgroundColor: "#020617",
         display: "flex",
         alignItems: "center",
-        backgroundColor: "#020617",
-        py: 15,
+        py: { xs: 8, md: 12 },
+        overflow: "hidden",
       }}
     >
       <Container maxWidth="lg">
-        <Grid container spacing={8} alignItems="flex-start">
-          {/* Left Side: Large Stylized Title */}
-          <Grid item xs={12} md={4}>
-            <Box sx={{ position: "sticky", top: "100px" }}>
-              <Typography
-                variant="h3"
-                fontWeight={800}
-                sx={{
-                  color: "#fff",
-                  position: "relative",
-                  zIndex: 1,
-                  display: "flex",
-                  flexDirection: "column",
-                }}
-              >
-                <span style={{ color: "#3b82f6" }}>About</span>
-                <span>Myself</span>
-              </Typography>
-              <Box
-                sx={{
-                  width: "60px",
-                  height: "4px",
-                  background: "linear-gradient(90deg, #3b82f6, #8b5cf6)",
-                  mt: 2,
-                }}
-              />
-            </Box>
+        <Grid container spacing={{ xs: 4, md: 8 }} alignItems="center">
+          
+          {/* LEFT: MINIMALIST IMAGE COMPONENT */}
+          <Grid item xs={12} md={5}>
+            <motion.div
+              initial={{ opacity: 0, scale: 0.9 }}
+              whileInView={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 0.7 }}
+            >
+              <Box sx={{ position: "relative", width: "fit-content", mx: "auto" }}>
+                {/* Massive Accent Border */}
+                <Box
+                  sx={{
+                    position: "absolute",
+                    top: 15,
+                    left: 15,
+                    right: -15,
+                    bottom: -15,
+                    border: "1px solid #3b82f6",
+                    borderRadius: "16px",
+                    zIndex: 0,
+                  }}
+                />
+
+                {/* Compact Image Container */}
+                <Box
+                  sx={{
+                    width: { xs: "260px", md: "320px" },
+                    height: { xs: "320px", md: "400px" },
+                    borderRadius: "16px",
+                    overflow: "hidden",
+                    position: "relative",
+                    zIndex: 2,
+                    boxShadow: "20px 20px 60px rgba(0,0,0,0.5)",
+                  }}
+                >
+                  <Box
+                    component="img"
+                    src={MyProfilePic}
+                    alt="Dinesh"
+                    sx={{
+                      width: "100%",
+                      height: "100%",
+                      objectFit: "cover",
+                      filter: "grayscale(30%) contrast(1.1)",
+                      transition: "transform 0.5s ease",
+                      "&:hover": {
+                        transform: "scale(1.05)",
+                        filter: "grayscale(0%)",
+                      },
+                    }}
+                  />
+                </Box>
+              </Box>
+            </motion.div>
           </Grid>
 
-          {/* Right Side: Clean Narrative Text */}
-          <Grid item xs={12} md={8}>
-            <Box
-              sx={{
-                borderLeft: "1px solid rgba(255, 255, 255, 0.1)",
-                pl: { md: 6, xs: 0 },
-                borderLeftWidth: { xs: 0, md: "1px" },
-              }}
-            >
-              <Typography
-                variant="h5"
-                sx={{
-                  color: "#f8fafc",
-                  mb: 3,
-                  fontWeight: 500,
-                  lineHeight: 1.4,
-                }}
+          {/* RIGHT: MASSIVE TYPOGRAPHY */}
+          <Grid item xs={12} md={7}>
+            <Stack spacing={3}>
+              <motion.div
+                initial={{ opacity: 0, x: 30 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                transition={{ duration: 0.5 }}
               >
-                I bridge the gap between complex backend logic and 
-                intuitive frontend experiences.
-              </Typography>
+                <Typography
+                  variant="overline"
+                  sx={{ color: "#3b82f6", fontWeight: 700, letterSpacing: 3 }}
+                >
+                  About Me !
+                </Typography>
+                <Typography
+                  variant="h2"
+                  sx={{
+                    color: "#fff",
+                    fontWeight: 900,
+                    fontSize: { xs: "2.5rem", md: "4rem" },
+                    lineHeight: 1,
+                    mt: 1,
+                  }}
+                >
+                  Software <br />
+                  <span style={{ color: "rgba(255,255,255,0.1)" }}>Developer.</span>
+                </Typography>
+              </motion.div>
 
-              <Typography
-                sx={{
-                  color: "#94a3b8",
-                  fontSize: "1.1rem",
-                  lineHeight: 1.8,
-                  mb: 4,
-                }}
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5, delay: 0.2 }}
               >
-                My journey started with a passion for clean UI, which led me to master{" "}
-                <b style={{ color: "#fff" }}>React</b> and modern JavaScript. 
-                As I grew, I realized the power of efficiency, leading me into the world 
-                of <b style={{ color: "#fff" }}>Python</b> automation.
-              </Typography>
-            </Box>
+                <Typography
+                  sx={{
+                    color: "#94a3b8",
+                    fontSize: "1.1rem",
+                    lineHeight: 1.7,
+                    maxWidth: "500px",
+                    borderLeft: "2px solid #3b82f6",
+                    pl: 3,
+                  }}
+                >
+                  I’m a software engineer focused on crafting performant frontend interfaces with React & Next.js, 
+                  and robust automation solutions using Python and Playwright. I turn ideas into reliable, 
+                  production-ready systems.
+                </Typography>
+              </motion.div>
+
+              {/* Minimalist Stats */}
+              <Stack direction="row" spacing={5} sx={{ pt: 2 }}>
+                <Box>
+                  <Typography variant="h5" sx={{ color: "#fff", fontWeight: 800 }}>99%</Typography>
+                  <Typography variant="caption" sx={{ color: "#64748b" }}>PRECISION</Typography>
+                </Box>
+                <Box>
+                  <Typography variant="h5" sx={{ color: "#fff", fontWeight: 800 }}>FAST</Typography>
+                  <Typography variant="caption" sx={{ color: "#64748b" }}>DELIVERY</Typography>
+                </Box>
+              </Stack>
+            </Stack>
           </Grid>
         </Grid>
       </Container>

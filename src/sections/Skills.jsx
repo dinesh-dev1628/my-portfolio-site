@@ -1,32 +1,29 @@
-import { Box, Typography, Grid, Container, Chip } from "@mui/material";
-import {
-  Code,
-  Language,
-  DataObject,
-  GitHub,
-  Storage,
-  BugReport,
-  ApiOutlined,
-} from "@mui/icons-material";
+import React from "react";
+import { Box, Typography, Grid, Container, Stack } from "@mui/material";
+import { Language, GitHub, BugReport } from "@mui/icons-material";
+import { motion } from "framer-motion";
 
 const skillCategories = [
   {
-    title: "Frontend Development",
-    icon: <Language sx={{ fontSize: 30 }} />,
+    title: "Frontend",
+    subtitle: "User Interface & Experience",
+    icon: <Language sx={{ fontSize: 40 }} />,
     color: "#3b82f6",
-    skills: ["React", "JavaScript", "HTML5", "CSS3", "Next.js"],
+    skills: ["React", "JavaScript", "Next.js", "MUI", "Framer Motion"],
   },
   {
-    title: "Backend & Automation",
-    icon: <BugReport sx={{ fontSize: 30 }} />,
+    title: "Backend",
+    subtitle: "Logic & Scalable Systems",
+    icon: <BugReport sx={{ fontSize: 40 }} />,
     color: "#10b981",
-    skills: ["Python", "FastAPI", "REST APIs", "Playwright", "Docker"],
+    skills: ["Python", "FastAPI", "RESTful APIs", "Docker"],
   },
   {
-    title: "Tools & Versioning",
-    icon: <GitHub sx={{ fontSize: 30 }} />,
+    title: "Core Tools",
+    subtitle: "Version Control & Workflow",
+    icon: <GitHub sx={{ fontSize: 40 }} />,
     color: "#a855f7",
-    skills: ["Git", "GitHub", "SQL", "Postman", "Linux"],
+    skills: ["Git", "Postman", "PostgreSQL", "Playwright"],
   },
 ];
 
@@ -35,108 +32,132 @@ const Skills = () => {
     <Box
       id="skills"
       sx={{
-        py: 15,
+        py: { xs: 10, md: 20 },
         backgroundColor: "#020617",
-        display: "flex",
-        flexDirection: "column",
-        alignItems: "center", // Center everything
+        position: "relative",
+        overflow: "hidden",
       }}
     >
-      <Container maxWidth="md">
-        {/* Centered Heading */}
-        <Box sx={{ textAlign: "center", mb: 10 }}>
-          <Typography
-            variant="overline"
-            sx={{ color: "#3b82f6", fontWeight: 800, letterSpacing: 3 }}
+      {/* Background Decorative Element */}
+      <Box 
+        sx={{
+          position: "absolute",
+          top: "50%",
+          left: "50%",
+          transform: "translate(-50%, -50%)",
+          width: "100%",
+          height: "100%",
+          background: "radial-gradient(circle, rgba(59, 130, 246, 0.03) 0%, transparent 70%)",
+          zIndex: 0
+        }}
+      />
+
+      <Container maxWidth="lg" sx={{ position: "relative", zIndex: 1 }}>
+        <Box sx={{ textAlign: "center", mb: { xs: 8, md: 12 } }}>
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5 }}
           >
-            MY STACK
-          </Typography>
-          <Typography
-            variant="h3"
-            fontWeight={800}
-            sx={{ color: "#fff", mt: 1, letterSpacing: -1 }}
-          >
-            Technologies I use.
-          </Typography>
+            <Typography
+              variant="overline"
+              sx={{ color: "#3b82f6", fontWeight: 800, letterSpacing: 4, display: "block", mb: 1 }}
+            >
+              EXPERTISE
+            </Typography>
+            <Typography
+              variant="h2"
+              sx={{ 
+                color: "#fff", 
+                fontWeight: 900, 
+                fontSize: { xs: "2.5rem", md: "4rem" },
+                letterSpacing: -2 
+              }}
+            >
+              My Tech <span style={{ color: "#3b82f6" }}>Universe.</span>
+            </Typography>
+          </motion.div>
         </Box>
 
-        <Grid container spacing={6} justifyContent="center">
+        <Grid container spacing={4}>
           {skillCategories.map((cat, index) => (
-            <Grid item xs={12} key={index}>
-              <Box
-                sx={{
-                  display: "flex",
-                  flexDirection: "column",
-                  alignItems: "center", // Center the category content
-                  textAlign: "center",
-                }}
+            <Grid item xs={12} md={4} key={index}>
+              <motion.div
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5, delay: index * 0.1 }}
+                viewport={{ once: true }}
               >
-                {/* Category Icon & Title */}
                 <Box
                   sx={{
-                    display: "flex",
-                    alignItems: "center",
-                    gap: 1.5,
-                    mb: 3,
-                    color: cat.color,
+                    p: 4,
+                    height: "100%",
+                    borderRadius: "32px",
+                    backgroundColor: "rgba(255, 255, 255, 0.02)",
+                    border: "1px solid rgba(255, 255, 255, 0.05)",
+                    backdropFilter: "blur(10px)",
+                    transition: "all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275)",
+                    "&:hover": {
+                      transform: "translateY(-10px)",
+                      borderColor: `${cat.color}66`,
+                      backgroundColor: "rgba(255, 255, 255, 0.04)",
+                      boxShadow: `0 20px 40px -20px ${cat.color}33`,
+                    },
                   }}
                 >
-                  {cat.icon}
-                  <Typography variant="h5" fontWeight={700} sx={{ color: "#f8fafc" }}>
-                    {cat.title}
-                  </Typography>
-                </Box>
-
-                {/* Centered Pill Grid */}
-                <Box
-                  sx={{
-                    display: "flex",
-                    flexWrap: "wrap",
-                    justifyContent: "center",
-                    gap: 2,
-                    maxWidth: "700px",
-                  }}
-                >
-                  {cat.skills.map((skill) => (
-                    <Box
-                      key={skill}
-                      sx={{
-                        px: 3,
-                        py: 1.5,
-                        borderRadius: "12px",
-                        backgroundColor: "rgba(255, 255, 255, 0.03)",
-                        border: "1px solid rgba(255, 255, 255, 0.08)",
-                        color: "#cbd5e1",
-                        fontSize: "1rem",
-                        fontWeight: 500,
-                        transition: "all 0.3s ease",
-                        cursor: "default",
-                        "&:hover": {
-                          backgroundColor: "rgba(255, 255, 255, 0.07)",
-                          borderColor: cat.color,
-                          color: "#fff",
-                          transform: "scale(1.05)",
-                          boxShadow: `0 0 20px ${cat.color}33`, // Added subtle glow
-                        },
+                  {/* Card Header */}
+                  <Stack direction="row" alignItems="center" spacing={2} mb={3}>
+                    <Box 
+                      sx={{ 
+                        p: 1.5, 
+                        borderRadius: "16px", 
+                        backgroundColor: `${cat.color}15`, 
+                        color: cat.color,
+                        display: "flex"
                       }}
                     >
-                      {skill}
+                      {cat.icon}
                     </Box>
-                  ))}
-                </Box>
+                    <Box>
+                      <Typography variant="h5" fontWeight={800} sx={{ color: "#fff" }}>
+                        {cat.title}
+                      </Typography>
+                      <Typography variant="caption" sx={{ color: "#64748b", fontWeight: 500 }}>
+                        {cat.subtitle}
+                      </Typography>
+                    </Box>
+                  </Stack>
 
-                {/* Divider Line (except for last item) */}
-                {index !== skillCategories.length - 1 && (
-                  <Box
-                    sx={{
-                      width: "50px",
-                      height: "2px",
-                      background: "rgba(255, 255, 255, 0.1)",
-                      mt: 6,
-                    }}
-                  />
-                )}
-              </Box>
+                  {/* Skills Tag Cloud */}
+                  <Box sx={{ display: "flex", flexWrap: "wrap", gap: 1.5 }}>
+                    {cat.skills.map((skill) => (
+                      <Box
+                        key={skill}
+                        component={motion.div}
+                        whileHover={{ scale: 1.1 }}
+                        sx={{
+                          px: 2,
+                          py: 0.8,
+                          borderRadius: "100px",
+                          backgroundColor: "rgba(255, 255, 255, 0.03)",
+                          border: "1px solid rgba(255, 255, 255, 0.08)",
+                          color: "#cbd5e1",
+                          fontSize: "0.85rem",
+                          fontWeight: 600,
+                          transition: "0.2s",
+                          "&:hover": {
+                            color: "#fff",
+                            backgroundColor: `${cat.color}22`,
+                            borderColor: cat.color,
+                          },
+                        }}
+                      >
+                        {skill}
+                      </Box>
+                    ))}
+                  </Box>
+                </Box>
+              </motion.div>
             </Grid>
           ))}
         </Grid>

@@ -21,7 +21,7 @@ const Navbar = () => {
   };
 
   const handleResumeClick = () => {
-    window.open("https://dineshofficial28.github.io/my_resume/", "_blank");
+    window.open("https://dinesh-dev1628.github.io/resume/", "_blank");
   };
 
   const navItems = ["About", "Skills", "Projects", "Contact"];
@@ -61,7 +61,7 @@ const Navbar = () => {
               WebkitTextFillColor: "transparent",
             }}
           >
-            Portfolio<span style={{ WebkitTextFillColor: "#fff" }}>.</span>
+            Dinesh<span style={{ WebkitTextFillColor: "#fff" }}>.</span>
           </Typography>
 
           {/* Desktop Nav Items - Hidden on Mobile */}
