@@ -1,9 +1,38 @@
-import { Box, Typography, Button, Container } from "@mui/material";
-import { ArrowDownward } from "@mui/icons-material";
+import React, { useState, useEffect } from "react";
+import { Box, Typography, Button, Container, Stack } from "@mui/material";
+import { ArrowDownward, NorthEast, ExploreOutlined } from "@mui/icons-material";
+import { motion, useReducedMotion } from "framer-motion";
 
 const Hero = () => {
+  const reduce = useReducedMotion();
+  const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
+
+  useEffect(() => {
+    if (reduce || window.matchMedia("(pointer: coarse)").matches) return;
+    const handleMouseMove = (e) => {
+      const { innerWidth, innerHeight } = window;
+      setMousePos({
+        x: (e.clientX / innerWidth - 0.5) * 20, // -10 to +10px
+        y: (e.clientY / innerHeight - 0.5) * 20,
+      });
+    };
+    window.addEventListener("mousemove", handleMouseMove, { passive: true });
+    return () => window.removeEventListener("mousemove", handleMouseMove);
+  }, [reduce]);
+
+  const scrollTo = (id) => {
+    const el = document.getElementById(id);
+    if (el) {
+      const yOffset = -85;
+      const y = el.getBoundingClientRect().top + window.pageYOffset + yOffset;
+      window.scrollTo({ top: y, behavior: "smooth" });
+    }
+  };
+
   return (
     <Box
+      id="home"
+      component="section"
       sx={{
         minHeight: "100vh",
         display: "flex",
@@ -11,177 +40,449 @@ const Hero = () => {
         justifyContent: "center",
         position: "relative",
         overflow: "hidden",
-        backgroundColor: "#020617",
-        // Added padding for mobile to prevent content touching edges
-        px: { xs: 2, sm: 0 },
+        pt: { xs: 14, md: 10 },
+        pb: { xs: 8, md: 10 },
       }}
     >
-      {/* Background Glow Orbs - Made sizes relative to viewport for better scaling */}
+      {/* Atmospheric lighting focal aura behind hero typography */}
       <Box
+        aria-hidden="true"
         sx={{
           position: "absolute",
-          top: "20%",
-          left: "10%",
-          width: { xs: "200px", md: "300px" },
-          height: { xs: "200px", md: "300px" },
-          background: "radial-gradient(circle, rgba(59, 130, 246, 0.15) 0%, transparent 70%)",
-          filter: "blur(50px)",
-          zIndex: 0,
-        }}
-      />
-      <Box
-        sx={{
-          position: "absolute",
-          bottom: "20%",
-          right: "10%",
-          width: { xs: "250px", md: "350px" },
-          height: { xs: "250px", md: "350px" },
-          background: "radial-gradient(circle, rgba(168, 85, 247, 0.15) 0%, transparent 70%)",
+          top: "40%",
+          left: "50%",
+          transform: "translate(-50%, -50%)",
+          width: { xs: "300px", md: "650px" },
+          height: { xs: "280px", md: "450px" },
+          background:
+            "radial-gradient(ellipse at center, rgba(96, 165, 250, 0.12) 0%, rgba(139, 92, 246, 0.05) 45%, transparent 70%)",
           filter: "blur(60px)",
+          pointerEvents: "none",
           zIndex: 0,
         }}
       />
 
-      <Container maxWidth="md" sx={{ position: "relative", zIndex: 1 }}>
-        <Box sx={{ textAlign: "center" }}>
-          {/* Status Badge */}
+      {/* Elegant Orbital Gyroscope Visual Element in background */}
+      <Box
+        aria-hidden="true"
+        sx={{
+          position: "absolute",
+          top: "50%",
+          left: "50%",
+          transform: "translate(-50%, -50%)",
+          width: { xs: "320px", sm: "480px", md: "680px" },
+          height: { xs: "320px", sm: "480px", md: "680px" },
+          pointerEvents: "none",
+          zIndex: 0,
+        }}
+      >
+        {/* Outer orbital ring */}
+        <Box
+          sx={{
+            position: "absolute",
+            inset: 0,
+            borderRadius: "50%",
+            border: "1px solid rgba(255, 255, 255, 0.04)",
+            animation: reduce ? "none" : "celestial-orbit 60s linear infinite",
+          }}
+        >
+          {/* Orbiting celestial satellite node */}
           <Box
             sx={{
-              display: "inline-flex",
-              alignItems: "center",
-              gap: 1.5,
-              px: 2,
-              py: 0.8,
-              borderRadius: "50px",
-              backgroundColor: "rgba(255, 255, 255, 0.05)",
-              border: "1px solid rgba(255, 255, 255, 0.1)",
-              mb: { xs: 3, md: 4 }, // Reduced margin for mobile
+              position: "absolute",
+              top: "-4px",
+              left: "50%",
+              width: "8px",
+              height: "8px",
+              borderRadius: "50%",
+              backgroundColor: "#60A5FA",
+              boxShadow: "0 0 12px #60A5FA",
             }}
+          />
+        </Box>
+
+        {/* Inner tilted orbital ring */}
+        <Box
+          sx={{
+            position: "absolute",
+            inset: { xs: "35px", md: "70px" },
+            borderRadius: "50%",
+            border: "1px dashed rgba(139, 92, 246, 0.08)",
+            animation: reduce ? "none" : "celestial-orbit-reverse 45s linear infinite",
+          }}
+        >
+          <Box
+            sx={{
+              position: "absolute",
+              bottom: "-3px",
+              left: "30%",
+              width: "6px",
+              height: "6px",
+              borderRadius: "50%",
+              backgroundColor: "#A78BFA",
+              boxShadow: "0 0 8px #A78BFA",
+            }}
+          />
+        </Box>
+      </Box>
+
+      {/* Hero Content Container */}
+      <Container maxWidth="lg" sx={{ position: "relative", zIndex: 1 }}>
+        <Box
+          component={motion.div}
+          animate={
+            reduce
+              ? undefined
+              : {
+                  x: mousePos.x * 0.5,
+                  y: mousePos.y * 0.5,
+                }
+          }
+          transition={{ type: "spring", stiffness: 100, damping: 20 }}
+          sx={{
+            maxWidth: "920px",
+            mx: "auto",
+            textAlign: "center",
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+          }}
+        >
+          {/* Telemetry Status Pill */}
+          <motion.div
+            initial={reduce ? false : { opacity: 0, y: -20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 0.1 }}
           >
             <Box
               sx={{
-                width: 8,
-                height: 8,
-                borderRadius: "50%",
-                backgroundColor: "#10b981",
-                boxShadow: "0 0 10px #10b981",
+                display: "inline-flex",
+                alignItems: "center",
+                gap: 1.5,
+                px: 2.2,
+                py: 0.7,
+                borderRadius: "999px",
+                backgroundColor: "rgba(10, 13, 22, 0.7)",
+                border: "1px solid rgba(255, 255, 255, 0.08)",
+                backdropFilter: "blur(12px)",
+                mb: { xs: 3, md: 4 },
+                boxShadow: "0 4px 20px rgba(0, 0, 0, 0.4)",
               }}
-            />
-            <Typography variant="caption" sx={{ color: "#cbd5e1", fontWeight: 500, letterSpacing: 1 }}>
-              AVAILABLE FOR NEW PROJECTS
-            </Typography>
-          </Box>
+            >
+              <Box
+                sx={{
+                  width: 7,
+                  height: 7,
+                  borderRadius: "50%",
+                  backgroundColor: "#10B981",
+                  boxShadow: "0 0 8px #10B981",
+                }}
+              />
+              <Typography
+                sx={{
+                  fontFamily: "'Geist Mono', monospace",
+                  fontSize: { xs: "0.68rem", sm: "0.75rem" },
+                  color: "#CBD5E1",
+                  letterSpacing: 2,
+                  fontWeight: 500,
+                  textTransform: "uppercase",
+                }}
+              >
+                AVAILABLE FOR NEW PROJECTS // 2026
+              </Typography>
+            </Box>
+          </motion.div>
 
-          {/* Main Title - Responsive sizes */}
-          <Typography
-            variant="h1"
-            sx={{
-              fontSize: { xs: "2.5rem", sm: "4rem", md: "5rem" }, // Fluid typography
-              fontWeight: 800,
-              lineHeight: { xs: 1.2, md: 1.1 },
-              mb: 3,
-              color: "#fff",
-              letterSpacing: { xs: -1, md: -2 },
-            }}
+          {/* Large Personal Brand Eyebrow */}
+          <motion.div
+            initial={reduce ? false : { opacity: 0, scale: 0.96 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.9, delay: 0.2 }}
           >
-            Hi, I’m{" "}
-            <span
-              style={{
-                background: "linear-gradient(90deg, #60a5fa, #a855f7)",
+            <Typography
+              sx={{
+                fontFamily: "'Geist Mono', monospace",
+                fontSize: { xs: "0.75rem", sm: "0.85rem" },
+                color: "#60A5FA",
+                letterSpacing: { xs: 4, md: 6 },
+                textTransform: "uppercase",
+                fontWeight: 600,
+                mb: 1.5,
+              }}
+            >
+              // DEVELOPER & SYSTEMS ARCHITECT
+            </Typography>
+
+            <Typography
+              variant="h1"
+              sx={{
+                fontSize: { xs: "3.2rem", sm: "5rem", md: "6.8rem" },
+                fontWeight: 800,
+                lineHeight: 0.95,
+                letterSpacing: { xs: "-0.04em", md: "-0.05em" },
+                color: "#F8FAFC",
+                textTransform: "uppercase",
+                mb: 2.5,
+                userSelect: "none",
+                background:
+                  "linear-gradient(180deg, #FFFFFF 0%, #E2E8F0 60%, #94A3B8 100%)",
                 WebkitBackgroundClip: "text",
                 WebkitTextFillColor: "transparent",
               }}
             >
-              Dinesh
-            </span>
-          </Typography>
+              DINESH
+            </Typography>
+          </motion.div>
 
-          {/* Subtitle - Responsive width and font */}
-          <Typography
+          {/* Core Cinematic Headline */}
+          <motion.div
+            initial={reduce ? false : { opacity: 0, y: 25 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 0.35 }}
+          >
+            <Typography
+              variant="h2"
+              sx={{
+                fontSize: { xs: "1.45rem", sm: "2rem", md: "2.4rem" },
+                fontWeight: 700,
+                lineHeight: 1.25,
+                letterSpacing: "-0.025em",
+                color: "#F8FAFC",
+                maxWidth: "780px",
+                mx: "auto",
+                mb: 2.5,
+              }}
+            >
+              Building Digital Experiences{" "}
+              <span
+                style={{
+                  background: "linear-gradient(90deg, #60A5FA, #A78BFA)",
+                  WebkitBackgroundClip: "text",
+                  WebkitTextFillColor: "transparent",
+                }}
+              >
+                Beyond Limits.
+              </span>
+            </Typography>
+          </motion.div>
+
+          {/* Supporting Narrative */}
+          <motion.div
+            initial={reduce ? false : { opacity: 0, y: 25 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 0.45 }}
+          >
+            <Typography
+              sx={{
+                fontSize: { xs: "0.98rem", sm: "1.12rem" },
+                color: "#94A3B8",
+                maxWidth: "680px",
+                mx: "auto",
+                lineHeight: 1.7,
+                fontWeight: 400,
+                mb: { xs: 4, md: 5 },
+              }}
+            >
+              I'm a developer focused on Python, automation, APIs, and modern
+              web experiences. I turn complex ideas into practical, scalable
+              solutions.
+            </Typography>
+          </motion.div>
+
+          {/* Action Buttons */}
+          <motion.div
+            initial={reduce ? false : { opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 0.55 }}
+          >
+            <Stack
+              direction={{ xs: "column", sm: "row" }}
+              spacing={2}
+              alignItems="center"
+              justifyContent="center"
+              sx={{ width: { xs: "100%", sm: "auto" } }}
+            >
+              {/* Primary CTA */}
+              <Button
+                variant="contained"
+                onClick={() => scrollTo("about")}
+                startIcon={<ExploreOutlined />}
+                sx={{
+                  width: { xs: "100%", sm: "auto" },
+                  px: 3.5,
+                  py: 1.5,
+                  borderRadius: "14px",
+                  fontSize: "0.95rem",
+                  fontWeight: 700,
+                  fontFamily: "'Space Grotesk', sans-serif",
+                  letterSpacing: "0.01em",
+                  color: "#FFFFFF",
+                  backgroundColor: "rgba(96, 165, 250, 0.16)",
+                  border: "1px solid rgba(96, 165, 250, 0.4)",
+                  boxShadow: "0 0 25px rgba(96, 165, 250, 0.25)",
+                  backdropFilter: "blur(12px)",
+                  "&:hover": {
+                    backgroundColor: "rgba(96, 165, 250, 0.26)",
+                    borderColor: "#60A5FA",
+                    boxShadow: "0 0 35px rgba(96, 165, 250, 0.4)",
+                    transform: "translateY(-2px)",
+                  },
+                  transition: "all 0.3s ease",
+                }}
+              >
+                Explore My Universe
+              </Button>
+
+              {/* Secondary CTA */}
+              <Button
+                variant="outlined"
+                onClick={() => scrollTo("projects")}
+                endIcon={<NorthEast sx={{ fontSize: "1rem !important" }} />}
+                sx={{
+                  width: { xs: "100%", sm: "auto" },
+                  px: 3.5,
+                  py: 1.5,
+                  borderRadius: "14px",
+                  fontSize: "0.95rem",
+                  fontWeight: 600,
+                  fontFamily: "'Space Grotesk', sans-serif",
+                  letterSpacing: "0.01em",
+                  color: "#F8FAFC",
+                  borderColor: "rgba(255, 255, 255, 0.12)",
+                  backgroundColor: "rgba(255, 255, 255, 0.02)",
+                  "&:hover": {
+                    borderColor: "rgba(255, 255, 255, 0.3)",
+                    backgroundColor: "rgba(255, 255, 255, 0.05)",
+                    transform: "translateY(-2px)",
+                  },
+                  transition: "all 0.3s ease",
+                }}
+              >
+                View Selected Work
+              </Button>
+            </Stack>
+          </motion.div>
+
+          {/* Quick Telemetry Footnote */}
+          <Box
             sx={{
-              fontSize: { xs: "1rem", md: "1.5rem" },
-              color: "#94a3b8",
-              maxWidth: { xs: "100%", md: "600px" },
-              mx: "auto",
-              mb: 5,
-              fontWeight: 300,
-              lineHeight: 1.6,
-            }}
-          >
-            Building high-performance <span style={{ color: "#fff", fontWeight: 500 }}>Frontend</span> interfaces 
-            and <span style={{ color: "#fff", fontWeight: 500 }}>Automation</span> workflows with React & Python.
-          </Typography>
-
-          {/* Buttons - Stack on mobile, Row on desktop */}
-          <Box 
-            sx={{ 
-              display: "flex", 
-              flexDirection: { xs: "column", sm: "row" }, // Key responsive change
-              gap: 2, 
+              display: "flex",
+              flexWrap: "wrap",
               justifyContent: "center",
-              alignItems: "center"
+              gap: { xs: 2.5, sm: 4 },
+              mt: { xs: 6, md: 8 },
+              pt: 3,
+              borderTop: "1px solid rgba(255, 255, 255, 0.05)",
+              width: "100%",
+              maxWidth: "600px",
             }}
           >
-            <Button
-              variant="contained"
-              fullWidth={{ xs: true, sm: false }} // Full width only on mobile
-              onClick={() => document.getElementById("projects").scrollIntoView({ behavior: "smooth" })}
-              sx={{
-                px: 4,
-                py: 1.5,
-                borderRadius: "12px",
-                textTransform: "none",
-                fontSize: "1rem",
-                fontWeight: 600,
-                background: "linear-gradient(90deg, #3b82f6, #8b5cf6)",
-                boxShadow: "0 10px 20px rgba(59, 130, 246, 0.3)",
-                "&:hover": { transform: "translateY(-3px)", boxShadow: "0 15px 25px rgba(59, 130, 246, 0.4)" },
-                transition: "all 0.3s",
-              }}
-            >
-              View Work
-            </Button>
-            <Button
-              variant="outlined"
-              fullWidth={{ xs: true, sm: false }} // Full width only on mobile
-              onClick={() => document.getElementById("contact").scrollIntoView({ behavior: "smooth" })}
-              sx={{
-                px: 4,
-                py: 1.5,
-                borderRadius: "12px",
-                textTransform: "none",
-                fontSize: "1rem",
-                fontWeight: 600,
-                color: "#fff",
-                borderColor: "rgba(255,255,255,0.2)",
-                "&:hover": { borderColor: "#fff", backgroundColor: "rgba(255,255,255,0.05)" },
-                transition: "all 0.3s",
-              }}
-            >
-              Let's Talk
-            </Button>
+            <Box sx={{ textAlign: "center" }}>
+              <Typography
+                sx={{
+                  fontFamily: "'Space Grotesk', sans-serif",
+                  fontSize: "1.1rem",
+                  fontWeight: 700,
+                  color: "#F8FAFC",
+                }}
+              >
+                Python & React
+              </Typography>
+              <Typography
+                sx={{
+                  fontFamily: "'Geist Mono', monospace",
+                  fontSize: "0.68rem",
+                  color: "#64748B",
+                  letterSpacing: 1.5,
+                }}
+              >
+                CORE SPECIALIZATION
+              </Typography>
+            </Box>
+
+            <Box sx={{ textAlign: "center" }}>
+              <Typography
+                sx={{
+                  fontFamily: "'Space Grotesk', sans-serif",
+                  fontSize: "1.1rem",
+                  fontWeight: 700,
+                  color: "#F8FAFC",
+                }}
+              >
+                Playwright & APIs
+              </Typography>
+              <Typography
+                sx={{
+                  fontFamily: "'Geist Mono', monospace",
+                  fontSize: "0.68rem",
+                  color: "#64748B",
+                  letterSpacing: 1.5,
+                }}
+              >
+                AUTOMATION STACK
+              </Typography>
+            </Box>
+
+            <Box sx={{ textAlign: "center" }}>
+              <Typography
+                sx={{
+                  fontFamily: "'Space Grotesk', sans-serif",
+                  fontSize: "1.1rem",
+                  fontWeight: 700,
+                  color: "#F8FAFC",
+                }}
+              >
+                PostgreSQL & Docker
+              </Typography>
+              <Typography
+                sx={{
+                  fontFamily: "'Geist Mono', monospace",
+                  fontSize: "0.68rem",
+                  color: "#64748B",
+                  letterSpacing: 1.5,
+                }}
+              >
+                DATA & DEVOPS
+              </Typography>
+            </Box>
           </Box>
         </Box>
       </Container>
 
-      {/* Scroll Down Indicator - Hidden on extra small mobile to save space */}
+      {/* Subtle Scroll Indicator */}
       <Box
+        onClick={() => scrollTo("about")}
         sx={{
           position: "absolute",
-          bottom: 30,
+          bottom: 24,
           left: "50%",
           transform: "translateX(-50%)",
-          color: "rgba(255,255,255,0.3)",
-          display: { xs: "none", sm: "block" }, // Only show on tablets/desktop
-          animation: "bounce 2s infinite",
-          "@keyframes bounce": {
-            "0%, 20%, 50%, 80%, 100%": { transform: "translateX(-50%) translateY(0)" },
-            "40%": { transform: "translateX(-50%) translateY(-10px)" },
-            "60%": { transform: "translateX(-50%) translateY(-5px)" },
-          },
+          display: { xs: "none", sm: "flex" },
+          flexDirection: "column",
+          alignItems: "center",
+          gap: 0.5,
+          cursor: "pointer",
+          color: "rgba(255, 255, 255, 0.35)",
+          "&:hover": { color: "#60A5FA" },
+          transition: "color 0.2s ease",
         }}
       >
-        <ArrowDownward />
+        <Typography
+          sx={{
+            fontFamily: "'Geist Mono', monospace",
+            fontSize: "0.62rem",
+            letterSpacing: 2,
+            textTransform: "uppercase",
+          }}
+        >
+          SCROLL TO EXPLORE
+        </Typography>
+        <motion.div
+          animate={reduce ? undefined : { y: [0, 6, 0] }}
+          transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
+        >
+          <ArrowDownward sx={{ fontSize: "1rem" }} />
+        </motion.div>
       </Box>
     </Box>
   );

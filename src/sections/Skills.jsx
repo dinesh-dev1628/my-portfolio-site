@@ -1,161 +1,253 @@
-import React from "react";
-import { Box, Typography, Grid, Container, Stack } from "@mui/material";
-import { Language, GitHub, BugReport } from "@mui/icons-material";
-import { motion } from "framer-motion";
-
-const skillCategories = [
-  {
-    title: "Frontend",
-    subtitle: "User Interface & Experience",
-    icon: <Language sx={{ fontSize: 40 }} />,
-    color: "#3b82f6",
-    skills: ["React", "JavaScript", "Next.js", "MUI", "Framer Motion"],
-  },
-  {
-    title: "Backend",
-    subtitle: "Logic & Scalable Systems",
-    icon: <BugReport sx={{ fontSize: 40 }} />,
-    color: "#10b981",
-    skills: ["Python", "FastAPI", "RESTful APIs", "Docker"],
-  },
-  {
-    title: "Core Tools",
-    subtitle: "Version Control & Workflow",
-    icon: <GitHub sx={{ fontSize: 40 }} />,
-    color: "#a855f7",
-    skills: ["Git", "Postman", "PostgreSQL", "Playwright"],
-  },
-];
+import React, { useState } from "react";
+import { Box, Typography, Container, Grid, Stack } from "@mui/material";
+import {
+  Code,
+  AutoAwesome,
+  Memory,
+  Tune,
+  Terminal,
+  ApiOutlined,
+  DataObject,
+  Storage,
+} from "@mui/icons-material";
+import { motion, useReducedMotion } from "framer-motion";
+import { skillCategories } from "../data/skills";
 
 const Skills = () => {
+  const reduce = useReducedMotion();
+  const [selectedSkill, setSelectedSkill] = useState(null);
+
   return (
     <Box
       id="skills"
+      component="section"
       sx={{
-        py: { xs: 10, md: 20 },
-        backgroundColor: "#020617",
+        py: { xs: 10, md: 18 },
         position: "relative",
         overflow: "hidden",
       }}
     >
-      {/* Background Decorative Element */}
-      <Box 
-        sx={{
-          position: "absolute",
-          top: "50%",
-          left: "50%",
-          transform: "translate(-50%, -50%)",
-          width: "100%",
-          height: "100%",
-          background: "radial-gradient(circle, rgba(59, 130, 246, 0.03) 0%, transparent 70%)",
-          zIndex: 0
-        }}
-      />
-
       <Container maxWidth="lg" sx={{ position: "relative", zIndex: 1 }}>
-        <Box sx={{ textAlign: "center", mb: { xs: 8, md: 12 } }}>
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5 }}
-          >
+        {/* Section Header */}
+        <Box sx={{ mb: { xs: 8, md: 12 } }}>
+          <Stack direction="row" alignItems="center" spacing={1.5} sx={{ mb: 1.5 }}>
+            <Box sx={{ width: 24, height: 1, backgroundColor: "#A78BFA" }} />
             <Typography
-              variant="overline"
-              sx={{ color: "#3b82f6", fontWeight: 800, letterSpacing: 4, display: "block", mb: 1 }}
-            >
-              EXPERTISE
-            </Typography>
-            <Typography
-              variant="h2"
-              sx={{ 
-                color: "#fff", 
-                fontWeight: 900, 
-                fontSize: { xs: "2.5rem", md: "4rem" },
-                letterSpacing: -2 
+              sx={{
+                fontFamily: "'Geist Mono', monospace",
+                fontSize: "0.75rem",
+                color: "#A78BFA",
+                letterSpacing: 3,
+                textTransform: "uppercase",
+                fontWeight: 600,
               }}
             >
-              My Tech <span style={{ color: "#3b82f6" }}>Universe.</span>
+              04 // CAPABILITY MATRIX
             </Typography>
-          </motion.div>
+          </Stack>
+
+          <Typography
+            variant="h2"
+            sx={{
+              fontSize: { xs: "2rem", sm: "3rem", md: "3.6rem" },
+              fontWeight: 800,
+              lineHeight: 1.1,
+              letterSpacing: "-0.03em",
+              color: "#F8FAFC",
+            }}
+          >
+            My Tech{" "}
+            <span
+              style={{
+                background: "linear-gradient(90deg, #A78BFA, #60A5FA)",
+                WebkitBackgroundClip: "text",
+                WebkitTextFillColor: "transparent",
+              }}
+            >
+              Universe.
+            </span>
+          </Typography>
+          <Typography
+            sx={{
+              color: "#94A3B8",
+              fontSize: { xs: "0.95rem", sm: "1.05rem" },
+              mt: 1.5,
+              maxWidth: "600px",
+            }}
+          >
+            A cohesive ecosystem of languages, automation frameworks, runtime
+            environments, and systems tools.
+          </Typography>
         </Box>
 
-        <Grid container spacing={4}>
-          {skillCategories.map((cat, index) => (
-            <Grid item xs={12} md={4} key={index}>
+        {/* 4 Quadrants Matrix */}
+        <Grid container spacing={3.5}>
+          {skillCategories.map((cat, idx) => (
+            <Grid size={{ xs: 12, md: 6 }} key={cat.id}>
               <motion.div
-                initial={{ opacity: 0, y: 30 }}
+                initial={reduce ? false : { opacity: 0, y: 30 }}
                 whileInView={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5, delay: index * 0.1 }}
-                viewport={{ once: true }}
+                viewport={{ once: true, amount: 0.15 }}
+                transition={{ duration: 0.8, delay: idx * 0.12 }}
+                style={{ height: "100%" }}
               >
                 <Box
                   sx={{
-                    p: 4,
+                    p: { xs: 3, md: 4 },
                     height: "100%",
-                    borderRadius: "32px",
-                    backgroundColor: "rgba(255, 255, 255, 0.02)",
-                    border: "1px solid rgba(255, 255, 255, 0.05)",
-                    backdropFilter: "blur(10px)",
-                    transition: "all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275)",
+                    borderRadius: "24px",
+                    backgroundColor: "rgba(16, 21, 34, 0.6)",
+                    border: "1px solid rgba(255, 255, 255, 0.06)",
+                    backdropFilter: "blur(12px)",
+                    transition: "all 0.3s ease",
                     "&:hover": {
-                      transform: "translateY(-10px)",
-                      borderColor: `${cat.color}66`,
-                      backgroundColor: "rgba(255, 255, 255, 0.04)",
-                      boxShadow: `0 20px 40px -20px ${cat.color}33`,
+                      borderColor: cat.accent,
+                      boxShadow: `0 15px 35px -10px rgba(0, 0, 0, 0.6), 0 0 25px ${cat.accent}12`,
+                      transform: "translateY(-3px)",
                     },
                   }}
                 >
-                  {/* Card Header */}
-                  <Stack direction="row" alignItems="center" spacing={2} mb={3}>
-                    <Box 
-                      sx={{ 
-                        p: 1.5, 
-                        borderRadius: "16px", 
-                        backgroundColor: `${cat.color}15`, 
-                        color: cat.color,
-                        display: "flex"
+                  {/* Category Header */}
+                  <Box
+                    sx={{
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "space-between",
+                      mb: 1,
+                    }}
+                  >
+                    <Typography
+                      variant="h4"
+                      sx={{
+                        fontFamily: "'Space Grotesk', sans-serif",
+                        fontSize: "1.35rem",
+                        fontWeight: 700,
+                        color: "#F8FAFC",
                       }}
                     >
-                      {cat.icon}
-                    </Box>
-                    <Box>
-                      <Typography variant="h5" fontWeight={800} sx={{ color: "#fff" }}>
-                        {cat.title}
-                      </Typography>
-                      <Typography variant="caption" sx={{ color: "#64748b", fontWeight: 500 }}>
-                        {cat.subtitle}
-                      </Typography>
-                    </Box>
-                  </Stack>
-
-                  {/* Skills Tag Cloud */}
-                  <Box sx={{ display: "flex", flexWrap: "wrap", gap: 1.5 }}>
-                    {cat.skills.map((skill) => (
-                      <Box
-                        key={skill}
-                        component={motion.div}
-                        whileHover={{ scale: 1.1 }}
-                        sx={{
-                          px: 2,
-                          py: 0.8,
-                          borderRadius: "100px",
-                          backgroundColor: "rgba(255, 255, 255, 0.03)",
-                          border: "1px solid rgba(255, 255, 255, 0.08)",
-                          color: "#cbd5e1",
-                          fontSize: "0.85rem",
-                          fontWeight: 600,
-                          transition: "0.2s",
-                          "&:hover": {
-                            color: "#fff",
-                            backgroundColor: `${cat.color}22`,
-                            borderColor: cat.color,
-                          },
-                        }}
-                      >
-                        {skill}
-                      </Box>
-                    ))}
+                      {cat.name}
+                    </Typography>
+                    <Box
+                      sx={{
+                        width: 8,
+                        height: 8,
+                        borderRadius: "50%",
+                        backgroundColor: cat.accent,
+                        boxShadow: `0 0 10px ${cat.accent}`,
+                      }}
+                    />
                   </Box>
+
+                  <Typography
+                    sx={{
+                      fontFamily: "'Geist Mono', monospace",
+                      fontSize: "0.75rem",
+                      color: cat.accent,
+                      letterSpacing: 1,
+                      mb: 2,
+                    }}
+                  >
+                    {cat.tagline}
+                  </Typography>
+
+                  <Typography
+                    sx={{
+                      color: "#94A3B8",
+                      fontSize: "0.88rem",
+                      lineHeight: 1.6,
+                      mb: 3,
+                    }}
+                  >
+                    {cat.description}
+                  </Typography>
+
+                  {/* Interactive Skill Indicator Badges */}
+                  <Stack spacing={1.2}>
+                    {cat.skills.map((skill) => {
+                      const isHovered = selectedSkill?.name === skill.name;
+                      return (
+                        <Box
+                          key={skill.name}
+                          onMouseEnter={() => setSelectedSkill(skill)}
+                          onMouseLeave={() => setSelectedSkill(null)}
+                          sx={{
+                            p: 1.5,
+                            borderRadius: "12px",
+                            backgroundColor: isHovered
+                              ? "rgba(255, 255, 255, 0.05)"
+                              : "rgba(5, 6, 10, 0.5)",
+                            border: "1px solid",
+                            borderColor: isHovered
+                              ? cat.accent
+                              : "rgba(255, 255, 255, 0.05)",
+                            display: "flex",
+                            alignItems: "center",
+                            justifyContent: "space-between",
+                            gap: 2,
+                            transition: "all 0.2s ease",
+                            cursor: "default",
+                          }}
+                        >
+                          <Box sx={{ display: "flex", alignItems: "center", gap: 1.5 }}>
+                            <Box
+                              sx={{
+                                width: 5,
+                                height: 5,
+                                borderRadius: "50%",
+                                backgroundColor: isHovered ? cat.accent : "#475569",
+                                transition: "background-color 0.2s ease",
+                              }}
+                            />
+                            <Typography
+                              sx={{
+                                fontFamily: "'Space Grotesk', sans-serif",
+                                fontSize: "0.92rem",
+                                fontWeight: 600,
+                                color: isHovered ? "#F8FAFC" : "#E2E8F0",
+                              }}
+                            >
+                              {skill.name}
+                            </Typography>
+                          </Box>
+
+                          <Box
+                            sx={{
+                              display: "flex",
+                              alignItems: "center",
+                              gap: 1.5,
+                            }}
+                          >
+                            <Typography
+                              sx={{
+                                display: { xs: "none", sm: "block" },
+                                fontSize: "0.78rem",
+                                color: "#94A3B8",
+                                textAlign: "right",
+                              }}
+                            >
+                              {skill.detail}
+                            </Typography>
+                            <Box
+                              sx={{
+                                px: 1.2,
+                                py: 0.3,
+                                borderRadius: "6px",
+                                backgroundColor: "rgba(255, 255, 255, 0.04)",
+                                border: "1px solid rgba(255, 255, 255, 0.08)",
+                                color: isHovered ? cat.accent : "#64748B",
+                                fontFamily: "'Geist Mono', monospace",
+                                fontSize: "0.68rem",
+                                fontWeight: 600,
+                                flexShrink: 0,
+                              }}
+                            >
+                              {skill.level}
+                            </Box>
+                          </Box>
+                        </Box>
+                      );
+                    })}
+                  </Stack>
                 </Box>
               </motion.div>
             </Grid>

@@ -1,85 +1,215 @@
 import React, { useState, useEffect } from "react";
 import { Box, Typography } from "@mui/material";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion, useReducedMotion } from "framer-motion";
 
 const Preloader = ({ setLoading }) => {
-  const [counter, setCounter] = useState(0);
+  const [progress, setProgress] = useState(0);
+  const reduce = useReducedMotion();
 
   useEffect(() => {
-    const timer = setInterval(() => {
-      setCounter((prev) => (prev < 100 ? prev + 1 : 100));
-    }, 20); // Adjust speed here
-
-    if (counter === 100) {
-      setTimeout(() => setLoading(false), 1000); // Hold at 100% for 1s
+    if (reduce) {
+      setLoading(false);
+      return;
     }
 
-    return () => clearInterval(timer);
-  }, [counter, setLoading]);
+    const interval = setInterval(() => {
+      setProgress((prev) => {
+        if (prev >= 100) {
+          clearInterval(interval);
+          return 100;
+        }
+        const increment = Math.max(1, Math.floor(Math.random() * 8) + 1);
+        return Math.min(100, prev + increment);
+      });
+    }, 32);
+
+    return () => clearInterval(interval);
+  }, [reduce, setLoading]);
+
+  useEffect(() => {
+    if (progress >= 100) {
+      const timer = setTimeout(() => {
+        setLoading(false);
+      }, 400);
+      return () => clearTimeout(timer);
+    }
+  }, [progress, setLoading]);
+
+  const phaseText =
+    progress > 75
+      ? "SYSTEMS SYNCHRONIZED"
+      : progress > 45
+      ? "INDEXING ARTIFACTS"
+      : progress > 20
+      ? "WARPING COORDINATES"
+      : "CALIBRATING STELLAR GRID";
+
+  const circumference = 2 * Math.PI * 44;
+  const strokeDashoffset = circumference - (progress / 100) * circumference;
 
   return (
     <Box
       component={motion.div}
       initial={{ opacity: 1 }}
-      exit={{ opacity: 0, transition: { duration: 1 } }}
+      exit={{
+        opacity: 0,
+        scale: 1.02,
+        filter: "blur(8px)",
+        transition: { duration: 0.6, ease: [0.16, 1, 0.3, 1] },
+      }}
       sx={{
         position: "fixed",
         inset: 0,
-        zIndex: 9999,
-        backgroundColor: "#020617",
+        zIndex: 99999,
+        backgroundColor: "#05060A",
         display: "flex",
         flexDirection: "column",
         alignItems: "center",
         justifyContent: "center",
+        userSelect: "none",
+        cursor: progress >= 100 ? "default" : "wait",
+        pointerEvents: progress >= 100 ? "none" : "auto",
       }}
     >
-      <Box sx={{ overflow: "hidden", textAlign: "center" }}>
-        {/* Name Reveal */}
-        <Typography
-          component={motion.h1}
-          initial={{ y: 100 }}
-          animate={{ y: 0 }}
-          transition={{ duration: 0.8, ease: "circOut" }}
-          variant="h2"
-          sx={{
-            color: "#fff",
-            fontWeight: 900,
-            letterSpacing: -2,
-            mb: 2,
-          }}
-        >
-          Dinesh<span style={{ color: "#3b82f6" }}>.</span>
-        </Typography>
+      {/* Background ambient pulse */}
+      <Box
+        sx={{
+          position: "absolute",
+          width: 380,
+          height: 380,
+          borderRadius: "50%",
+          background:
+            "radial-gradient(circle, rgba(96, 165, 250, 0.08) 0%, transparent 70%)",
+          filter: "blur(40px)",
+        }}
+      />
 
-        {/* Progress Bar Container */}
+      {/* Central telemetry circle */}
+      <Box sx={{ position: "relative", width: 140, height: 140, mb: 4 }}>
+        <svg width="140" height="140" viewBox="0 0 100 100" style={{ transform: "rotate(-90deg)" }}>
+          {/* Track */}
+          <circle
+            cx="50"
+            cy="50"
+            r="44"
+            fill="none"
+            stroke="rgba(255, 255, 255, 0.06)"
+            strokeWidth="1.5"
+          />
+          {/* Active progress */}
+          <circle
+            cx="50"
+            cy="50"
+            r="44"
+            fill="none"
+            stroke="url(#preloaderGrad)"
+            strokeWidth="1.8"
+            strokeLinecap="round"
+            strokeDasharray={circumference}
+            strokeDashoffset={strokeDashoffset}
+            style={{ transition: "stroke-dashoffset 0.08s ease" }}
+          />
+          {/* Concentric subtle outer dash */}
+          <circle
+            cx="50"
+            cy="50"
+            r="48"
+            fill="none"
+            stroke="rgba(96, 165, 250, 0.15)"
+            strokeWidth="0.8"
+            strokeDasharray="4 8"
+          />
+          <defs>
+            <linearGradient id="preloaderGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stopColor="#60A5FA" />
+              <stop offset="100%" stopColor="#A78BFA" />
+            </linearGradient>
+          </defs>
+        </svg>
+
+        {/* Counter in center */}
         <Box
           sx={{
-            width: "200px",
-            height: "2px",
-            backgroundColor: "rgba(255,255,255,0.1)",
-            position: "relative",
-            mt: 2,
+            position: "absolute",
+            inset: 0,
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            justifyContent: "center",
           }}
         >
-          <Box
-            component={motion.div}
-            initial={{ width: 0 }}
-            animate={{ width: `${counter}%` }}
+          <Typography
             sx={{
-              height: "100%",
-              backgroundColor: "#3b82f6",
-              boxShadow: "0 0 15px #3b82f6",
+              fontFamily: "'Space Grotesk', sans-serif",
+              fontSize: "1.75rem",
+              fontWeight: 700,
+              color: "#F8FAFC",
+              letterSpacing: "-0.04em",
+              lineHeight: 1,
             }}
-          />
+          >
+            {progress.toString().padStart(2, "0")}
+          </Typography>
+          <Typography
+            sx={{
+              fontFamily: "'Geist Mono', monospace",
+              fontSize: "0.6rem",
+              color: "#64748B",
+              letterSpacing: 2,
+              mt: 0.5,
+            }}
+          >
+            PCT
+          </Typography>
         </Box>
+      </Box>
 
-        {/* Counter Text */}
+      {/* Brand & telemetry status */}
+      <Box sx={{ textAlign: "center" }}>
         <Typography
-          variant="caption"
-          sx={{ color: "#475569", mt: 1, display: "block", letterSpacing: 4 }}
+          sx={{
+            fontFamily: "'Space Grotesk', sans-serif",
+            fontSize: "0.85rem",
+            fontWeight: 700,
+            letterSpacing: 4,
+            color: "#F8FAFC",
+            mb: 0.8,
+            textTransform: "uppercase",
+          }}
         >
-          {counter}%
+          DINESH <span style={{ color: "#60A5FA" }}>//</span> CYBERSPACE
         </Typography>
+
+        <Typography
+          sx={{
+            fontFamily: "'Geist Mono', monospace",
+            fontSize: "0.68rem",
+            color: "#94A3B8",
+            letterSpacing: 2.5,
+            textTransform: "uppercase",
+          }}
+        >
+          {phaseText}
+        </Typography>
+      </Box>
+
+      {/* Orbital coordinate marker */}
+      <Box
+        sx={{
+          position: "absolute",
+          bottom: 32,
+          display: "flex",
+          alignItems: "center",
+          gap: 2,
+          fontFamily: "'Geist Mono', monospace",
+          fontSize: "0.65rem",
+          color: "#475569",
+          letterSpacing: 2,
+        }}
+      >
+        <span>COORD: 13.0827° N, 80.2707° E</span>
+        <span>•</span>
+        <span>INITIALIZING UNIVERSE</span>
       </Box>
     </Box>
   );

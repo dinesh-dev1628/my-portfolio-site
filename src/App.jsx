@@ -1,75 +1,134 @@
 import React, { useState } from "react";
-import { AnimatePresence, motion } from "framer-motion";
+import {
+  AnimatePresence,
+  motion,
+  useReducedMotion,
+  useScroll,
+  useSpring,
+} from "framer-motion";
 import { Box } from "@mui/material";
+
 import Navbar from "./components/layout/Navbar.jsx";
+import Starfield from "./components/layout/Starfield.jsx";
+import CosmicAmbience from "./components/layout/CosmicAmbience.jsx";
+import Footer from "./components/layout/Footer.jsx";
+
 import Hero from "./sections/Hero.jsx";
 import About from "./sections/About.jsx";
-import Skills from "./sections/Skills.jsx";
+import Experience from "./sections/Experience.jsx";
 import Projects from "./sections/Projects.jsx";
+import Skills from "./sections/Skills.jsx";
 import Contact from "./sections/Contact.jsx";
 import Preloader from "./sections/Preloader.jsx";
 
-// --- The "Perfect" Reveal Component ---
-const ScrollReveal = ({ children }) => (
-  <motion.div
-    initial={{ opacity: 0, y: 60, filter: "blur(10px)" }} // Start with a slight blur for "High-End" feel
-    whileInView={{ opacity: 1, y: 0, filter: "blur(0px)" }}
-    viewport={{ 
-      once: true, 
-      amount: 0.2, // Triggers when 20% of the section is visible
-      margin: "0px 0px -100px 0px" // "Wait" until the section is 100px into the screen
-    }}
-    transition={{ 
-      duration: 1.2, 
-      ease: [0.16, 1, 0.3, 1], // Ultra-smooth "Quartz" easing
-      delay: 0.1 // Small delay so it doesn't feel abrupt
-    }}
-  >
-    {children}
-  </motion.div>
-);
+const EASE = [0.16, 1, 0.3, 1];
+
+// Scroll reveal component for celestial transitions
+const SectionReveal = ({ children, id }) => {
+  const reduce = useReducedMotion();
+  return (
+    <motion.section
+      id={id}
+      initial={
+        reduce
+          ? false
+          : { opacity: 0, y: 60, scale: 0.98, filter: "blur(8px)" }
+      }
+      whileInView={{ opacity: 1, y: 0, scale: 1, filter: "blur(0px)" }}
+      viewport={{ once: true, amount: 0.12, margin: "0px 0px -60px 0px" }}
+      transition={{ duration: 1.1, ease: EASE }}
+      style={{ position: "relative" }}
+    >
+      {children}
+    </motion.section>
+  );
+};
 
 function App() {
   const [loading, setLoading] = useState(true);
 
+  // Top scroll progress "orbital telemetry line"
+  const { scrollYProgress } = useScroll();
+  const progressSpring = useSpring(scrollYProgress, {
+    stiffness: 120,
+    damping: 30,
+    restDelta: 0.001,
+  });
+
   return (
     <>
       <AnimatePresence mode="wait">
-        {loading && <Preloader setLoading={setLoading} key="loader" />}
+        {loading && <Preloader setLoading={setLoading} key="cosmic-preloader" />}
       </AnimatePresence>
 
       {!loading && (
-        <Box 
-          component="main" 
-          sx={{ 
-            backgroundColor: "#020617", 
+        <Box
+          component="main"
+          sx={{
+            position: "relative",
             minHeight: "100vh",
-            overflowX: "hidden" 
+            backgroundColor: "#05060A",
+            overflowX: "hidden",
           }}
         >
-          <Navbar />
-          
-          {/* Hero triggers its own entry animation in its own file */}
-          <Hero />
+          {/* Deep Space Atmosphere Layers */}
+          <CosmicAmbience />
+          <Starfield />
 
-          <Box sx={{ display: "flex", flexDirection: "column", gap: { xs: 10, md: 20 } }}>
-            <ScrollReveal>
-              <About />
-            </ScrollReveal>
+          {/* Top Orbital Scroll Progress Bar */}
+          <motion.div
+            aria-hidden="true"
+            style={{
+              scaleX: progressSpring,
+              transformOrigin: "0% 50%",
+              position: "fixed",
+              top: 0,
+              left: 0,
+              right: 0,
+              height: 2.5,
+              zIndex: 1400,
+              background:
+                "linear-gradient(90deg, #60A5FA 0%, #8B5CF6 50%, #A78BFA 100%)",
+              boxShadow: "0 0 10px rgba(96, 165, 250, 0.7)",
+            }}
+          />
 
-            <ScrollReveal>
-              <Skills />
-            </ScrollReveal>
+          {/* Foreground Universe Content */}
+          <Box sx={{ position: "relative", zIndex: 2 }}>
+            <Navbar />
 
-            <ScrollReveal>
-              <Projects />
-            </ScrollReveal>
+            <Hero />
 
-            <ScrollReveal>
-              <Contact />
-            </ScrollReveal>
+            <Box
+              sx={{
+                display: "flex",
+                flexDirection: "column",
+                gap: { xs: 8, md: 14 },
+              }}
+            >
+              <SectionReveal id="about">
+                <About />
+              </SectionReveal>
+
+              <SectionReveal id="experience">
+                <Experience />
+              </SectionReveal>
+
+              <SectionReveal id="projects">
+                <Projects />
+              </SectionReveal>
+
+              <SectionReveal id="skills">
+                <Skills />
+              </SectionReveal>
+
+              <SectionReveal id="contact">
+                <Contact />
+              </SectionReveal>
+            </Box>
+
+            <Footer />
           </Box>
-          
         </Box>
       )}
     </>
