@@ -3,488 +3,668 @@ import { Box, Typography, Container, Grid, Stack } from "@mui/material";
 import {
   Code,
   AutoAwesome,
+  HubOutlined,
   Memory,
   Security,
-  Speed,
   CloudQueue,
-  HubOutlined,
-  CheckCircleOutline,
+  NorthEast,
+  Explore,
+  Radar,
 } from "@mui/icons-material";
 import { motion, useReducedMotion } from "framer-motion";
 import MyProfilePic from "../components/asset/IMG-20240604-WA0002.jpg";
 
-const corePillars = [
+// Interactive Orbital Odyssey Epochs for the right-side planetary journey
+const journeyOrbits = [
   {
-    icon: <Code fontSize="small" />,
-    title: "Python Development",
-    desc: "Clean backend architectures, robust algorithms, and optimized data processing.",
+    id: "systems-core",
+    name: "Orbit 01: Core Systems",
+    epoch: "FOUNDATIONAL CORE",
+    color: "#8B5CF6", // Cosmic violet
+    distance: "120 AU",
+    description:
+      "Deep grounding in clean Python architecture, relational database schema modeling in PostgreSQL, and deterministic algorithmic problem solving.",
+    tech: ["Python", "PostgreSQL", "Data Structures", "Docker"],
   },
   {
-    icon: <AutoAwesome fontSize="small" />,
-    title: "Production Automation",
-    desc: "End-to-end browser automation, task runners, and intelligent scraping with Playwright.",
+    id: "automation-orbit",
+    name: "Orbit 02: Automation Matrix",
+    epoch: "AUTONOMOUS PIPELINES",
+    color: "#38BDF8", // Electric blue
+    distance: "240 AU",
+    description:
+      "Engineering resilient browser automations with Playwright, anti-flakiness retry systems, and high-volume dynamic SPA scraping pipelines.",
+    tech: ["Playwright", "AsyncIO", "n8n", "Postman"],
   },
   {
-    icon: <HubOutlined fontSize="small" />,
-    title: "API Integration",
-    desc: "Asynchronous RESTful APIs with FastAPI, secure authentication, and webhook pipelines.",
+    id: "fullstack-orbit",
+    name: "Orbit 03: Full-Stack Galaxy",
+    epoch: "REACTIVE SYSTEMS",
+    color: "#D946EF", // Nebula pink
+    distance: "360 AU",
+    description:
+      "Building seamless end-to-end full-stack applications with React 19, FastAPI, modern micro-interactions, and accessible typography.",
+    tech: ["React 19", "FastAPI", "Next.js", "Framer Motion"],
   },
   {
-    icon: <Memory fontSize="small" />,
-    title: "React & Next.js",
-    desc: "Fluid, accessible, and high-performance frontend interfaces with Framer Motion.",
+    id: "ai-frontier",
+    name: "Orbit 04: Frontier & AI",
+    epoch: "AGENTIC EXPEDITION",
+    color: "#2DD4BF", // Teal nebula
+    distance: "480 AU",
+    description:
+      "Orchestrating multi-step autonomous AI agent workflows, webhook integrations, and cloud deployment pipelines on Google Cloud.",
+    tech: ["AI Agents", "Google Cloud", "API Automation", "Redis"],
   },
-  {
-    icon: <Security fontSize="small" />,
-    title: "Docker & Systems",
-    desc: "Reproducible containerized environments, PostgreSQL tuning, and persistent storage.",
-  },
-  {
-    icon: <CloudQueue fontSize="small" />,
-    title: "Cloud & AI Workflows",
-    desc: "Cloud deployment architectures and AI-assisted engineering automations.",
-  },
+];
+
+// Animated Stats Data
+const statsData = [
+  { value: "12+", label: "PROJECTS BUILT", detail: "Production & Systems" },
+  { value: "15+", label: "TECHNOLOGIES EXPLORED", detail: "Languages & Frameworks" },
+  { value: "50+", label: "AUTOMATION WORKFLOWS", detail: "Pipelines & Scrapers" },
+  { value: "3+", label: "YEARS OF EXPERIENCE", detail: "Software Engineering" },
 ];
 
 const About = () => {
   const reduce = useReducedMotion();
-  const [activePillar, setActivePillar] = useState(0);
+  const [activeOrbit, setActiveOrbit] = useState(journeyOrbits[0]);
 
   return (
     <Box
       id="about"
       component="section"
       sx={{
-        py: { xs: 10, md: 18 },
+        py: { xs: 12, md: 18 },
         position: "relative",
         overflow: "hidden",
       }}
     >
       <Container maxWidth="lg" sx={{ position: "relative", zIndex: 1 }}>
         {/* Section Header */}
-        <Box sx={{ mb: { xs: 6, md: 10 } }}>
+        <Box sx={{ mb: { xs: 7, md: 9 } }}>
           <Stack direction="row" alignItems="center" spacing={1.5} sx={{ mb: 1.5 }}>
             <Box
               sx={{
                 width: 24,
-                height: 1,
-                backgroundColor: "#60A5FA",
+                height: 2,
+                backgroundColor: "#8B5CF6",
+                boxShadow: "0 0 10px #8B5CF6",
               }}
             />
             <Typography
               sx={{
                 fontFamily: "'Geist Mono', monospace",
                 fontSize: "0.75rem",
-                color: "#60A5FA",
+                color: "#8B5CF6",
                 letterSpacing: 3,
                 textTransform: "uppercase",
                 fontWeight: 600,
               }}
             >
-              01 // ORIGIN & ARCHITECTURE
+              01 // THE ORIGIN
             </Typography>
           </Stack>
 
           <Typography
             variant="h2"
             sx={{
-              fontSize: { xs: "2rem", sm: "3rem", md: "3.6rem" },
+              fontSize: { xs: "clamp(2rem, 5vw, 3.8rem)" },
               fontWeight: 800,
-              lineHeight: 1.1,
+              lineHeight: 1.08,
               letterSpacing: "-0.03em",
-              color: "#F8FAFC",
+              color: "#F5F5FA",
               maxWidth: "850px",
             }}
           >
-            A universe of ideas.{" "}
-            <span
-              style={{
-                background: "linear-gradient(90deg, #60A5FA, #A78BFA)",
+            THE STORY BEHIND{" "}
+            <Box
+              component="span"
+              sx={{
+                background: "linear-gradient(90deg, #8B5CF6, #38BDF8, #D946EF)",
                 WebkitBackgroundClip: "text",
                 WebkitTextFillColor: "transparent",
               }}
             >
-              Engineered into reality.
-            </span>
+              THE UNIVERSE.
+            </Box>
           </Typography>
         </Box>
 
-        <Grid container spacing={{ xs: 6, md: 8 }} alignItems="center">
-          {/* Left Column: Portrait with Celestial HUD Viewfinder */}
-          <Grid size={{ xs: 12, md: 5 }}>
-            <motion.div
-              initial={reduce ? false : { opacity: 0, scale: 0.96 }}
-              whileInView={{ opacity: 1, scale: 1 }}
-              viewport={{ once: true, amount: 0.2 }}
-              transition={{ duration: 0.9, ease: [0.16, 1, 0.3, 1] }}
-            >
-              <Box
-                sx={{
-                  position: "relative",
-                  width: "fit-content",
-                  mx: { xs: "auto", md: 0 },
-                }}
+        {/* Split Layout: Left Introduction & Philosophy | Right Interactive Planetary System */}
+        <Grid container spacing={{ xs: 6, md: 8 }} alignItems="stretch">
+          {/* Left Column: Personal Introduction & Professional Philosophy */}
+          <Grid size={{ xs: 12, md: 6 }}>
+            <Box sx={{ display: "flex", flexDirection: "column", height: "100%", justifyContent: "space-between" }}>
+              <motion.div
+                initial={reduce ? false : { opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, amount: 0.18 }}
+                transition={{ duration: 0.8 }}
               >
-                {/* Outer Celestial Frame */}
+                {/* Profile Visual with Astronaut HUD Viewfinder Frame */}
                 <Box
                   sx={{
-                    position: "absolute",
-                    inset: "-12px",
-                    borderRadius: "24px",
-                    border: "1px dashed rgba(96, 165, 250, 0.2)",
-                    pointerEvents: "none",
-                  }}
-                />
-
-                {/* HUD Corner Accents */}
-                <Box
-                  sx={{
-                    position: "absolute",
-                    top: -16,
-                    left: -16,
-                    width: 20,
-                    height: 20,
-                    borderTop: "2px solid #60A5FA",
-                    borderLeft: "2px solid #60A5FA",
-                    pointerEvents: "none",
-                  }}
-                />
-                <Box
-                  sx={{
-                    position: "absolute",
-                    bottom: -16,
-                    right: -16,
-                    width: 20,
-                    height: 20,
-                    borderBottom: "2px solid #A78BFA",
-                    borderRight: "2px solid #A78BFA",
-                    pointerEvents: "none",
-                  }}
-                />
-
-                {/* Image Container */}
-                <Box
-                  sx={{
-                    position: "relative",
-                    width: { xs: "270px", sm: "320px", md: "340px" },
-                    height: { xs: "340px", sm: "400px", md: "430px" },
-                    borderRadius: "20px",
-                    overflow: "hidden",
-                    backgroundColor: "#101522",
-                    border: "1px solid rgba(255, 255, 255, 0.1)",
-                    boxShadow:
-                      "0 25px 60px -15px rgba(0, 0, 0, 0.8), 0 0 30px rgba(96, 165, 250, 0.08)",
+                    display: "flex",
+                    alignItems: "center",
+                    gap: 3,
+                    mb: 4,
                   }}
                 >
                   <Box
-                    component="img"
-                    src={MyProfilePic}
-                    alt="Dinesh — Developer"
                     sx={{
-                      width: "100%",
-                      height: "100%",
-                      objectFit: "cover",
-                      filter: "grayscale(25%) contrast(1.08)",
-                      transition: "all 0.6s cubic-bezier(0.16, 1, 0.3, 1)",
-                      "&:hover": {
-                        transform: "scale(1.04)",
-                        filter: "grayscale(0%) contrast(1.04)",
-                      },
-                    }}
-                  />
-
-                  {/* Gradient overlay for depth */}
-                  <Box
-                    sx={{
-                      position: "absolute",
-                      inset: 0,
-                      background:
-                        "linear-gradient(to top, rgba(5, 6, 10, 0.8) 0%, transparent 40%)",
-                      pointerEvents: "none",
-                    }}
-                  />
-
-                  {/* Telemetry pill at bottom of portrait */}
-                  <Box
-                    sx={{
-                      position: "absolute",
-                      bottom: 16,
-                      left: 16,
-                      right: 16,
-                      px: 2,
-                      py: 1,
-                      borderRadius: "12px",
-                      backgroundColor: "rgba(10, 13, 22, 0.75)",
-                      backdropFilter: "blur(12px)",
-                      border: "1px solid rgba(255, 255, 255, 0.1)",
-                      display: "flex",
-                      alignItems: "center",
-                      justifyContent: "space-between",
+                      position: "relative",
+                      width: { xs: "95px", sm: "115px" },
+                      height: { xs: "95px", sm: "115px" },
+                      borderRadius: "24px",
+                      overflow: "hidden",
+                      border: "2px solid rgba(56, 189, 248, 0.45)",
+                      boxShadow: "0 0 30px rgba(56, 189, 248, 0.25)",
+                      flexShrink: 0,
                     }}
                   >
-                    <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
-                      <Box
-                        sx={{
-                          width: 6,
-                          height: 6,
-                          borderRadius: "50%",
-                          backgroundColor: "#60A5FA",
-                        }}
-                      />
+                    <Box
+                      component="img"
+                      src={MyProfilePic}
+                      alt="Dinesh"
+                      sx={{
+                        width: "100%",
+                        height: "100%",
+                        objectFit: "cover",
+                        filter: "contrast(1.05)",
+                      }}
+                    />
+                    <Box
+                      sx={{
+                        position: "absolute",
+                        inset: 0,
+                        background:
+                          "linear-gradient(to top, rgba(5, 5, 16, 0.6) 0%, transparent 60%)",
+                      }}
+                    />
+                  </Box>
+
+                  <Box>
+                    <Typography
+                      sx={{
+                        fontFamily: "'Space Grotesk', sans-serif",
+                        fontWeight: 800,
+                        fontSize: { xs: "1.45rem", sm: "1.7rem" },
+                        color: "#F5F5FA",
+                        lineHeight: 1.1,
+                      }}
+                    >
+                      Dinesh
+                    </Typography>
+                    <Typography
+                      sx={{
+                        fontFamily: "'Geist Mono', monospace",
+                        fontSize: "0.78rem",
+                        color: "#38BDF8",
+                        letterSpacing: 1.5,
+                        mt: 0.5,
+                      }}
+                    >
+                      CYBERSPACE EXPLORER // 2026
+                    </Typography>
+                    <Typography
+                      sx={{
+                        fontFamily: "'Geist Mono', monospace",
+                        fontSize: "0.68rem",
+                        color: "#9292A8",
+                        letterSpacing: 1,
+                        mt: 0.4,
+                      }}
+                    >
+                      STATION: SOL-EARTH // STATUS: ONLINE
+                    </Typography>
+                  </Box>
+                </Box>
+
+                {/* Core Narrative / Specified Content */}
+                <Box
+                  sx={{
+                    p: 3.5,
+                    borderRadius: "20px",
+                    backgroundColor: "rgba(16, 16, 38, 0.65)",
+                    backdropFilter: "blur(18px)",
+                    border: "1px solid rgba(255, 255, 255, 0.08)",
+                    mb: 3.5,
+                    position: "relative",
+                  }}
+                >
+                  <Typography
+                    sx={{
+                      fontFamily: "'Space Grotesk', sans-serif",
+                      fontSize: { xs: "1.12rem", sm: "1.25rem" },
+                      fontWeight: 600,
+                      lineHeight: 1.6,
+                      color: "#F5F5FA",
+                      mb: 2,
+                    }}
+                  >
+                    "I'm a developer focused on building practical software
+                    solutions, production automation systems, and intelligent
+                    applications. I enjoy turning complex workflows into simple,
+                    reliable experiences."
+                  </Typography>
+
+                  <Typography
+                    sx={{
+                      color: "#9292A8",
+                      fontSize: "0.95rem",
+                      lineHeight: 1.8,
+                    }}
+                  >
+                    Every software system I build is approached with the
+                    rigor of a space mission: resilient to unexpected environmental
+                    failures, architected for low resource consumption, and crafted
+                    with obsessive attention to operational simplicity and telemetry.
+                  </Typography>
+                </Box>
+
+                {/* Professional Philosophy Principles */}
+                <Stack spacing={1.5} sx={{ mb: 4 }}>
+                  <Box
+                    sx={{
+                      display: "flex",
+                      alignItems: "flex-start",
+                      gap: 2,
+                      p: 2,
+                      borderRadius: "14px",
+                      backgroundColor: "rgba(255, 255, 255, 0.02)",
+                      border: "1px solid rgba(255, 255, 255, 0.05)",
+                    }}
+                  >
+                    <Box
+                      sx={{
+                        p: 0.8,
+                        borderRadius: "8px",
+                        backgroundColor: "rgba(139, 92, 246, 0.15)",
+                        color: "#8B5CF6",
+                        display: "flex",
+                      }}
+                    >
+                      <Code fontSize="small" />
+                    </Box>
+                    <Box>
                       <Typography
                         sx={{
                           fontFamily: "'Space Grotesk', sans-serif",
                           fontWeight: 700,
-                          fontSize: "0.85rem",
-                          color: "#F8FAFC",
+                          fontSize: "0.92rem",
+                          color: "#F5F5FA",
                         }}
                       >
-                        Dinesh
+                        Clean &amp; Deterministic Logic
+                      </Typography>
+                      <Typography sx={{ fontSize: "0.82rem", color: "#9292A8", mt: 0.2 }}>
+                        Favoring readable modularity and predictable state transitions over unnecessary complexity.
                       </Typography>
                     </Box>
-                    <Typography
+                  </Box>
+
+                  <Box
+                    sx={{
+                      display: "flex",
+                      alignItems: "flex-start",
+                      gap: 2,
+                      p: 2,
+                      borderRadius: "14px",
+                      backgroundColor: "rgba(255, 255, 255, 0.02)",
+                      border: "1px solid rgba(255, 255, 255, 0.05)",
+                    }}
+                  >
+                    <Box
                       sx={{
-                        fontFamily: "'Geist Mono', monospace",
-                        fontSize: "0.65rem",
-                        color: "#94A3B8",
-                        letterSpacing: 1,
+                        p: 0.8,
+                        borderRadius: "8px",
+                        backgroundColor: "rgba(56, 189, 248, 0.15)",
+                        color: "#38BDF8",
+                        display: "flex",
                       }}
                     >
-                      CYBERSPACE // 2026
-                    </Typography>
+                      <AutoAwesome fontSize="small" />
+                    </Box>
+                    <Box>
+                      <Typography
+                        sx={{
+                          fontFamily: "'Space Grotesk', sans-serif",
+                          fontWeight: 700,
+                          fontSize: "0.92rem",
+                          color: "#F5F5FA",
+                        }}
+                      >
+                        Zero-Flakiness Automation
+                      </Typography>
+                      <Typography sx={{ fontSize: "0.82rem", color: "#9292A8", mt: 0.2 }}>
+                        Designing browser scrapers and API workers that gracefully recover from network jitter and DOM shifts.
+                      </Typography>
+                    </Box>
                   </Box>
-                </Box>
-              </Box>
-            </motion.div>
+                </Stack>
+              </motion.div>
+            </Box>
           </Grid>
 
-          {/* Right Column: Narrative & Interactive Expertise Indicators */}
-          <Grid size={{ xs: 12, md: 7 }}>
-            <Stack spacing={4}>
-              <motion.div
-                initial={reduce ? false : { opacity: 0, y: 30 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, amount: 0.2 }}
-                transition={{ duration: 0.8, delay: 0.1 }}
+          {/* Right Column: Interactive Planetary System representing development journey */}
+          <Grid size={{ xs: 12, md: 6 }}>
+            <motion.div
+              initial={reduce ? false : { opacity: 0, scale: 0.97 }}
+              whileInView={{ opacity: 1, scale: 1 }}
+              viewport={{ once: true, amount: 0.18 }}
+              transition={{ duration: 0.85, delay: 0.15 }}
+              style={{ height: "100%" }}
+            >
+              <Box
+                sx={{
+                  p: { xs: 3, sm: 4 },
+                  borderRadius: "26px",
+                  backgroundColor: "rgba(16, 16, 38, 0.68)",
+                  border: "1px solid rgba(139, 92, 246, 0.28)",
+                  backdropFilter: "blur(20px)",
+                  boxShadow:
+                    "0 20px 50px -15px rgba(0, 0, 0, 0.8), 0 0 30px rgba(139, 92, 246, 0.08)",
+                  height: "100%",
+                  display: "flex",
+                  flexDirection: "column",
+                  justifyContent: "space-between",
+                }}
               >
-                <Typography
-                  sx={{
-                    fontFamily: "'Space Grotesk', sans-serif",
-                    fontSize: { xs: "1.2rem", sm: "1.35rem" },
-                    fontWeight: 600,
-                    lineHeight: 1.5,
-                    color: "#F8FAFC",
-                    mb: 2,
-                  }}
-                >
-                  I'm a software engineer driven by solving real-world challenges
-                  through clean logic, resilient automation, and intuitive digital interfaces.
-                </Typography>
+                {/* Header for Planetary Journey */}
+                <Box sx={{ mb: 3 }}>
+                  <Box
+                    sx={{
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "space-between",
+                      mb: 1,
+                    }}
+                  >
+                    <Typography
+                      sx={{
+                        fontFamily: "'Space Grotesk', sans-serif",
+                        fontWeight: 700,
+                        fontSize: "1.25rem",
+                        color: "#F5F5FA",
+                      }}
+                    >
+                      Orbital Development Journey
+                    </Typography>
+                    <Box
+                      sx={{
+                        px: 1.5,
+                        py: 0.4,
+                        borderRadius: "999px",
+                        backgroundColor: "rgba(56, 189, 248, 0.12)",
+                        border: "1px solid rgba(56, 189, 248, 0.3)",
+                      }}
+                    >
+                      <Typography
+                        sx={{
+                          fontFamily: "'Geist Mono', monospace",
+                          fontSize: "0.68rem",
+                          color: "#38BDF8",
+                          fontWeight: 600,
+                        }}
+                      >
+                        INTERACTIVE SYSTEM
+                      </Typography>
+                    </Box>
+                  </Box>
+                  <Typography sx={{ color: "#9292A8", fontSize: "0.85rem" }}>
+                    Select an orbital sector to inspect the systems and technologies established along my path.
+                  </Typography>
+                </Box>
 
-                <Typography
-                  sx={{
-                    color: "#94A3B8",
-                    fontSize: "1rem",
-                    lineHeight: 1.8,
-                    mb: 2,
-                  }}
-                >
-                  My work spans the entire lifecycle of modern applications: from
-                  designing high-throughput backend APIs with Python and FastAPI,
-                  orchestrating robust browser automation with Playwright, to crafting
-                  refined interactive frontend experiences using React 19 and Next.js.
-                </Typography>
-
-                <Typography
-                  sx={{
-                    color: "#94A3B8",
-                    fontSize: "1rem",
-                    lineHeight: 1.8,
-                  }}
-                >
-                  I prioritize maintainability, minimal complexity, and high engineering
-                  precision over temporary shortcuts.
-                </Typography>
-              </motion.div>
-
-              {/* Interactive Core Expertise Matrix */}
-              <motion.div
-                initial={reduce ? false : { opacity: 0, y: 30 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, amount: 0.2 }}
-                transition={{ duration: 0.8, delay: 0.2 }}
-              >
-                <Typography
-                  sx={{
-                    fontFamily: "'Geist Mono', monospace",
-                    fontSize: "0.72rem",
-                    color: "#60A5FA",
-                    letterSpacing: 2,
-                    textTransform: "uppercase",
-                    fontWeight: 600,
-                    mb: 2,
-                  }}
-                >
-                  // INTERACTIVE SYSTEM CAPABILITIES
-                </Typography>
-
+                {/* Interactive Orbital Selector Nodes */}
                 <Box
                   sx={{
                     display: "grid",
                     gridTemplateColumns: { xs: "1fr", sm: "1fr 1fr" },
                     gap: 1.5,
+                    mb: 3,
                   }}
                 >
-                  {corePillars.map((pillar, idx) => {
-                    const isSelected = activePillar === idx;
+                  {journeyOrbits.map((orbit) => {
+                    const isSelected = activeOrbit.id === orbit.id;
                     return (
                       <Box
-                        key={pillar.title}
-                        onClick={() => setActivePillar(idx)}
+                        key={orbit.id}
+                        onClick={() => setActiveOrbit(orbit)}
                         sx={{
                           p: 2,
                           borderRadius: "14px",
                           backgroundColor: isSelected
-                            ? "rgba(96, 165, 250, 0.08)"
+                            ? "rgba(139, 92, 246, 0.18)"
                             : "rgba(255, 255, 255, 0.02)",
                           border: "1px solid",
                           borderColor: isSelected
-                            ? "rgba(96, 165, 250, 0.35)"
+                            ? orbit.color
                             : "rgba(255, 255, 255, 0.06)",
                           cursor: "pointer",
                           transition: "all 0.25s ease",
+                          boxShadow: isSelected
+                            ? `0 0 20px ${orbit.color}30`
+                            : "none",
                           "&:hover": {
-                            borderColor: "rgba(96, 165, 250, 0.3)",
-                            backgroundColor: "rgba(255, 255, 255, 0.04)",
+                            borderColor: orbit.color,
+                            backgroundColor: "rgba(255, 255, 255, 0.05)",
                           },
                         }}
                       >
-                        <Stack direction="row" spacing={1.5} alignItems="center" mb={0.6}>
+                        <Box sx={{ display: "flex", alignItems: "center", gap: 1.2, mb: 0.8 }}>
                           <Box
                             sx={{
-                              color: isSelected ? "#60A5FA" : "#94A3B8",
-                              display: "flex",
+                              width: 8,
+                              height: 8,
+                              borderRadius: "50%",
+                              backgroundColor: orbit.color,
+                              boxShadow: `0 0 8px ${orbit.color}`,
                             }}
-                          >
-                            {pillar.icon}
-                          </Box>
+                          />
                           <Typography
                             sx={{
                               fontFamily: "'Space Grotesk', sans-serif",
-                              fontSize: "0.92rem",
                               fontWeight: 700,
-                              color: isSelected ? "#F8FAFC" : "#E2E8F0",
+                              fontSize: "0.92rem",
+                              color: isSelected ? "#F5F5FA" : "#E2E8F0",
                             }}
                           >
-                            {pillar.title}
+                            {orbit.name}
                           </Typography>
-                        </Stack>
+                        </Box>
                         <Typography
                           sx={{
-                            fontSize: "0.82rem",
-                            color: "#94A3B8",
-                            lineHeight: 1.5,
+                            fontFamily: "'Geist Mono', monospace",
+                            fontSize: "0.68rem",
+                            color: isSelected ? orbit.color : "#9292A8",
+                            letterSpacing: 1,
                           }}
                         >
-                          {pillar.desc}
+                          {orbit.epoch}
                         </Typography>
                       </Box>
                     );
                   })}
                 </Box>
-              </motion.div>
 
-              {/* Engineering Metrics (No generic percentage bars!) */}
-              <Box
-                sx={{
-                  display: "flex",
-                  flexWrap: "wrap",
-                  gap: { xs: 4, sm: 6 },
-                  pt: 2,
-                  borderTop: "1px solid rgba(255, 255, 255, 0.06)",
-                }}
-              >
-                <Box>
-                  <Typography
+                {/* Active Orbital Deep-Dive Telemetry Display */}
+                <Box
+                  sx={{
+                    p: 3,
+                    borderRadius: "16px",
+                    backgroundColor: "rgba(5, 5, 16, 0.82)",
+                    border: `1px solid ${activeOrbit.color}35`,
+                    position: "relative",
+                    overflow: "hidden",
+                  }}
+                >
+                  <Box
                     sx={{
-                      fontFamily: "'Space Grotesk', sans-serif",
-                      fontSize: "2rem",
-                      fontWeight: 800,
-                      color: "#F8FAFC",
-                      lineHeight: 1,
+                      position: "absolute",
+                      top: 0,
+                      right: 0,
+                      width: 140,
+                      height: 140,
+                      background: `radial-gradient(circle at top right, ${activeOrbit.color}25 0%, transparent 70%)`,
+                      pointerEvents: "none",
                     }}
-                  >
-                    99.9%
-                  </Typography>
-                  <Typography
-                    sx={{
-                      fontFamily: "'Geist Mono', monospace",
-                      fontSize: "0.7rem",
-                      color: "#64748B",
-                      letterSpacing: 2,
-                      mt: 0.5,
-                      textTransform: "uppercase",
-                    }}
-                  >
-                    CODE INTEGRITY
-                  </Typography>
-                </Box>
+                  />
 
-                <Box>
-                  <Typography
-                    sx={{
-                      fontFamily: "'Space Grotesk', sans-serif",
-                      fontSize: "2rem",
-                      fontWeight: 800,
-                      color: "#60A5FA",
-                      lineHeight: 1,
-                    }}
-                  >
-                    10x
-                  </Typography>
-                  <Typography
-                    sx={{
-                      fontFamily: "'Geist Mono', monospace",
-                      fontSize: "0.7rem",
-                      color: "#64748B",
-                      letterSpacing: 2,
-                      mt: 0.5,
-                      textTransform: "uppercase",
-                    }}
-                  >
-                    AUTOMATION SPEED
-                  </Typography>
-                </Box>
+                  <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center", mb: 1.5 }}>
+                    <Typography
+                      sx={{
+                        fontFamily: "'Geist Mono', monospace",
+                        fontSize: "0.72rem",
+                        color: activeOrbit.color,
+                        letterSpacing: 1.5,
+                        fontWeight: 600,
+                      }}
+                    >
+                      // {activeOrbit.epoch}
+                    </Typography>
+                    <Typography
+                      sx={{
+                        fontFamily: "'Geist Mono', monospace",
+                        fontSize: "0.68rem",
+                        color: "#9292A8",
+                      }}
+                    >
+                      DISTANCE: {activeOrbit.distance}
+                    </Typography>
+                  </Box>
 
-                <Box>
                   <Typography
                     sx={{
-                      fontFamily: "'Space Grotesk', sans-serif",
-                      fontSize: "2rem",
-                      fontWeight: 800,
-                      color: "#A78BFA",
-                      lineHeight: 1,
+                      fontSize: "0.94rem",
+                      color: "#F5F5FA",
+                      lineHeight: 1.75,
+                      mb: 2.5,
                     }}
                   >
-                    &lt;50ms
+                    {activeOrbit.description}
                   </Typography>
-                  <Typography
-                    sx={{
-                      fontFamily: "'Geist Mono', monospace",
-                      fontSize: "0.7rem",
-                      color: "#64748B",
-                      letterSpacing: 2,
-                      mt: 0.5,
-                      textTransform: "uppercase",
-                    }}
-                  >
-                    API RESPONSE GOAL
-                  </Typography>
+
+                  <Box>
+                    <Typography
+                      sx={{
+                        fontFamily: "'Geist Mono', monospace",
+                        fontSize: "0.65rem",
+                        color: "#9292A8",
+                        letterSpacing: 1.5,
+                        mb: 1,
+                        textTransform: "uppercase",
+                      }}
+                    >
+                      DEPLOYED TECHNOLOGIES IN THIS ORBIT:
+                    </Typography>
+                    <Box sx={{ display: "flex", flexWrap: "wrap", gap: 1 }}>
+                      {activeOrbit.tech.map((t) => (
+                        <Box
+                          key={t}
+                          sx={{
+                            px: 1.4,
+                            py: 0.4,
+                            borderRadius: "6px",
+                            backgroundColor: "rgba(255, 255, 255, 0.04)",
+                            border: "1px solid rgba(255, 255, 255, 0.09)",
+                            fontFamily: "'Geist Mono', monospace",
+                            fontSize: "0.72rem",
+                            color: "#E2E8F0",
+                          }}
+                        >
+                          {t}
+                        </Box>
+                      ))}
+                    </Box>
+                  </Box>
                 </Box>
               </Box>
-            </Stack>
+            </motion.div>
           </Grid>
         </Grid>
+
+        {/* Animated Statistics Section */}
+        <Box
+          sx={{
+            mt: { xs: 8, md: 12 },
+            pt: { xs: 6, md: 8 },
+            borderTop: "1px solid rgba(255, 255, 255, 0.07)",
+          }}
+        >
+          <Grid container spacing={{ xs: 3, sm: 4 }}>
+            {statsData.map((stat, idx) => (
+              <Grid size={{ xs: 6, md: 3 }} key={stat.label}>
+                <motion.div
+                  initial={reduce ? false : { opacity: 0, y: 25 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true, amount: 0.2 }}
+                  transition={{ duration: 0.7, delay: idx * 0.12 }}
+                >
+                  <Box
+                    sx={{
+                      p: 2.5,
+                      borderRadius: "18px",
+                      backgroundColor: "rgba(16, 16, 38, 0.45)",
+                      border: "1px solid rgba(255, 255, 255, 0.06)",
+                      transition: "all 0.3s ease",
+                      "&:hover": {
+                        borderColor: "rgba(56, 189, 248, 0.35)",
+                        boxShadow: "0 12px 30px -10px rgba(0, 0, 0, 0.6)",
+                        transform: "translateY(-2px)",
+                      },
+                    }}
+                  >
+                    <Typography
+                      sx={{
+                        fontFamily: "'Space Grotesk', sans-serif",
+                        fontSize: { xs: "2.4rem", sm: "3rem", md: "3.4rem" },
+                        fontWeight: 800,
+                        lineHeight: 1,
+                        background:
+                          idx === 0
+                            ? "linear-gradient(90deg, #8B5CF6, #C084FC)"
+                            : idx === 1
+                            ? "linear-gradient(90deg, #38BDF8, #7DD3FC)"
+                            : idx === 2
+                            ? "linear-gradient(90deg, #D946EF, #F472B6)"
+                            : "linear-gradient(90deg, #2DD4BF, #5EEAD4)",
+                        WebkitBackgroundClip: "text",
+                        WebkitTextFillColor: "transparent",
+                        mb: 1,
+                      }}
+                    >
+                      {stat.value}
+                    </Typography>
+                    <Typography
+                      sx={{
+                        fontFamily: "'Space Grotesk', sans-serif",
+                        fontWeight: 700,
+                        fontSize: "0.95rem",
+                        color: "#F5F5FA",
+                        lineHeight: 1.2,
+                        mb: 0.5,
+                      }}
+                    >
+                      {stat.label}
+                    </Typography>
+                    <Typography
+                      sx={{
+                        fontFamily: "'Geist Mono', monospace",
+                        fontSize: "0.68rem",
+                        color: "#9292A8",
+                        letterSpacing: 1,
+                      }}
+                    >
+                      {stat.detail}
+                    </Typography>
+                  </Box>
+                </motion.div>
+              </Grid>
+            ))}
+          </Grid>
+        </Box>
       </Container>
     </Box>
   );

@@ -2,55 +2,57 @@ export const projectsData = [
   {
     id: "expense-tracker",
     title: "Expense Tracker",
-    codename: "STELLAR // 01",
+    codename: "MISSION // STELLAR-01",
+    sector: "ORBITAL SECTOR 01",
+    category: "Full-Stack Web & Financial Systems",
     subtitle: "Financial Intelligence & Ledger Engine",
     description:
-      "Precision-built Python core for automated personal finance and transaction analytics. Features real-time PostgreSQL integration wrapped in a minimalist logic layer.",
+      "Precision-engineered Python application for automated personal finance tracking and transactional analytics. Features real-time PostgreSQL storage, robust SQL schemas, and structured REST interfaces.",
+    problemSolved:
+      "Eliminates manual transaction logging and categorization errors by aggregating disparate financial inputs into an ACID-compliant relational ledger with sub-second analytical reporting.",
     technologies: ["Python", "PostgreSQL", "REST APIs", "Analytics", "Docker"],
-    challenges: [
-      "Real-time transactional data aggregation without race conditions.",
-      "Optimized relational schema for multi-period analytical SQL queries.",
-      "Clean separation of business logic, database transactions, and interface layers."
-    ],
-    features: [
-      "Automated transaction ingestion and category classification.",
-      "Real-time financial analytics and monthly summary reports.",
-      "Persistent PostgreSQL relational storage with connection pooling.",
-      "Lightweight command and REST integration interfaces."
+    keyFeatures: [
+      "Automated transaction ingestion with dynamic multi-tier category classification.",
+      "Real-time analytical dashboards generating monthly spend telemetry and trajectory forecasts.",
+      "Persistent PostgreSQL relational storage backed by optimized connection pooling.",
+      "Containerized deployment environment ensuring zero configuration drift via Docker."
     ],
     github: "https://github.com/dinesh-dev1628/expense_tracker_app",
     demo: null,
     featured: true,
-    accent: "#60A5FA",
+    status: "MISSION ACCOMPLISHED",
+    accent: "#38BDF8", // Electric Blue
+    glow: "rgba(56, 189, 248, 0.4)",
     stats: {
-      uptime: "99.9%",
       latency: "<15ms",
-      architecture: "Modular Python"
+      architecture: "Modular Python",
+      dataEngine: "PostgreSQL"
     }
   },
   {
     id: "playwright-automation",
     title: "Production Web Automation Suite",
-    codename: "STELLAR // 02",
+    codename: "MISSION // STELLAR-02",
+    sector: "ORBITAL SECTOR 02",
+    category: "Production Automation Systems",
     subtitle: "Browser Orchestration & Scraping Pipeline",
     description:
-      "Fault-tolerant web automation and intelligent extraction suite powered by Playwright and Python. Built to handle complex dynamic SPAs, resilient scraping, and automated workflows.",
+      "Fault-tolerant web automation and intelligent extraction suite built with Python and Playwright. Engineered to harvest dynamic, JavaScript-heavy single-page applications with zero test flakiness.",
+    problemSolved:
+      "Solves fragile web scraping and high manual workflow overhead by implementing state-aware DOM polling, exponential backoff retries, and concurrent headless browser instances.",
     technologies: ["Python", "Playwright", "FastAPI", "AsyncIO", "Postman"],
-    challenges: [
-      "Resilient handling of dynamic single-page applications and asynchronous DOM hydration.",
-      "Anti-flakiness retry algorithms with smart exponential backoff and element state polling.",
-      "Headless resource optimization for concurrent browser contexts."
-    ],
-    features: [
-      "Headless multi-browser automation with Chromium and WebKit.",
-      "Structured data extraction pipelines with schema validation.",
-      "Automated visual telemetry, network tracing, and error screenshots.",
-      "FastAPI endpoint triggers for on-demand headless task execution."
+    keyFeatures: [
+      "Headless multi-browser orchestration running concurrent Chromium and WebKit instances.",
+      "Structured data extraction pipelines with automated schema validation and JSON export.",
+      "Anti-flakiness retry algorithms with smart state polling and dynamic waiting.",
+      "FastAPI endpoint triggers for on-demand headless task execution and telemetry logging."
     ],
     github: "https://github.com/dinesh-dev1628",
     demo: null,
     featured: true,
-    accent: "#8B5CF6",
+    status: "IN ORBIT // OPERATIONAL",
+    accent: "#8B5CF6", // Cosmic Violet
+    glow: "rgba(139, 92, 246, 0.45)",
     stats: {
       efficiency: "10x Faster",
       reliability: "High SLA",
@@ -60,26 +62,27 @@ export const projectsData = [
   {
     id: "cyberspace-universe",
     title: "Cyberspace Digital Universe",
-    codename: "STELLAR // 03",
-    subtitle: "Cinematic High-Performance Portfolio",
+    codename: "MISSION // STELLAR-03",
+    sector: "ORBITAL SECTOR 03",
+    category: "Full-Stack Web Applications",
+    subtitle: "Cinematic High-Performance Interactive Portfolio",
     description:
-      "An award-winning editorial universe experience blending deep-space minimalism with interactive HTML5 canvas physics, responsive fluid typography, and buttery motion design.",
+      "A cinematic, deep-space themed digital universe portfolio blending astronomical data aesthetics with interactive WebGL/Canvas physics, responsive fluid typography, and buttery spring motion design.",
+    problemSolved:
+      "Replaces generic developer templates with an immersive, narrative-driven space exploration identity that proves technical rigor in frontend engineering, systems architecture, and creative UI/UX.",
     technologies: ["React 19", "Framer Motion", "HTML5 Canvas", "Material UI", "Vite"],
-    challenges: [
-      "Maintaining fluid 60FPS multi-depth stellar canvas rendering across diverse screen densities.",
-      "Balancing rich atmospheric depth and negative space while keeping visual clutter under 20%.",
+    keyFeatures: [
+      "Custom multi-depth stellar canvas engine with cursor-reactive parallax and cosmic dust.",
+      "Interactive 3D planetary models with atmospheric Fresnel rim lighting and orbital rings.",
+      "Editorial Space Grotesk and Geist Mono typography system with sub-second initial load.",
       "Full accessibility and reduced-motion graceful degradation without breaking layouts."
-    ],
-    features: [
-      "Custom multi-plane stellar canvas engine with cursor-reactive parallax.",
-      "Floating glass telemetry navigation with active section tracking.",
-      "Editorial Space Grotesk typography system with sub-second initial load.",
-      "Fully responsive and touch-optimized interactive cosmos."
     ],
     github: "https://github.com/dinesh-dev1628",
     demo: "https://dinesh-dev1628.github.io/resume/",
     featured: true,
-    accent: "#A78BFA",
+    status: "MISSION ACCOMPLISHED",
+    accent: "#D946EF", // Nebula Pink
+    glow: "rgba(217, 70, 239, 0.45)",
     stats: {
       fps: "60 FPS",
       performance: "100%",
@@ -88,30 +91,33 @@ export const projectsData = [
   },
   {
     id: "project-zero",
-    title: "Project Zero",
-    codename: "STELLAR // 04",
-    subtitle: "Autonomous Workflow & Agent Engine",
+    title: "Project Zero: Autonomous Workflow Engine",
+    codename: "MISSION // STELLAR-04",
+    sector: "ORBITAL SECTOR 04",
+    category: "Workflow Automation & AI Platforms",
+    subtitle: "Autonomous Multi-Step Task Orchestrator",
     description:
-      "Next frontier intelligent automation system orchestrating multi-step developer operations, background worker routines, and API pipelines into cohesive autonomous flows.",
-    technologies: ["Python", "FastAPI", "AI Workflows", "Next.js", "Docker"],
-    challenges: [
-      "Designing stateful multi-step task execution with deterministic checkpoint recovery.",
-      "Low-latency streaming responses with asynchronous task queues."
-    ],
-    features: [
-      "Graph-based task execution architecture.",
-      "Automated verification checks and telemetry logging.",
-      "Extensible connector hooks for cloud and database systems."
+      "Next-generation intelligent automation system orchestrating multi-step developer operations, background worker routines, and API pipelines into cohesive autonomous execution loops.",
+    problemSolved:
+      "Bridges disparate web services and AI agents into a deterministic, stateful workflow graph with automated verification checks and recovery checkpoints.",
+    technologies: ["Python", "FastAPI", "AI Agents", "Next.js", "Docker"],
+    keyFeatures: [
+      "Graph-based task execution architecture supporting dynamic branching and retries.",
+      "Automated verification checks and telemetry logging with structured error reporting.",
+      "Extensible connector hooks for cloud endpoints, webhooks, and database systems.",
+      "Lightweight asynchronous worker loop optimized for concurrent execution."
     ],
     github: "https://github.com/dinesh-dev1628",
     demo: null,
     featured: false,
     inDevelopment: true,
-    accent: "#60A5FA",
+    status: "EXPEDITION IN PROGRESS",
+    accent: "#38BDF8", // Electric Blue
+    glow: "rgba(56, 189, 248, 0.4)",
     stats: {
-      status: "In Development",
       phase: "Alpha Orbital",
-      target: "2026"
+      target: "2026",
+      status: "In Development"
     }
   }
 ];

@@ -1,6 +1,6 @@
 import React from "react";
 import { Box, Container, Typography, Stack, IconButton } from "@mui/material";
-import { ArrowUpward, GitHub, LinkedIn, Description } from "@mui/icons-material";
+import { ArrowUpward, GitHub, LinkedIn, Description, Instagram } from "@mui/icons-material";
 
 const Footer = () => {
   const scrollToTop = () => {
@@ -12,9 +12,9 @@ const Footer = () => {
       component="footer"
       sx={{
         py: 6,
-        borderTop: "1px solid rgba(255, 255, 255, 0.06)",
-        backgroundColor: "rgba(5, 6, 10, 0.85)",
-        backdropFilter: "blur(12px)",
+        borderTop: "1px solid rgba(255, 255, 255, 0.08)",
+        backgroundColor: "rgba(5, 5, 16, 0.9)",
+        backdropFilter: "blur(16px)",
         position: "relative",
         zIndex: 2,
       }}
@@ -31,37 +31,38 @@ const Footer = () => {
         >
           {/* Brand & Concept */}
           <Box>
-            <Stack direction="row" alignItems="center" spacing={1} mb={0.5}>
+            <Stack direction="row" alignItems="center" spacing={1.2} mb={0.5}>
               <Box
                 sx={{
-                  width: 6,
-                  height: 6,
+                  width: 7,
+                  height: 7,
                   borderRadius: "50%",
-                  backgroundColor: "#60A5FA",
+                  backgroundColor: "#38BDF8",
+                  boxShadow: "0 0 10px #38BDF8",
                 }}
               />
               <Typography
                 sx={{
                   fontFamily: "'Space Grotesk', sans-serif",
                   fontWeight: 800,
-                  fontSize: "1rem",
-                  letterSpacing: "-0.02em",
-                  color: "#F8FAFC",
+                  fontSize: "1.05rem",
+                  letterSpacing: "-0.01em",
+                  color: "#F5F5FA",
                 }}
               >
-                DINESH <span style={{ color: "#60A5FA" }}>//</span> CYBERSPACE
+                DINESH <span style={{ color: "#38BDF8" }}>//</span> DIGITAL UNIVERSE
               </Typography>
             </Stack>
 
             <Typography
               sx={{
                 fontFamily: "'Geist Mono', monospace",
-                fontSize: "0.72rem",
-                color: "#64748B",
+                fontSize: "0.75rem",
+                color: "#9292A8",
                 letterSpacing: 1,
               }}
             >
-              A universe of ideas. Engineered into reality.
+              Exploring the frontiers of automation, systems, and creative code.
             </Typography>
           </Box>
 
@@ -74,8 +75,8 @@ const Footer = () => {
               rel="noopener noreferrer"
               aria-label="GitHub Profile"
               sx={{
-                color: "#94A3B8",
-                "&:hover": { color: "#F8FAFC", backgroundColor: "rgba(255, 255, 255, 0.05)" },
+                color: "#9292A8",
+                "&:hover": { color: "#F5F5FA", backgroundColor: "rgba(255, 255, 255, 0.05)" },
               }}
             >
               <GitHub fontSize="small" />
@@ -88,11 +89,25 @@ const Footer = () => {
               rel="noopener noreferrer"
               aria-label="LinkedIn Profile"
               sx={{
-                color: "#94A3B8",
-                "&:hover": { color: "#60A5FA", backgroundColor: "rgba(255, 255, 255, 0.05)" },
+                color: "#9292A8",
+                "&:hover": { color: "#38BDF8", backgroundColor: "rgba(255, 255, 255, 0.05)" },
               }}
             >
               <LinkedIn fontSize="small" />
+            </IconButton>
+
+            <IconButton
+              size="small"
+              href="https://www.instagram.com/dinesh.genz/"
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="Instagram Profile"
+              sx={{
+                color: "#9292A8",
+                "&:hover": { color: "#D946EF", backgroundColor: "rgba(255, 255, 255, 0.05)" },
+              }}
+            >
+              <Instagram fontSize="small" />
             </IconButton>
 
             <IconButton
@@ -102,8 +117,8 @@ const Footer = () => {
               rel="noopener noreferrer"
               aria-label="Resume Document"
               sx={{
-                color: "#94A3B8",
-                "&:hover": { color: "#A78BFA", backgroundColor: "rgba(255, 255, 255, 0.05)" },
+                color: "#9292A8",
+                "&:hover": { color: "#8B5CF6", backgroundColor: "rgba(255, 255, 255, 0.05)" },
               }}
             >
               <Description fontSize="small" />
@@ -118,12 +133,12 @@ const Footer = () => {
               sx={{
                 borderRadius: "50%",
                 border: "1px solid rgba(255, 255, 255, 0.12)",
-                color: "#F8FAFC",
+                color: "#F5F5FA",
                 p: 1,
                 "&:hover": {
-                  borderColor: "#60A5FA",
-                  backgroundColor: "rgba(96, 165, 250, 0.1)",
-                  color: "#60A5FA",
+                  borderColor: "#38BDF8",
+                  backgroundColor: "rgba(56, 189, 248, 0.1)",
+                  color: "#38BDF8",
                 },
                 transition: "all 0.25s ease",
               }}
@@ -138,7 +153,7 @@ const Footer = () => {
           sx={{
             mt: 4,
             pt: 3,
-            borderTop: "1px solid rgba(255, 255, 255, 0.04)",
+            borderTop: "1px solid rgba(255, 255, 255, 0.05)",
             display: "flex",
             flexDirection: { xs: "column", sm: "row" },
             alignItems: "center",
@@ -150,20 +165,20 @@ const Footer = () => {
             sx={{
               fontFamily: "'Geist Mono', monospace",
               fontSize: "0.68rem",
-              color: "#475569",
+              color: "#676780",
             }}
           >
-            &copy; {new Date().getFullYear()} DINESH. ALL RIGHTS RESERVED.
+            &copy; {new Date().getFullYear()} DINESH. ENGINEERED FOR HIGH PERFORMANCE.
           </Typography>
 
           <Typography
             sx={{
               fontFamily: "'Geist Mono', monospace",
               fontSize: "0.68rem",
-              color: "#475569",
+              color: "#676780",
             }}
           >
-            PRECISION FRONTEND ARCHITECTURE &bull; REACT 19 &bull; FRAMER MOTION
+            CINEMATIC DIGITAL UNIVERSE &bull; REACT 19 &bull; WEBGL
           </Typography>
         </Box>
       </Container>

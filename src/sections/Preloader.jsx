@@ -21,7 +21,7 @@ const Preloader = ({ setLoading }) => {
         const increment = Math.max(1, Math.floor(Math.random() * 8) + 1);
         return Math.min(100, prev + increment);
       });
-    }, 32);
+    }, 28);
 
     return () => clearInterval(interval);
   }, [reduce, setLoading]);
@@ -30,19 +30,19 @@ const Preloader = ({ setLoading }) => {
     if (progress >= 100) {
       const timer = setTimeout(() => {
         setLoading(false);
-      }, 400);
+      }, 350);
       return () => clearTimeout(timer);
     }
   }, [progress, setLoading]);
 
   const phaseText =
-    progress > 75
-      ? "SYSTEMS SYNCHRONIZED"
-      : progress > 45
-      ? "INDEXING ARTIFACTS"
-      : progress > 20
-      ? "WARPING COORDINATES"
-      : "CALIBRATING STELLAR GRID";
+    progress > 80
+      ? "SYSTEMS SYNCHRONIZED // ENTERING UNIVERSE"
+      : progress > 50
+      ? "ORCHESTRATING PLANETARY ENGINES"
+      : progress > 25
+      ? "WARPING CELESTIAL COORDINATES"
+      : "CALIBRATING STELLAR SENSORS";
 
   const circumference = 2 * Math.PI * 44;
   const strokeDashoffset = circumference - (progress / 100) * circumference;
@@ -54,14 +54,14 @@ const Preloader = ({ setLoading }) => {
       exit={{
         opacity: 0,
         scale: 1.02,
-        filter: "blur(8px)",
-        transition: { duration: 0.6, ease: [0.16, 1, 0.3, 1] },
+        filter: "blur(10px)",
+        transition: { duration: 0.65, ease: [0.16, 1, 0.3, 1] },
       }}
       sx={{
         position: "fixed",
         inset: 0,
         zIndex: 99999,
-        backgroundColor: "#05060A",
+        backgroundColor: "#050510",
         display: "flex",
         flexDirection: "column",
         alignItems: "center",
@@ -75,12 +75,12 @@ const Preloader = ({ setLoading }) => {
       <Box
         sx={{
           position: "absolute",
-          width: 380,
-          height: 380,
+          width: 420,
+          height: 420,
           borderRadius: "50%",
           background:
-            "radial-gradient(circle, rgba(96, 165, 250, 0.08) 0%, transparent 70%)",
-          filter: "blur(40px)",
+            "radial-gradient(circle, rgba(139, 92, 246, 0.15) 0%, rgba(56, 189, 248, 0.08) 40%, transparent 70%)",
+          filter: "blur(50px)",
         }}
       />
 
@@ -103,7 +103,7 @@ const Preloader = ({ setLoading }) => {
             r="44"
             fill="none"
             stroke="url(#preloaderGrad)"
-            strokeWidth="1.8"
+            strokeWidth="2.2"
             strokeLinecap="round"
             strokeDasharray={circumference}
             strokeDashoffset={strokeDashoffset}
@@ -115,14 +115,15 @@ const Preloader = ({ setLoading }) => {
             cy="50"
             r="48"
             fill="none"
-            stroke="rgba(96, 165, 250, 0.15)"
+            stroke="rgba(56, 189, 248, 0.2)"
             strokeWidth="0.8"
             strokeDasharray="4 8"
           />
           <defs>
             <linearGradient id="preloaderGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-              <stop offset="0%" stopColor="#60A5FA" />
-              <stop offset="100%" stopColor="#A78BFA" />
+              <stop offset="0%" stopColor="#8B5CF6" />
+              <stop offset="50%" stopColor="#38BDF8" />
+              <stop offset="100%" stopColor="#D946EF" />
             </linearGradient>
           </defs>
         </svg>
@@ -141,9 +142,9 @@ const Preloader = ({ setLoading }) => {
           <Typography
             sx={{
               fontFamily: "'Space Grotesk', sans-serif",
-              fontSize: "1.75rem",
-              fontWeight: 700,
-              color: "#F8FAFC",
+              fontSize: "1.85rem",
+              fontWeight: 800,
+              color: "#F5F5FA",
               letterSpacing: "-0.04em",
               lineHeight: 1,
             }}
@@ -153,8 +154,8 @@ const Preloader = ({ setLoading }) => {
           <Typography
             sx={{
               fontFamily: "'Geist Mono', monospace",
-              fontSize: "0.6rem",
-              color: "#64748B",
+              fontSize: "0.62rem",
+              color: "#9292A8",
               letterSpacing: 2,
               mt: 0.5,
             }}
@@ -169,22 +170,22 @@ const Preloader = ({ setLoading }) => {
         <Typography
           sx={{
             fontFamily: "'Space Grotesk', sans-serif",
-            fontSize: "0.85rem",
-            fontWeight: 700,
+            fontSize: "0.95rem",
+            fontWeight: 800,
             letterSpacing: 4,
-            color: "#F8FAFC",
+            color: "#F5F5FA",
             mb: 0.8,
             textTransform: "uppercase",
           }}
         >
-          DINESH <span style={{ color: "#60A5FA" }}>//</span> CYBERSPACE
+          DINESH <span style={{ color: "#38BDF8" }}>//</span> DIGITAL UNIVERSE
         </Typography>
 
         <Typography
           sx={{
             fontFamily: "'Geist Mono', monospace",
             fontSize: "0.68rem",
-            color: "#94A3B8",
+            color: "#9292A8",
             letterSpacing: 2.5,
             textTransform: "uppercase",
           }}
@@ -203,13 +204,13 @@ const Preloader = ({ setLoading }) => {
           gap: 2,
           fontFamily: "'Geist Mono', monospace",
           fontSize: "0.65rem",
-          color: "#475569",
+          color: "#676780",
           letterSpacing: 2,
         }}
       >
         <span>COORD: 13.0827° N, 80.2707° E</span>
         <span>•</span>
-        <span>INITIALIZING UNIVERSE</span>
+        <span>SECTOR 0x7E // ONLINE</span>
       </Box>
     </Box>
   );

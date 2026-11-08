@@ -21,8 +21,10 @@ import {
   Send,
   Check,
   Description,
+  ChatBubbleOutline,
 } from "@mui/icons-material";
 import { motion, useReducedMotion } from "framer-motion";
+import MagneticButton from "../components/common/MagneticButton.jsx";
 
 const socialProfiles = [
   {
@@ -30,32 +32,32 @@ const socialProfiles = [
     handle: "/in/dineshm-dev",
     url: "https://www.linkedin.com/in/dineshm-dev/",
     icon: <LinkedIn />,
-    color: "#0A66C2",
-    accent: "#60A5FA",
+    color: "#38BDF8",
+    badge: "PROFESSIONAL NETWORK",
   },
   {
     name: "GitHub",
     handle: "@dinesh-dev1628",
     url: "https://github.com/dinesh-dev1628",
     icon: <GitHub />,
-    color: "#F8FAFC",
-    accent: "#A78BFA",
+    color: "#8B5CF6",
+    badge: "CODE REPOSITORIES",
   },
   {
     name: "Instagram",
     handle: "@dinesh.genz",
     url: "https://www.instagram.com/dinesh.genz/",
     icon: <Instagram />,
-    color: "#E1306C",
-    accent: "#F472B6",
+    color: "#D946EF",
+    badge: "CREATIVE & LIFE",
   },
   {
-    name: "Resume",
+    name: "Resume CV",
     handle: "Live Portfolio CV",
     url: "https://dinesh-dev1628.github.io/resume/",
     icon: <Description />,
-    color: "#10B981",
-    accent: "#34D399",
+    color: "#2DD4BF",
+    badge: "OFFICIAL CREDENTIALS",
   },
 ];
 
@@ -76,7 +78,9 @@ const Contact = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    const subject = encodeURIComponent(`Project Inquiry from ${formData.name || "Collaborator"}`);
+    const subject = encodeURIComponent(
+      `Project Inquiry from ${formData.name || "Collaborator"}`
+    );
     const body = encodeURIComponent(
       `Name: ${formData.name}\nEmail: ${formData.email}\n\nMessage:\n${formData.message}`
     );
@@ -88,57 +92,84 @@ const Contact = () => {
       id="contact"
       component="section"
       sx={{
-        py: { xs: 10, md: 18 },
+        py: { xs: 12, md: 20 },
         position: "relative",
         overflow: "hidden",
       }}
     >
-      {/* Ambient background glow */}
+      {/* Background: Large Glowing Celestial Planet & Galaxy Horizon */}
       <Box
         aria-hidden="true"
         sx={{
           position: "absolute",
-          bottom: "10%",
+          bottom: "-25%",
           left: "50%",
           transform: "translateX(-50%)",
-          width: { xs: "320px", md: "700px" },
-          height: { xs: "250px", md: "400px" },
+          width: { xs: "500px", sm: "750px", md: "1100px" },
+          height: { xs: "320px", sm: "480px", md: "650px" },
+          borderRadius: "50% 50% 0 0",
           background:
-            "radial-gradient(ellipse at center, rgba(139, 92, 246, 0.08) 0%, rgba(96, 165, 250, 0.04) 50%, transparent 70%)",
+            "radial-gradient(circle at 50% 100%, rgba(139, 92, 246, 0.28) 0%, rgba(56, 189, 248, 0.15) 35%, rgba(217, 70, 239, 0.08) 60%, transparent 85%)",
           filter: "blur(60px)",
           pointerEvents: "none",
+          zIndex: 0,
+        }}
+      />
+
+      {/* Planet Horizon Arc Line */}
+      <Box
+        aria-hidden="true"
+        sx={{
+          position: "absolute",
+          bottom: "-10%",
+          left: "50%",
+          transform: "translateX(-50%)",
+          width: { xs: "120vw", md: "100vw" },
+          height: { xs: "180px", md: "260px" },
+          borderRadius: "50% 50% 0 0",
+          borderTop: "1.5px solid rgba(56, 189, 248, 0.45)",
+          boxShadow: "0 -10px 30px rgba(56, 189, 248, 0.3)",
+          pointerEvents: "none",
+          zIndex: 0,
         }}
       />
 
       <Container maxWidth="lg" sx={{ position: "relative", zIndex: 1 }}>
         {/* Section Header */}
-        <Box sx={{ mb: { xs: 8, md: 12 }, textAlign: { xs: "left", md: "center" } }}>
+        <Box sx={{ mb: { xs: 8, md: 10 }, textAlign: "center", maxWidth: "900px", mx: "auto" }}>
           <Stack
             direction="row"
             alignItems="center"
-            justifyContent={{ xs: "flex-start", md: "center" }}
+            justifyContent="center"
             spacing={1.5}
             sx={{ mb: 1.5 }}
           >
-            <Box sx={{ width: 24, height: 1, backgroundColor: "#60A5FA" }} />
+            <Box
+              sx={{
+                width: 24,
+                height: 2,
+                backgroundColor: "#38BDF8",
+                boxShadow: "0 0 10px #38BDF8",
+              }}
+            />
             <Typography
               sx={{
                 fontFamily: "'Geist Mono', monospace",
                 fontSize: "0.75rem",
-                color: "#60A5FA",
+                color: "#38BDF8",
                 letterSpacing: 3,
                 textTransform: "uppercase",
                 fontWeight: 600,
               }}
             >
-              05 // DIRECT FREQUENCY
+              05 // ESTABLISH CONNECTION
             </Typography>
             <Box
               sx={{
                 width: 24,
-                height: 1,
-                backgroundColor: "#60A5FA",
-                display: { xs: "none", md: "block" },
+                height: 2,
+                backgroundColor: "#38BDF8",
+                boxShadow: "0 0 10px #38BDF8",
               }}
             />
           </Stack>
@@ -146,148 +177,378 @@ const Contact = () => {
           <Typography
             variant="h2"
             sx={{
-              fontSize: { xs: "2.2rem", sm: "3.2rem", md: "4rem" },
+              fontSize: { xs: "2.2rem", sm: "3.4rem", md: "4.2rem" },
               fontWeight: 800,
-              lineHeight: 1.1,
+              lineHeight: 1.08,
               letterSpacing: "-0.03em",
-              color: "#F8FAFC",
-              maxWidth: "800px",
-              mx: { md: "auto" },
+              color: "#F5F5FA",
+              mb: 2.5,
             }}
           >
-            Every great idea starts with a{" "}
+            LET'S CREATE SOMETHING{" "}
             <span
               style={{
-                background: "linear-gradient(90deg, #60A5FA, #A78BFA)",
+                background: "linear-gradient(90deg, #38BDF8 0%, #8B5CF6 50%, #D946EF 100%)",
                 WebkitBackgroundClip: "text",
                 WebkitTextFillColor: "transparent",
               }}
             >
-              connection.
+              OUT OF THIS WORLD.
             </span>
           </Typography>
 
           <Typography
             sx={{
-              color: "#94A3B8",
-              fontSize: { xs: "0.95rem", sm: "1.08rem" },
-              mt: 2,
-              maxWidth: "600px",
-              mx: { md: "auto" },
+              color: "#9292A8",
+              fontSize: { xs: "1.05rem", sm: "1.2rem" },
+              maxWidth: "720px",
+              mx: "auto",
               lineHeight: 1.7,
+              mb: 5,
             }}
           >
-            Whether you have a breakthrough concept, need high-throughput automation,
-            or are looking for a dedicated software engineer, let’s start a conversation.
+            Have an interesting idea, a challenging problem, or an opportunity?
+            Let's connect and build something extraordinary.
           </Typography>
+
+          {/* Three Primary Action Buttons */}
+          <Stack
+            direction={{ xs: "column", sm: "row" }}
+            spacing={2.5}
+            justifyContent="center"
+            alignItems="center"
+            sx={{ mb: 8 }}
+          >
+            {/* LET'S TALK Button */}
+            <MagneticButton>
+              <Button
+                variant="contained"
+                onClick={() => {
+                  window.location.href = `mailto:${emailAddress}?subject=Project%20Inquiry%20via%20Universe%20Portfolio`;
+                }}
+                startIcon={<ChatBubbleOutline />}
+                sx={{
+                  px: 4,
+                  py: 1.6,
+                  borderRadius: "14px",
+                  fontSize: "0.95rem",
+                  fontWeight: 700,
+                  fontFamily: "'Space Grotesk', sans-serif",
+                  letterSpacing: "0.04em",
+                  color: "#FFFFFF",
+                  backgroundColor: "#8B5CF6",
+                  boxShadow: "0 0 30px rgba(139, 92, 246, 0.45)",
+                  "&:hover": {
+                    backgroundColor: "#7C3AED",
+                    boxShadow: "0 0 45px rgba(139, 92, 246, 0.65)",
+                    transform: "translateY(-2px)",
+                  },
+                  transition: "all 0.25s ease",
+                }}
+              >
+                LET'S TALK
+              </Button>
+            </MagneticButton>
+
+            {/* CONNECT ON LINKEDIN Button */}
+            <MagneticButton>
+              <Button
+                variant="outlined"
+                href="https://www.linkedin.com/in/dineshm-dev/"
+                target="_blank"
+                rel="noopener noreferrer"
+                startIcon={<LinkedIn />}
+                sx={{
+                  px: 3.5,
+                  py: 1.6,
+                  borderRadius: "14px",
+                  fontSize: "0.95rem",
+                  fontWeight: 600,
+                  fontFamily: "'Space Grotesk', sans-serif",
+                  letterSpacing: "0.04em",
+                  color: "#F5F5FA",
+                  borderColor: "rgba(56, 189, 248, 0.4)",
+                  backgroundColor: "rgba(56, 189, 248, 0.05)",
+                  backdropFilter: "blur(12px)",
+                  "&:hover": {
+                    borderColor: "#38BDF8",
+                    backgroundColor: "rgba(56, 189, 248, 0.15)",
+                    boxShadow: "0 0 25px rgba(56, 189, 248, 0.35)",
+                    transform: "translateY(-2px)",
+                  },
+                  transition: "all 0.25s ease",
+                }}
+              >
+                CONNECT ON LINKEDIN
+              </Button>
+            </MagneticButton>
+
+            {/* VIEW GITHUB Button */}
+            <MagneticButton>
+              <Button
+                variant="outlined"
+                href="https://github.com/dinesh-dev1628"
+                target="_blank"
+                rel="noopener noreferrer"
+                startIcon={<GitHub />}
+                sx={{
+                  px: 3.5,
+                  py: 1.6,
+                  borderRadius: "14px",
+                  fontSize: "0.95rem",
+                  fontWeight: 600,
+                  fontFamily: "'Space Grotesk', sans-serif",
+                  letterSpacing: "0.04em",
+                  color: "#F5F5FA",
+                  borderColor: "rgba(255, 255, 255, 0.15)",
+                  backgroundColor: "rgba(255, 255, 255, 0.02)",
+                  backdropFilter: "blur(12px)",
+                  "&:hover": {
+                    borderColor: "#F5F5FA",
+                    backgroundColor: "rgba(255, 255, 255, 0.08)",
+                    transform: "translateY(-2px)",
+                  },
+                  transition: "all 0.25s ease",
+                }}
+              >
+                VIEW GITHUB
+              </Button>
+            </MagneticButton>
+          </Stack>
         </Box>
 
-        <Grid container spacing={{ xs: 5, md: 6 }}>
-          {/* Left Column: Direct Email Beacon & Social Nodes */}
-          <Grid size={{ xs: 12, md: 5 }}>
+        {/* Split Grid: Transmission Form Left | Social Profiles & Direct Email Right */}
+        <Grid container spacing={{ xs: 5, md: 8 }} alignItems="stretch">
+          {/* Left Column: Direct Message Transmission Form */}
+          <Grid size={{ xs: 12, md: 6 }}>
             <motion.div
-              initial={reduce ? false : { opacity: 0, x: -30 }}
-              whileInView={{ opacity: 1, x: 0 }}
+              initial={reduce ? false : { opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, amount: 0.2 }}
               transition={{ duration: 0.8 }}
+              style={{ height: "100%" }}
             >
-              <Stack spacing={3}>
-                {/* Main Email Transmission Card */}
+              <Box
+                component="form"
+                onSubmit={handleSubmit}
+                sx={{
+                  p: { xs: 3.5, sm: 4.5 },
+                  borderRadius: "24px",
+                  backgroundColor: "rgba(16, 16, 38, 0.65)",
+                  border: "1px solid rgba(255, 255, 255, 0.08)",
+                  backdropFilter: "blur(18px)",
+                  height: "100%",
+                  display: "flex",
+                  flexDirection: "column",
+                  justifyContent: "space-between",
+                }}
+              >
+                <Box>
+                  <Typography
+                    sx={{
+                      fontFamily: "'Space Grotesk', sans-serif",
+                      fontWeight: 700,
+                      fontSize: "1.35rem",
+                      color: "#F5F5FA",
+                      mb: 1,
+                    }}
+                  >
+                    Direct Transmission
+                  </Typography>
+                  <Typography sx={{ color: "#9292A8", fontSize: "0.88rem", mb: 3 }}>
+                    Send an instantaneous transmission directly to my personal terminal.
+                  </Typography>
+
+                  <Stack spacing={2.5}>
+                    <TextField
+                      fullWidth
+                      label="Your Name or Designation"
+                      variant="outlined"
+                      value={formData.name}
+                      onChange={(e) =>
+                        setFormData({ ...formData, name: e.target.value })
+                      }
+                      sx={{
+                        "& .MuiOutlinedInput-root": {
+                          color: "#F5F5FA",
+                          backgroundColor: "rgba(5, 5, 16, 0.5)",
+                          borderRadius: "12px",
+                          "& fieldset": { borderColor: "rgba(255, 255, 255, 0.1)" },
+                          "&:hover fieldset": { borderColor: "#38BDF8" },
+                          "&.Mui-focused fieldset": { borderColor: "#38BDF8" },
+                        },
+                        "& .MuiInputLabel-root": { color: "#9292A8" },
+                        "& .MuiInputLabel-root.Mui-focused": { color: "#38BDF8" },
+                      }}
+                    />
+
+                    <TextField
+                      fullWidth
+                      type="email"
+                      label="Your Frequency / Email"
+                      variant="outlined"
+                      required
+                      value={formData.email}
+                      onChange={(e) =>
+                        setFormData({ ...formData, email: e.target.value })
+                      }
+                      sx={{
+                        "& .MuiOutlinedInput-root": {
+                          color: "#F5F5FA",
+                          backgroundColor: "rgba(5, 5, 16, 0.5)",
+                          borderRadius: "12px",
+                          "& fieldset": { borderColor: "rgba(255, 255, 255, 0.1)" },
+                          "&:hover fieldset": { borderColor: "#38BDF8" },
+                          "&.Mui-focused fieldset": { borderColor: "#38BDF8" },
+                        },
+                        "& .MuiInputLabel-root": { color: "#9292A8" },
+                        "& .MuiInputLabel-root.Mui-focused": { color: "#38BDF8" },
+                      }}
+                    />
+
+                    <TextField
+                      fullWidth
+                      label="Message / Mission Brief"
+                      variant="outlined"
+                      multiline
+                      rows={4}
+                      required
+                      value={formData.message}
+                      onChange={(e) =>
+                        setFormData({ ...formData, message: e.target.value })
+                      }
+                      sx={{
+                        "& .MuiOutlinedInput-root": {
+                          color: "#F5F5FA",
+                          backgroundColor: "rgba(5, 5, 16, 0.5)",
+                          borderRadius: "12px",
+                          "& fieldset": { borderColor: "rgba(255, 255, 255, 0.1)" },
+                          "&:hover fieldset": { borderColor: "#38BDF8" },
+                          "&.Mui-focused fieldset": { borderColor: "#38BDF8" },
+                        },
+                        "& .MuiInputLabel-root": { color: "#9292A8" },
+                        "& .MuiInputLabel-root.Mui-focused": { color: "#38BDF8" },
+                      }}
+                    />
+                  </Stack>
+                </Box>
+
+                <Button
+                  type="submit"
+                  variant="contained"
+                  fullWidth
+                  endIcon={<Send />}
+                  sx={{
+                    mt: 3,
+                    py: 1.5,
+                    borderRadius: "12px",
+                    fontFamily: "'Space Grotesk', sans-serif",
+                    fontWeight: 700,
+                    fontSize: "0.95rem",
+                    backgroundColor: "rgba(56, 189, 248, 0.2)",
+                    border: "1px solid rgba(56, 189, 248, 0.45)",
+                    color: "#F5F5FA",
+                    boxShadow: "0 0 20px rgba(56, 189, 248, 0.2)",
+                    "&:hover": {
+                      backgroundColor: "rgba(56, 189, 248, 0.35)",
+                      borderColor: "#38BDF8",
+                      boxShadow: "0 0 30px rgba(56, 189, 248, 0.35)",
+                    },
+                    transition: "all 0.25s ease",
+                  }}
+                >
+                  TRANSMIT MESSAGE
+                </Button>
+              </Box>
+            </motion.div>
+          </Grid>
+
+          {/* Right Column: Copy Email Box & Social Profiles Matrix */}
+          <Grid size={{ xs: 12, md: 6 }}>
+            <motion.div
+              initial={reduce ? false : { opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, amount: 0.2 }}
+              transition={{ duration: 0.8, delay: 0.15 }}
+              style={{ height: "100%" }}
+            >
+              <Stack spacing={3} sx={{ height: "100%", justifyContent: "space-between" }}>
+                {/* One-Click Copy Email Card */}
                 <Box
                   sx={{
-                    p: { xs: 3, md: 3.5 },
-                    borderRadius: "24px",
-                    backgroundColor: "rgba(16, 21, 34, 0.7)",
-                    border: "1px solid rgba(96, 165, 250, 0.25)",
-                    backdropFilter: "blur(12px)",
-                    boxShadow: "0 10px 30px rgba(0, 0, 0, 0.5)",
+                    p: 3.5,
+                    borderRadius: "22px",
+                    backgroundColor: "rgba(16, 16, 38, 0.65)",
+                    border: "1px solid rgba(139, 92, 246, 0.25)",
+                    backdropFilter: "blur(18px)",
                   }}
                 >
                   <Typography
                     sx={{
                       fontFamily: "'Geist Mono', monospace",
-                      fontSize: "0.72rem",
-                      color: "#60A5FA",
+                      fontSize: "0.68rem",
+                      color: "#8B5CF6",
                       letterSpacing: 2,
                       textTransform: "uppercase",
-                      mb: 1.5,
+                      mb: 1,
                     }}
                   >
-                    // DIRECT EMAIL TRANSMISSION
+                    // DIRECT EMAIL DISPATCH
                   </Typography>
 
-                  <Typography
-                    variant="h5"
+                  <Box
                     sx={{
-                      fontFamily: "'Space Grotesk', sans-serif",
-                      fontWeight: 700,
-                      color: "#F8FAFC",
-                      fontSize: { xs: "1.1rem", sm: "1.3rem" },
-                      mb: 2,
-                      wordBreak: "break-all",
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "space-between",
+                      gap: 2,
+                      p: 2,
+                      borderRadius: "14px",
+                      backgroundColor: "rgba(5, 5, 16, 0.6)",
+                      border: "1px solid rgba(255, 255, 255, 0.08)",
                     }}
                   >
-                    {emailAddress}
-                  </Typography>
-
-                  <Stack direction={{ xs: "column", sm: "row" }} spacing={1.5}>
-                    <Button
-                      variant="contained"
-                      onClick={() => (window.location.href = `mailto:${emailAddress}`)}
-                      startIcon={<Email />}
-                      sx={{
-                        flex: 1,
-                        py: 1.2,
-                        borderRadius: "12px",
-                        backgroundColor: "rgba(96, 165, 250, 0.16)",
-                        border: "1px solid rgba(96, 165, 250, 0.4)",
-                        color: "#F8FAFC",
-                        fontFamily: "'Space Grotesk', sans-serif",
-                        fontWeight: 700,
-                        fontSize: "0.86rem",
-                        "&:hover": {
-                          backgroundColor: "rgba(96, 165, 250, 0.28)",
-                        },
-                      }}
-                    >
-                      Compose Mail
-                    </Button>
+                    <Box sx={{ display: "flex", alignItems: "center", gap: 1.5, minWidth: 0 }}>
+                      <Email sx={{ color: "#38BDF8" }} />
+                      <Typography
+                        sx={{
+                          fontFamily: "'Geist Mono', monospace",
+                          fontSize: { xs: "0.85rem", sm: "1rem" },
+                          color: "#F5F5FA",
+                          fontWeight: 600,
+                          overflow: "hidden",
+                          textOverflow: "ellipsis",
+                        }}
+                      >
+                        {emailAddress}
+                      </Typography>
+                    </Box>
 
                     <Button
-                      variant="outlined"
                       onClick={handleCopyEmail}
-                      startIcon={copied ? <Check /> : <ContentCopy />}
+                      variant="outlined"
+                      size="small"
+                      startIcon={copied ? <Check sx={{ color: "#10B981" }} /> : <ContentCopy />}
                       sx={{
-                        py: 1.2,
-                        px: 2.2,
-                        borderRadius: "12px",
-                        borderColor: copied
-                          ? "rgba(16, 185, 129, 0.4)"
-                          : "rgba(255, 255, 255, 0.12)",
-                        color: copied ? "#10B981" : "#F8FAFC",
-                        fontFamily: "'Space Grotesk', sans-serif",
-                        fontWeight: 600,
-                        fontSize: "0.86rem",
-                        backgroundColor: copied
-                          ? "rgba(16, 185, 129, 0.08)"
-                          : "transparent",
-                        "&:hover": {
-                          borderColor: "#60A5FA",
-                          backgroundColor: "rgba(96, 165, 250, 0.08)",
-                        },
+                        borderRadius: "10px",
+                        fontFamily: "'Geist Mono', monospace",
+                        fontSize: "0.75rem",
+                        color: copied ? "#10B981" : "#F5F5FA",
+                        borderColor: copied ? "#10B981" : "rgba(255, 255, 255, 0.15)",
+                        flexShrink: 0,
                       }}
                     >
-                      {copied ? "Copied" : "Copy"}
+                      {copied ? "COPIED" : "COPY"}
                     </Button>
-                  </Stack>
+                  </Box>
                 </Box>
 
-                {/* Social Nodes Grid */}
+                {/* Social Profiles Grid */}
                 <Box
                   sx={{
                     display: "grid",
                     gridTemplateColumns: { xs: "1fr", sm: "1fr 1fr" },
-                    gap: 1.5,
+                    gap: 2,
                   }}
                 >
                   {socialProfiles.map((p) => (
@@ -298,221 +559,62 @@ const Contact = () => {
                       target="_blank"
                       rel="noopener noreferrer"
                       sx={{
-                        p: 2,
-                        borderRadius: "16px",
-                        backgroundColor: "rgba(16, 21, 34, 0.5)",
-                        border: "1px solid rgba(255, 255, 255, 0.06)",
-                        backdropFilter: "blur(12px)",
+                        p: 2.5,
+                        borderRadius: "18px",
+                        backgroundColor: "rgba(16, 16, 38, 0.5)",
+                        border: "1px solid rgba(255, 255, 255, 0.07)",
+                        backdropFilter: "blur(14px)",
                         textDecoration: "none",
-                        display: "flex",
-                        alignItems: "center",
-                        justifyContent: "space-between",
                         transition: "all 0.25s ease",
                         "&:hover": {
-                          borderColor: p.accent,
-                          backgroundColor: "rgba(255, 255, 255, 0.03)",
+                          borderColor: p.color,
+                          backgroundColor: "rgba(255, 255, 255, 0.04)",
+                          boxShadow: `0 10px 25px -10px ${p.color}35`,
                           transform: "translateY(-3px)",
-                          boxShadow: `0 8px 20px -5px ${p.accent}20`,
                         },
                       }}
                     >
-                      <Box sx={{ display: "flex", alignItems: "center", gap: 1.5 }}>
-                        <Box sx={{ color: p.accent, display: "flex" }}>{p.icon}</Box>
-                        <Box>
-                          <Typography
-                            sx={{
-                              fontFamily: "'Space Grotesk', sans-serif",
-                              fontSize: "0.92rem",
-                              fontWeight: 700,
-                              color: "#F8FAFC",
-                              lineHeight: 1.2,
-                            }}
-                          >
-                            {p.name}
-                          </Typography>
-                          <Typography
-                            sx={{
-                              fontFamily: "'Geist Mono', monospace",
-                              fontSize: "0.68rem",
-                              color: "#64748B",
-                            }}
-                          >
-                            {p.handle}
-                          </Typography>
-                        </Box>
+                      <Box
+                        sx={{
+                          display: "flex",
+                          alignItems: "center",
+                          justifyContent: "space-between",
+                          mb: 1.2,
+                        }}
+                      >
+                        <Box sx={{ color: p.color, display: "flex" }}>{p.icon}</Box>
+                        <NorthEast sx={{ fontSize: "0.95rem", color: "#9292A8" }} />
                       </Box>
-                      <NorthEast
-                        sx={{ fontSize: "0.85rem", color: "#64748B" }}
-                      />
+                      <Typography
+                        sx={{
+                          fontFamily: "'Space Grotesk', sans-serif",
+                          fontWeight: 700,
+                          fontSize: "1.05rem",
+                          color: "#F5F5FA",
+                        }}
+                      >
+                        {p.name}
+                      </Typography>
+                      <Typography
+                        sx={{
+                          fontFamily: "'Geist Mono', monospace",
+                          fontSize: "0.72rem",
+                          color: "#9292A8",
+                          mt: 0.3,
+                        }}
+                      >
+                        {p.handle}
+                      </Typography>
                     </Box>
                   ))}
                 </Box>
-
-                {/* Telemetry coordinate footnote */}
-                <Box
-                  sx={{
-                    p: 2,
-                    borderRadius: "14px",
-                    backgroundColor: "rgba(5, 6, 10, 0.5)",
-                    border: "1px dashed rgba(255, 255, 255, 0.06)",
-                    fontFamily: "'Geist Mono', monospace",
-                    fontSize: "0.7rem",
-                    color: "#64748B",
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "space-between",
-                  }}
-                >
-                  <span>LAT 13.0827° N, LON 80.2707° E</span>
-                  <span style={{ color: "#10B981" }}>ONLINE // 2026</span>
-                </Box>
               </Stack>
-            </motion.div>
-          </Grid>
-
-          {/* Right Column: Transmission Dispatcher Form */}
-          <Grid size={{ xs: 12, md: 7 }}>
-            <motion.div
-              initial={reduce ? false : { opacity: 0, x: 30 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true, amount: 0.2 }}
-              transition={{ duration: 0.8 }}
-            >
-              <Box
-                component="form"
-                onSubmit={handleSubmit}
-                sx={{
-                  p: { xs: 3, md: 4 },
-                  borderRadius: "24px",
-                  backgroundColor: "rgba(16, 21, 34, 0.6)",
-                  border: "1px solid rgba(255, 255, 255, 0.08)",
-                  backdropFilter: "blur(16px)",
-                }}
-              >
-                <Typography
-                  sx={{
-                    fontFamily: "'Space Grotesk', sans-serif",
-                    fontSize: "1.3rem",
-                    fontWeight: 700,
-                    color: "#F8FAFC",
-                    mb: 0.5,
-                  }}
-                >
-                  Initiate Transmission
-                </Typography>
-                <Typography sx={{ color: "#94A3B8", fontSize: "0.88rem", mb: 3 }}>
-                  Direct signal routing to Dinesh’s primary mailbox.
-                </Typography>
-
-                <Stack spacing={2.5}>
-                  <TextField
-                    fullWidth
-                    required
-                    label="Your Name or Organization"
-                    variant="outlined"
-                    value={formData.name}
-                    onChange={(e) =>
-                      setFormData({ ...formData, name: e.target.value })
-                    }
-                    InputLabelProps={{
-                      sx: { color: "#64748B", fontSize: "0.88rem" },
-                    }}
-                    sx={{
-                      "& .MuiOutlinedInput-root": {
-                        backgroundColor: "rgba(5, 6, 10, 0.6)",
-                        borderRadius: "12px",
-                        color: "#F8FAFC",
-                        "& fieldset": { borderColor: "rgba(255, 255, 255, 0.08)" },
-                        "&:hover fieldset": { borderColor: "rgba(96, 165, 250, 0.3)" },
-                        "&.Mui-focused fieldset": { borderColor: "#60A5FA" },
-                      },
-                    }}
-                  />
-
-                  <TextField
-                    fullWidth
-                    required
-                    type="email"
-                    label="Your Frequency (Email Address)"
-                    variant="outlined"
-                    value={formData.email}
-                    onChange={(e) =>
-                      setFormData({ ...formData, email: e.target.value })
-                    }
-                    InputLabelProps={{
-                      sx: { color: "#64748B", fontSize: "0.88rem" },
-                    }}
-                    sx={{
-                      "& .MuiOutlinedInput-root": {
-                        backgroundColor: "rgba(5, 6, 10, 0.6)",
-                        borderRadius: "12px",
-                        color: "#F8FAFC",
-                        "& fieldset": { borderColor: "rgba(255, 255, 255, 0.08)" },
-                        "&:hover fieldset": { borderColor: "rgba(96, 165, 250, 0.3)" },
-                        "&.Mui-focused fieldset": { borderColor: "#60A5FA" },
-                      },
-                    }}
-                  />
-
-                  <TextField
-                    fullWidth
-                    required
-                    multiline
-                    rows={4}
-                    label="Transmission Payload (Message / Project Details)"
-                    variant="outlined"
-                    value={formData.message}
-                    onChange={(e) =>
-                      setFormData({ ...formData, message: e.target.value })
-                    }
-                    InputLabelProps={{
-                      sx: { color: "#64748B", fontSize: "0.88rem" },
-                    }}
-                    sx={{
-                      "& .MuiOutlinedInput-root": {
-                        backgroundColor: "rgba(5, 6, 10, 0.6)",
-                        borderRadius: "12px",
-                        color: "#F8FAFC",
-                        "& fieldset": { borderColor: "rgba(255, 255, 255, 0.08)" },
-                        "&:hover fieldset": { borderColor: "rgba(96, 165, 250, 0.3)" },
-                        "&.Mui-focused fieldset": { borderColor: "#60A5FA" },
-                      },
-                    }}
-                  />
-
-                  <Button
-                    type="submit"
-                    variant="contained"
-                    fullWidth
-                    endIcon={<Send />}
-                    sx={{
-                      py: 1.5,
-                      borderRadius: "14px",
-                      backgroundColor: "rgba(96, 165, 250, 0.18)",
-                      border: "1px solid rgba(96, 165, 250, 0.4)",
-                      color: "#F8FAFC",
-                      fontFamily: "'Space Grotesk', sans-serif",
-                      fontWeight: 700,
-                      fontSize: "0.95rem",
-                      boxShadow: "0 0 20px rgba(96, 165, 250, 0.2)",
-                      "&:hover": {
-                        backgroundColor: "rgba(96, 165, 250, 0.3)",
-                        borderColor: "#60A5FA",
-                        boxShadow: "0 0 30px rgba(96, 165, 250, 0.35)",
-                      },
-                      transition: "all 0.3s ease",
-                    }}
-                  >
-                    Dispatch Message
-                  </Button>
-                </Stack>
-              </Box>
             </motion.div>
           </Grid>
         </Grid>
       </Container>
 
-      {/* Copy Toast feedback */}
+      {/* Copy Notification Snackbar */}
       <Snackbar
         open={snackbarOpen}
         autoHideDuration={3000}
@@ -522,14 +624,15 @@ const Contact = () => {
         <Alert
           severity="success"
           sx={{
-            backgroundColor: "#101522",
-            color: "#F8FAFC",
-            border: "1px solid rgba(96, 165, 250, 0.3)",
-            fontFamily: "'Space Grotesk', sans-serif",
-            "& .MuiAlert-icon": { color: "#60A5FA" },
+            backgroundColor: "rgba(10, 10, 24, 0.95)",
+            color: "#F5F5FA",
+            border: "1px solid #10B981",
+            fontFamily: "'Geist Mono', monospace",
+            fontSize: "0.82rem",
+            backdropFilter: "blur(16px)",
           }}
         >
-          COPIED TO CLIPBOARD // {emailAddress}
+          Email address successfully copied to clipboard!
         </Alert>
       </Snackbar>
     </Box>

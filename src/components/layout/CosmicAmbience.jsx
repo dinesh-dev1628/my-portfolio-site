@@ -5,17 +5,17 @@ import { motion, useMotionValue, useSpring, useReducedMotion } from "framer-moti
 const CosmicAmbience = () => {
   const reduce = useReducedMotion();
 
-  // Mouse tracking spring for desktop cursor glow
+  // Mouse tracking spring for subtle cursor glow
   const mouseX = useMotionValue(-1000);
   const mouseY = useMotionValue(-1000);
-  const springX = useSpring(mouseX, { stiffness: 90, damping: 25, mass: 0.5 });
-  const springY = useSpring(mouseY, { stiffness: 90, damping: 25, mass: 0.5 });
+  const springX = useSpring(mouseX, { stiffness: 80, damping: 22, mass: 0.5 });
+  const springY = useSpring(mouseY, { stiffness: 80, damping: 22, mass: 0.5 });
 
   useEffect(() => {
     if (window.matchMedia("(pointer: coarse)").matches) return;
     const onMouseMove = (e) => {
-      mouseX.set(e.clientX - 225);
-      mouseY.set(e.clientY - 225);
+      mouseX.set(e.clientX - 220);
+      mouseY.set(e.clientY - 220);
     };
     window.addEventListener("mousemove", onMouseMove, { passive: true });
     return () => window.removeEventListener("mousemove", onMouseMove);
@@ -38,65 +38,92 @@ const CosmicAmbience = () => {
           position: "absolute",
           inset: 0,
           background:
-            "radial-gradient(120% 100% at 50% 0%, #0A0D16 0%, #05060A 55%, #030407 100%)",
+            "radial-gradient(130% 100% at 50% 0%, #0A0A18 0%, #050510 50%, #03030A 100%)",
         }}
       />
 
-      {/* Primary subtle nebula glow (top-left cosmic blue) */}
+      {/* Primary nebula glow (Cosmic Violet #8B5CF6) */}
       <motion.div
         animate={
           reduce
             ? undefined
             : {
-                x: [0, 40, -30, 0],
-                y: [0, -40, 20, 0],
-                scale: [1, 1.08, 0.94, 1],
+                x: [0, 35, -25, 0],
+                y: [0, -35, 20, 0],
+                scale: [1, 1.06, 0.95, 1],
               }
         }
-        transition={{ duration: 28, repeat: Infinity, ease: "easeInOut" }}
+        transition={{ duration: 30, repeat: Infinity, ease: "easeInOut" }}
         style={{
           position: "absolute",
-          top: "-15%",
-          left: "-10%",
+          top: "-10%",
+          left: "-8%",
           width: "55vw",
           height: "55vw",
           maxWidth: 900,
           maxHeight: 900,
           borderRadius: "50%",
           background:
-            "radial-gradient(circle, rgba(96, 165, 250, 0.12) 0%, rgba(96, 165, 250, 0.03) 45%, transparent 70%)",
-          filter: "blur(70px)",
+            "radial-gradient(circle, rgba(139, 92, 246, 0.12) 0%, rgba(139, 92, 246, 0.03) 45%, transparent 70%)",
+          filter: "blur(80px)",
         }}
       />
 
-      {/* Secondary subtle nebula glow (mid-right muted violet) */}
+      {/* Secondary nebula glow (Electric Blue #38BDF8) */}
       <motion.div
         animate={
           reduce
             ? undefined
             : {
-                x: [0, -35, 45, 0],
-                y: [0, 50, -30, 0],
-                scale: [1, 0.95, 1.1, 1],
+                x: [0, -40, 35, 0],
+                y: [0, 45, -25, 0],
+                scale: [1, 0.94, 1.08, 1],
               }
         }
-        transition={{ duration: 34, repeat: Infinity, ease: "easeInOut" }}
+        transition={{ duration: 36, repeat: Infinity, ease: "easeInOut" }}
         style={{
           position: "absolute",
-          top: "40%",
-          right: "-12%",
+          top: "35%",
+          right: "-10%",
           width: "50vw",
           height: "50vw",
-          maxWidth: 800,
-          maxHeight: 800,
+          maxWidth: 850,
+          maxHeight: 850,
           borderRadius: "50%",
           background:
-            "radial-gradient(circle, rgba(139, 92, 246, 0.10) 0%, rgba(139, 92, 246, 0.02) 40%, transparent 65%)",
-          filter: "blur(80px)",
+            "radial-gradient(circle, rgba(56, 189, 248, 0.10) 0%, rgba(56, 189, 248, 0.02) 40%, transparent 65%)",
+          filter: "blur(85px)",
         }}
       />
 
-      {/* Concentric faint orbital geometry in deep background */}
+      {/* Tertiary deep nebula glow (Nebula Pink #D946EF) */}
+      <motion.div
+        animate={
+          reduce
+            ? undefined
+            : {
+                x: [0, 30, -30, 0],
+                y: [0, 20, -30, 0],
+                scale: [1, 1.05, 0.96, 1],
+              }
+        }
+        transition={{ duration: 42, repeat: Infinity, ease: "easeInOut" }}
+        style={{
+          position: "absolute",
+          bottom: "10%",
+          left: "20%",
+          width: "45vw",
+          height: "45vw",
+          maxWidth: 750,
+          maxHeight: 750,
+          borderRadius: "50%",
+          background:
+            "radial-gradient(circle, rgba(217, 70, 239, 0.07) 0%, rgba(139, 92, 246, 0.02) 40%, transparent 65%)",
+          filter: "blur(90px)",
+        }}
+      />
+
+      {/* Concentric faint orbital geometry */}
       <Box
         sx={{
           position: "absolute",
@@ -123,12 +150,12 @@ const CosmicAmbience = () => {
           maxWidth: "1200px",
           maxHeight: "1200px",
           borderRadius: "50%",
-          border: "1px solid rgba(96, 165, 250, 0.012)",
+          border: "1px solid rgba(56, 189, 248, 0.02)",
           pointerEvents: "none",
         }}
       />
 
-      {/* Desktop soft cursor luminous aura */}
+      {/* Cursor luminous aura */}
       <motion.div
         style={{
           x: springX,
@@ -136,14 +163,14 @@ const CosmicAmbience = () => {
           position: "fixed",
           top: 0,
           left: 0,
-          width: 450,
-          height: 450,
+          width: 440,
+          height: 440,
           borderRadius: "50%",
           background:
-            "radial-gradient(circle, rgba(96, 165, 250, 0.08) 0%, rgba(139, 92, 246, 0.03) 40%, transparent 70%)",
+            "radial-gradient(circle, rgba(56, 189, 248, 0.07) 0%, rgba(139, 92, 246, 0.03) 38%, transparent 70%)",
           pointerEvents: "none",
           zIndex: 1,
-          filter: "blur(30px)",
+          filter: "blur(32px)",
         }}
       />
 

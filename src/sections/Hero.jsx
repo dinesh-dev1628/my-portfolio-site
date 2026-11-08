@@ -1,24 +1,12 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import { Box, Typography, Button, Container, Stack } from "@mui/material";
 import { ArrowDownward, NorthEast, ExploreOutlined } from "@mui/icons-material";
 import { motion, useReducedMotion } from "framer-motion";
+import HeroPlanet from "../components/3d/HeroPlanet.jsx";
+import MagneticButton from "../components/common/MagneticButton.jsx";
 
 const Hero = () => {
   const reduce = useReducedMotion();
-  const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
-
-  useEffect(() => {
-    if (reduce || window.matchMedia("(pointer: coarse)").matches) return;
-    const handleMouseMove = (e) => {
-      const { innerWidth, innerHeight } = window;
-      setMousePos({
-        x: (e.clientX / innerWidth - 0.5) * 20, // -10 to +10px
-        y: (e.clientY / innerHeight - 0.5) * 20,
-      });
-    };
-    window.addEventListener("mousemove", handleMouseMove, { passive: true });
-    return () => window.removeEventListener("mousemove", handleMouseMove);
-  }, [reduce]);
 
   const scrollTo = (id) => {
     const el = document.getElementById(id);
@@ -40,38 +28,52 @@ const Hero = () => {
         justifyContent: "center",
         position: "relative",
         overflow: "hidden",
-        pt: { xs: 14, md: 10 },
-        pb: { xs: 8, md: 10 },
+        pt: { xs: 14, sm: 16, md: 14 },
+        pb: { xs: 8, sm: 10, md: 12 },
       }}
     >
-      {/* Atmospheric lighting focal aura behind hero typography */}
+      {/* 1. Full-Screen Photorealistic 3D Planet & Planetary Rings (Zero clipping, full 100vw x 100vh) */}
+      <Box
+        sx={{
+          position: "absolute",
+          inset: 0,
+          width: "100%",
+          height: "100%",
+          zIndex: 1,
+          pointerEvents: "auto",
+        }}
+      >
+        <HeroPlanet />
+      </Box>
+
+      {/* 2. Deep Atmospheric Horizon Light Glow behind planet */}
       <Box
         aria-hidden="true"
         sx={{
           position: "absolute",
-          top: "40%",
+          top: "46%",
           left: "50%",
           transform: "translate(-50%, -50%)",
-          width: { xs: "300px", md: "650px" },
-          height: { xs: "280px", md: "450px" },
+          width: { xs: "360px", sm: "640px", md: "960px" },
+          height: { xs: "360px", sm: "520px", md: "700px" },
           background:
-            "radial-gradient(ellipse at center, rgba(96, 165, 250, 0.12) 0%, rgba(139, 92, 246, 0.05) 45%, transparent 70%)",
-          filter: "blur(60px)",
+            "radial-gradient(ellipse at center, rgba(139, 92, 246, 0.22) 0%, rgba(56, 189, 248, 0.10) 45%, rgba(217, 70, 239, 0.04) 65%, transparent 75%)",
+          filter: "blur(90px)",
           pointerEvents: "none",
           zIndex: 0,
         }}
       />
 
-      {/* Elegant Orbital Gyroscope Visual Element in background */}
+      {/* 3. Subtle Concentric Orbit Rings & Satellite Beacons */}
       <Box
         aria-hidden="true"
         sx={{
           position: "absolute",
-          top: "50%",
+          top: "46%",
           left: "50%",
           transform: "translate(-50%, -50%)",
-          width: { xs: "320px", sm: "480px", md: "680px" },
-          height: { xs: "320px", sm: "480px", md: "680px" },
+          width: { xs: "380px", sm: "580px", md: "840px" },
+          height: { xs: "380px", sm: "580px", md: "840px" },
           pointerEvents: "none",
           zIndex: 0,
         }}
@@ -82,63 +84,218 @@ const Hero = () => {
             position: "absolute",
             inset: 0,
             borderRadius: "50%",
-            border: "1px solid rgba(255, 255, 255, 0.04)",
-            animation: reduce ? "none" : "celestial-orbit 60s linear infinite",
+            border: "1px dashed rgba(56, 189, 248, 0.12)",
+            animation: reduce ? "none" : "celestial-orbit 65s linear infinite",
           }}
         >
-          {/* Orbiting celestial satellite node */}
+          {/* Orbiting Satellite Node 1 */}
           <Box
             sx={{
               position: "absolute",
-              top: "-4px",
+              top: "-5px",
               left: "50%",
-              width: "8px",
-              height: "8px",
+              transform: "translateX(-50%)",
+              width: 10,
+              height: 10,
               borderRadius: "50%",
-              backgroundColor: "#60A5FA",
-              boxShadow: "0 0 12px #60A5FA",
+              backgroundColor: "#38BDF8",
+              boxShadow: "0 0 12px #38BDF8, 0 0 24px #38BDF8",
             }}
           />
         </Box>
 
-        {/* Inner tilted orbital ring */}
+        {/* Inner reverse orbital ring */}
         <Box
           sx={{
             position: "absolute",
-            inset: { xs: "35px", md: "70px" },
+            inset: { xs: "40px", sm: "65px", md: "95px" },
             borderRadius: "50%",
-            border: "1px dashed rgba(139, 92, 246, 0.08)",
-            animation: reduce ? "none" : "celestial-orbit-reverse 45s linear infinite",
+            border: "1px solid rgba(139, 92, 246, 0.10)",
+            animation: reduce ? "none" : "celestial-orbit-reverse 48s linear infinite",
           }}
         >
+          {/* Orbiting Satellite Node 2 */}
           <Box
             sx={{
               position: "absolute",
-              bottom: "-3px",
-              left: "30%",
-              width: "6px",
-              height: "6px",
+              bottom: "-4px",
+              right: "28%",
+              width: 8,
+              height: 8,
               borderRadius: "50%",
-              backgroundColor: "#A78BFA",
-              boxShadow: "0 0 8px #A78BFA",
+              backgroundColor: "#D946EF",
+              boxShadow: "0 0 10px #D946EF, 0 0 20px #D946EF",
             }}
           />
         </Box>
       </Box>
 
-      {/* Hero Content Container */}
-      <Container maxWidth="lg" sx={{ position: "relative", zIndex: 1 }}>
+      {/* 4. Four-Corner Tactical HUD Framing Reticles */}
+      <Box
+        aria-hidden="true"
+        sx={{
+          position: "absolute",
+          top: 90,
+          left: { xs: 16, sm: 36, md: 64 },
+          display: { xs: "none", sm: "block" },
+          zIndex: 2,
+          pointerEvents: "none",
+        }}
+      >
+        <Typography
+          sx={{
+            fontFamily: "'Geist Mono', monospace",
+            fontSize: "0.65rem",
+            color: "#676780",
+            letterSpacing: 2,
+          }}
+        >
+          + [0x7E: SOL-ORBIT]
+        </Typography>
+      </Box>
+
+      <Box
+        aria-hidden="true"
+        sx={{
+          position: "absolute",
+          top: 90,
+          right: { xs: 16, sm: 36, md: 64 },
+          display: { xs: "none", sm: "block" },
+          textAlign: "right",
+          zIndex: 2,
+          pointerEvents: "none",
+        }}
+      >
+        <Typography
+          sx={{
+            fontFamily: "'Geist Mono', monospace",
+            fontSize: "0.65rem",
+            color: "#676780",
+            letterSpacing: 2,
+          }}
+        >
+          LAT: 13.08° N // LONG: 80.27° E +
+        </Typography>
+      </Box>
+
+      {/* Futuristic Floating HUD Astronomical Telemetry (Desktop Left) */}
+      <Box
+        aria-hidden="true"
+        sx={{
+          position: "absolute",
+          top: { xs: 130, md: 150 },
+          left: { xs: 24, md: 64 },
+          display: { xs: "none", lg: "block" },
+          zIndex: 2,
+          pointerEvents: "none",
+        }}
+      >
+        <motion.div
+          initial={reduce ? false : { opacity: 0, x: -25 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ duration: 0.9, delay: 0.5 }}
+        >
+          <Box
+            sx={{
+              p: 2.2,
+              borderRadius: "16px",
+              backgroundColor: "rgba(10, 10, 24, 0.65)",
+              border: "1px solid rgba(56, 189, 248, 0.2)",
+              backdropFilter: "blur(14px)",
+              boxShadow: "0 8px 25px rgba(0, 0, 0, 0.5)",
+            }}
+          >
+            <Typography
+              sx={{
+                fontFamily: "'Geist Mono', monospace",
+                fontSize: "0.7rem",
+                color: "#38BDF8",
+                letterSpacing: 2,
+                mb: 0.6,
+                fontWeight: 700,
+              }}
+            >
+              // ORBITAL COORDINATES
+            </Typography>
+            <Typography
+              sx={{
+                fontFamily: "'Geist Mono', monospace",
+                fontSize: "0.68rem",
+                color: "#9292A8",
+                letterSpacing: 1.5,
+                lineHeight: 1.6,
+              }}
+            >
+              RA: 19h 50m 47s<br />
+              DEC: +08° 52′ 06″<br />
+              TILT: 23.4° // STABLE<br />
+              ORBIT: GEO-SYNCHRONOUS
+            </Typography>
+          </Box>
+        </motion.div>
+      </Box>
+
+      {/* Futuristic Floating HUD Telemetry (Desktop Right) */}
+      <Box
+        aria-hidden="true"
+        sx={{
+          position: "absolute",
+          top: { xs: 130, md: 150 },
+          right: { xs: 24, md: 64 },
+          display: { xs: "none", lg: "block" },
+          zIndex: 2,
+          textAlign: "right",
+          pointerEvents: "none",
+        }}
+      >
+        <motion.div
+          initial={reduce ? false : { opacity: 0, x: 25 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ duration: 0.9, delay: 0.5 }}
+        >
+          <Box
+            sx={{
+              p: 2.2,
+              borderRadius: "16px",
+              backgroundColor: "rgba(10, 10, 24, 0.65)",
+              border: "1px solid rgba(139, 92, 246, 0.2)",
+              backdropFilter: "blur(14px)",
+              boxShadow: "0 8px 25px rgba(0, 0, 0, 0.5)",
+            }}
+          >
+            <Typography
+              sx={{
+                fontFamily: "'Geist Mono', monospace",
+                fontSize: "0.7rem",
+                color: "#8B5CF6",
+                letterSpacing: 2,
+                mb: 0.6,
+                fontWeight: 700,
+              }}
+            >
+              // MISSION TELEMETRY
+            </Typography>
+            <Typography
+              sx={{
+                fontFamily: "'Geist Mono', monospace",
+                fontSize: "0.68rem",
+                color: "#9292A8",
+                letterSpacing: 1.5,
+                lineHeight: 1.6,
+              }}
+            >
+              WARP VELOCITY: 0.04c<br />
+              GRAVITATIONAL: 1.00 G<br />
+              FRAME RATE: 60 FPS [LOCKED]<br />
+              SECTOR: 0x7E [SOL-DINESH]
+            </Typography>
+          </Box>
+        </motion.div>
+      </Box>
+
+      {/* 5. Foreground Hero Narrative (Proportionally Balanced, 100% Readable) */}
+      <Container maxWidth="lg" sx={{ position: "relative", zIndex: 3, pointerEvents: "none" }}>
         <Box
-          component={motion.div}
-          animate={
-            reduce
-              ? undefined
-              : {
-                  x: mousePos.x * 0.5,
-                  y: mousePos.y * 0.5,
-                }
-          }
-          transition={{ type: "spring", stiffness: 100, damping: 20 }}
           sx={{
             maxWidth: "920px",
             mx: "auto",
@@ -146,27 +303,28 @@ const Hero = () => {
             display: "flex",
             flexDirection: "column",
             alignItems: "center",
+            pointerEvents: "auto",
           }}
         >
-          {/* Telemetry Status Pill */}
+          {/* Staggered Entrance 1: Role Identification */}
           <motion.div
-            initial={reduce ? false : { opacity: 0, y: -20 }}
+            initial={reduce ? false : { opacity: 0, y: -25 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.1 }}
+            transition={{ duration: 0.85, delay: 0.2 }}
           >
             <Box
               sx={{
                 display: "inline-flex",
                 alignItems: "center",
                 gap: 1.5,
-                px: 2.2,
-                py: 0.7,
+                px: { xs: 2.2, sm: 2.8 },
+                py: 0.85,
                 borderRadius: "999px",
-                backgroundColor: "rgba(10, 13, 22, 0.7)",
-                border: "1px solid rgba(255, 255, 255, 0.08)",
-                backdropFilter: "blur(12px)",
-                mb: { xs: 3, md: 4 },
-                boxShadow: "0 4px 20px rgba(0, 0, 0, 0.4)",
+                backgroundColor: "rgba(10, 10, 24, 0.82)",
+                border: "1px solid rgba(56, 189, 248, 0.35)",
+                backdropFilter: "blur(18px)",
+                mb: { xs: 2.5, sm: 3.5 },
+                boxShadow: "0 0 25px rgba(56, 189, 248, 0.18)",
               }}
             >
               <Box
@@ -174,275 +332,256 @@ const Hero = () => {
                   width: 7,
                   height: 7,
                   borderRadius: "50%",
-                  backgroundColor: "#10B981",
-                  boxShadow: "0 0 8px #10B981",
+                  backgroundColor: "#38BDF8",
+                  boxShadow: "0 0 10px #38BDF8",
                 }}
               />
               <Typography
                 sx={{
                   fontFamily: "'Geist Mono', monospace",
-                  fontSize: { xs: "0.68rem", sm: "0.75rem" },
-                  color: "#CBD5E1",
-                  letterSpacing: 2,
-                  fontWeight: 500,
+                  fontSize: { xs: "0.68rem", sm: "0.78rem" },
+                  color: "#F5F5FA",
+                  letterSpacing: { xs: 1.2, sm: 2 },
+                  fontWeight: 600,
                   textTransform: "uppercase",
                 }}
               >
-                AVAILABLE FOR NEW PROJECTS // 2026
+                Python Developer | Automation Engineer | Full-Stack Developer
               </Typography>
             </Box>
           </motion.div>
 
-          {/* Large Personal Brand Eyebrow */}
+          {/* Staggered Entrance 2: Main Headline */}
           <motion.div
-            initial={reduce ? false : { opacity: 0, scale: 0.96 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 0.9, delay: 0.2 }}
+            initial={reduce ? false : { opacity: 0, scale: 0.94, filter: "blur(10px)" }}
+            animate={{ opacity: 1, scale: 1, filter: "blur(0px)" }}
+            transition={{ duration: 1.0, delay: 0.35, ease: [0.16, 1, 0.3, 1] }}
           >
-            <Typography
-              sx={{
-                fontFamily: "'Geist Mono', monospace",
-                fontSize: { xs: "0.75rem", sm: "0.85rem" },
-                color: "#60A5FA",
-                letterSpacing: { xs: 4, md: 6 },
-                textTransform: "uppercase",
-                fontWeight: 600,
-                mb: 1.5,
-              }}
-            >
-              // DEVELOPER & SYSTEMS ARCHITECT
-            </Typography>
-
             <Typography
               variant="h1"
               sx={{
-                fontSize: { xs: "3.2rem", sm: "5rem", md: "6.8rem" },
+                fontSize: {
+                  xs: "clamp(2.1rem, 7vw, 2.8rem)",
+                  sm: "clamp(2.8rem, 6.2vw, 4.2rem)",
+                  md: "clamp(3.6rem, 5.2vw, 5rem)",
+                },
                 fontWeight: 800,
-                lineHeight: 0.95,
-                letterSpacing: { xs: "-0.04em", md: "-0.05em" },
-                color: "#F8FAFC",
+                lineHeight: 1.05,
+                letterSpacing: "-0.035em",
                 textTransform: "uppercase",
                 mb: 2.5,
                 userSelect: "none",
                 background:
-                  "linear-gradient(180deg, #FFFFFF 0%, #E2E8F0 60%, #94A3B8 100%)",
+                  "linear-gradient(180deg, #FFFFFF 0%, #F5F5FA 45%, #9292A8 100%)",
                 WebkitBackgroundClip: "text",
                 WebkitTextFillColor: "transparent",
+                filter: "drop-shadow(0 4px 28px rgba(5, 5, 16, 0.95)) drop-shadow(0 0 35px rgba(139, 92, 246, 0.3))",
               }}
             >
-              DINESH
-            </Typography>
-          </motion.div>
-
-          {/* Core Cinematic Headline */}
-          <motion.div
-            initial={reduce ? false : { opacity: 0, y: 25 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.35 }}
-          >
-            <Typography
-              variant="h2"
-              sx={{
-                fontSize: { xs: "1.45rem", sm: "2rem", md: "2.4rem" },
-                fontWeight: 700,
-                lineHeight: 1.25,
-                letterSpacing: "-0.025em",
-                color: "#F8FAFC",
-                maxWidth: "780px",
-                mx: "auto",
-                mb: 2.5,
-              }}
-            >
-              Building Digital Experiences{" "}
-              <span
-                style={{
-                  background: "linear-gradient(90deg, #60A5FA, #A78BFA)",
+              EXPLORING THE{" "}
+              <Box
+                component="span"
+                sx={{
+                  display: "inline-block",
+                  background: "linear-gradient(90deg, #8B5CF6 0%, #38BDF8 50%, #D946EF 100%)",
                   WebkitBackgroundClip: "text",
                   WebkitTextFillColor: "transparent",
+                  filter: "drop-shadow(0 0 30px rgba(56, 189, 248, 0.4))",
                 }}
               >
-                Beyond Limits.
-              </span>
+                DIGITAL UNIVERSE.
+              </Box>
             </Typography>
           </motion.div>
 
-          {/* Supporting Narrative */}
+          {/* Staggered Entrance 3: Supporting Narrative */}
           <motion.div
             initial={reduce ? false : { opacity: 0, y: 25 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.45 }}
+            transition={{ duration: 0.85, delay: 0.5 }}
           >
             <Typography
               sx={{
-                fontSize: { xs: "0.98rem", sm: "1.12rem" },
-                color: "#94A3B8",
+                fontSize: { xs: "0.95rem", sm: "1.12rem", md: "1.2rem" },
+                color: "#E2E8F0",
                 maxWidth: "680px",
                 mx: "auto",
                 lineHeight: 1.7,
                 fontWeight: 400,
-                mb: { xs: 4, md: 5 },
+                mb: { xs: 3.5, sm: 4.5 },
+                textShadow: "0 2px 14px rgba(5, 5, 16, 0.95), 0 0 10px rgba(5, 5, 16, 0.8)",
               }}
             >
-              I'm a developer focused on Python, automation, APIs, and modern
-              web experiences. I turn complex ideas into practical, scalable
-              solutions.
+              I'm Dinesh — a developer building intelligent automation, scalable
+              applications, and experiences where code meets creativity.
             </Typography>
           </motion.div>
 
-          {/* Action Buttons */}
+          {/* Staggered Entrance 4: Magnetic CTA Buttons */}
           <motion.div
-            initial={reduce ? false : { opacity: 0, y: 20 }}
+            initial={reduce ? false : { opacity: 0, y: 25 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.55 }}
+            transition={{ duration: 0.85, delay: 0.65 }}
           >
             <Stack
               direction={{ xs: "column", sm: "row" }}
-              spacing={2}
+              spacing={2.2}
               alignItems="center"
               justifyContent="center"
               sx={{ width: { xs: "100%", sm: "auto" } }}
             >
               {/* Primary CTA */}
-              <Button
-                variant="contained"
-                onClick={() => scrollTo("about")}
-                startIcon={<ExploreOutlined />}
-                sx={{
-                  width: { xs: "100%", sm: "auto" },
-                  px: 3.5,
-                  py: 1.5,
-                  borderRadius: "14px",
-                  fontSize: "0.95rem",
-                  fontWeight: 700,
-                  fontFamily: "'Space Grotesk', sans-serif",
-                  letterSpacing: "0.01em",
-                  color: "#FFFFFF",
-                  backgroundColor: "rgba(96, 165, 250, 0.16)",
-                  border: "1px solid rgba(96, 165, 250, 0.4)",
-                  boxShadow: "0 0 25px rgba(96, 165, 250, 0.25)",
-                  backdropFilter: "blur(12px)",
-                  "&:hover": {
-                    backgroundColor: "rgba(96, 165, 250, 0.26)",
-                    borderColor: "#60A5FA",
-                    boxShadow: "0 0 35px rgba(96, 165, 250, 0.4)",
-                    transform: "translateY(-2px)",
-                  },
-                  transition: "all 0.3s ease",
-                }}
-              >
-                Explore My Universe
-              </Button>
+              <MagneticButton>
+                <Button
+                  variant="contained"
+                  onClick={() => scrollTo("about")}
+                  startIcon={<ExploreOutlined />}
+                  sx={{
+                    width: { xs: "100%", sm: "auto" },
+                    minWidth: { xs: "220px", sm: "210px" },
+                    px: 3.8,
+                    py: 1.5,
+                    borderRadius: "14px",
+                    fontSize: "0.92rem",
+                    fontWeight: 700,
+                    fontFamily: "'Space Grotesk', sans-serif",
+                    letterSpacing: "0.04em",
+                    color: "#FFFFFF",
+                    backgroundColor: "rgba(139, 92, 246, 0.32)",
+                    border: "1px solid rgba(139, 92, 246, 0.65)",
+                    boxShadow: "0 0 35px rgba(139, 92, 246, 0.5)",
+                    backdropFilter: "blur(14px)",
+                    "&:hover": {
+                      backgroundColor: "rgba(139, 92, 246, 0.48)",
+                      borderColor: "#8B5CF6",
+                      boxShadow: "0 0 50px rgba(139, 92, 246, 0.75)",
+                      transform: "translateY(-2px)",
+                    },
+                    transition: "all 0.3s cubic-bezier(0.16, 1, 0.3, 1)",
+                  }}
+                >
+                  EXPLORE MY UNIVERSE
+                </Button>
+              </MagneticButton>
 
               {/* Secondary CTA */}
-              <Button
-                variant="outlined"
-                onClick={() => scrollTo("projects")}
-                endIcon={<NorthEast sx={{ fontSize: "1rem !important" }} />}
-                sx={{
-                  width: { xs: "100%", sm: "auto" },
-                  px: 3.5,
-                  py: 1.5,
-                  borderRadius: "14px",
-                  fontSize: "0.95rem",
-                  fontWeight: 600,
-                  fontFamily: "'Space Grotesk', sans-serif",
-                  letterSpacing: "0.01em",
-                  color: "#F8FAFC",
-                  borderColor: "rgba(255, 255, 255, 0.12)",
-                  backgroundColor: "rgba(255, 255, 255, 0.02)",
-                  "&:hover": {
-                    borderColor: "rgba(255, 255, 255, 0.3)",
-                    backgroundColor: "rgba(255, 255, 255, 0.05)",
-                    transform: "translateY(-2px)",
-                  },
-                  transition: "all 0.3s ease",
-                }}
-              >
-                View Selected Work
-              </Button>
+              <MagneticButton>
+                <Button
+                  variant="outlined"
+                  onClick={() => scrollTo("projects")}
+                  endIcon={<NorthEast sx={{ fontSize: "1.05rem !important" }} />}
+                  sx={{
+                    width: { xs: "100%", sm: "auto" },
+                    minWidth: { xs: "220px", sm: "185px" },
+                    px: 3.6,
+                    py: 1.5,
+                    borderRadius: "14px",
+                    fontSize: "0.92rem",
+                    fontWeight: 600,
+                    fontFamily: "'Space Grotesk', sans-serif",
+                    letterSpacing: "0.04em",
+                    color: "#F5F5FA",
+                    borderColor: "rgba(56, 189, 248, 0.42)",
+                    backgroundColor: "rgba(10, 10, 24, 0.6)",
+                    backdropFilter: "blur(14px)",
+                    "&:hover": {
+                      borderColor: "#38BDF8",
+                      backgroundColor: "rgba(56, 189, 248, 0.18)",
+                      boxShadow: "0 0 35px rgba(56, 189, 248, 0.4)",
+                      transform: "translateY(-2px)",
+                    },
+                    transition: "all 0.3s cubic-bezier(0.16, 1, 0.3, 1)",
+                  }}
+                >
+                  VIEW MY WORK
+                </Button>
+              </MagneticButton>
             </Stack>
           </motion.div>
 
-          {/* Quick Telemetry Footnote */}
+          {/* Astronomical Telemetry Grid Footnote */}
           <Box
             sx={{
               display: "flex",
               flexWrap: "wrap",
               justifyContent: "center",
-              gap: { xs: 2.5, sm: 4 },
-              mt: { xs: 6, md: 8 },
+              gap: { xs: 2.5, sm: 5 },
+              mt: { xs: 5, sm: 7, md: 8 },
               pt: 3,
-              borderTop: "1px solid rgba(255, 255, 255, 0.05)",
+              borderTop: "1px solid rgba(255, 255, 255, 0.08)",
               width: "100%",
-              maxWidth: "600px",
+              maxWidth: "700px",
             }}
           >
-            <Box sx={{ textAlign: "center" }}>
+            <Box sx={{ textAlign: "center", minWidth: "140px" }}>
               <Typography
                 sx={{
                   fontFamily: "'Space Grotesk', sans-serif",
-                  fontSize: "1.1rem",
+                  fontSize: "1.05rem",
                   fontWeight: 700,
-                  color: "#F8FAFC",
+                  color: "#F5F5FA",
                 }}
               >
-                Python & React
+                Python &amp; AsyncIO
               </Typography>
               <Typography
                 sx={{
                   fontFamily: "'Geist Mono', monospace",
                   fontSize: "0.68rem",
-                  color: "#64748B",
+                  color: "#9292A8",
                   letterSpacing: 1.5,
+                  mt: 0.3,
                 }}
               >
-                CORE SPECIALIZATION
+                CORE BACKEND ARCHITECTURE
               </Typography>
             </Box>
 
-            <Box sx={{ textAlign: "center" }}>
+            <Box sx={{ textAlign: "center", minWidth: "140px" }}>
               <Typography
                 sx={{
                   fontFamily: "'Space Grotesk', sans-serif",
-                  fontSize: "1.1rem",
+                  fontSize: "1.05rem",
                   fontWeight: 700,
-                  color: "#F8FAFC",
+                  color: "#F5F5FA",
                 }}
               >
-                Playwright & APIs
+                Playwright &amp; n8n
               </Typography>
               <Typography
                 sx={{
                   fontFamily: "'Geist Mono', monospace",
                   fontSize: "0.68rem",
-                  color: "#64748B",
+                  color: "#9292A8",
                   letterSpacing: 1.5,
+                  mt: 0.3,
                 }}
               >
-                AUTOMATION STACK
+                PRODUCTION AUTOMATION
               </Typography>
             </Box>
 
-            <Box sx={{ textAlign: "center" }}>
+            <Box sx={{ textAlign: "center", minWidth: "140px" }}>
               <Typography
                 sx={{
                   fontFamily: "'Space Grotesk', sans-serif",
-                  fontSize: "1.1rem",
+                  fontSize: "1.05rem",
                   fontWeight: 700,
-                  color: "#F8FAFC",
+                  color: "#F5F5FA",
                 }}
               >
-                PostgreSQL & Docker
+                React 19 &amp; Next.js
               </Typography>
               <Typography
                 sx={{
                   fontFamily: "'Geist Mono', monospace",
                   fontSize: "0.68rem",
-                  color: "#64748B",
+                  color: "#9292A8",
                   letterSpacing: 1.5,
+                  mt: 0.3,
                 }}
               >
-                DATA & DEVOPS
+                INTERACTIVE FRONTEND
               </Typography>
             </Box>
           </Box>
@@ -454,25 +593,27 @@ const Hero = () => {
         onClick={() => scrollTo("about")}
         sx={{
           position: "absolute",
-          bottom: 24,
+          bottom: 20,
           left: "50%",
           transform: "translateX(-50%)",
           display: { xs: "none", sm: "flex" },
           flexDirection: "column",
           alignItems: "center",
-          gap: 0.5,
+          gap: 0.8,
           cursor: "pointer",
-          color: "rgba(255, 255, 255, 0.35)",
-          "&:hover": { color: "#60A5FA" },
-          transition: "color 0.2s ease",
+          color: "rgba(245, 245, 250, 0.45)",
+          "&:hover": { color: "#38BDF8" },
+          transition: "color 0.25s ease",
+          zIndex: 4,
         }}
       >
         <Typography
           sx={{
             fontFamily: "'Geist Mono', monospace",
-            fontSize: "0.62rem",
-            letterSpacing: 2,
+            fontSize: "0.68rem",
+            letterSpacing: 2.5,
             textTransform: "uppercase",
+            fontWeight: 600,
           }}
         >
           SCROLL TO EXPLORE
@@ -481,7 +622,7 @@ const Hero = () => {
           animate={reduce ? undefined : { y: [0, 6, 0] }}
           transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
         >
-          <ArrowDownward sx={{ fontSize: "1rem" }} />
+          <ArrowDownward sx={{ fontSize: "1.1rem" }} />
         </motion.div>
       </Box>
     </Box>

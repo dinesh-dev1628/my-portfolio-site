@@ -6,22 +6,65 @@ import {
   useScroll,
   useSpring,
 } from "framer-motion";
-import { Box } from "@mui/material";
+import { Box, Typography } from "@mui/material";
 
 import Navbar from "./components/layout/Navbar.jsx";
 import Starfield from "./components/layout/Starfield.jsx";
 import CosmicAmbience from "./components/layout/CosmicAmbience.jsx";
+import SectorTracker from "./components/layout/SectorTracker.jsx";
 import Footer from "./components/layout/Footer.jsx";
 
 import Hero from "./sections/Hero.jsx";
 import About from "./sections/About.jsx";
-import Experience from "./sections/Experience.jsx";
-import Projects from "./sections/Projects.jsx";
 import Skills from "./sections/Skills.jsx";
+import Projects from "./sections/Projects.jsx";
+import Experience from "./sections/Experience.jsx";
 import Contact from "./sections/Contact.jsx";
 import Preloader from "./sections/Preloader.jsx";
 
 const EASE = [0.16, 1, 0.3, 1];
+
+// Celestial orbital transition divider
+const OrbitalDivider = ({ label }) => (
+  <Box
+    aria-hidden="true"
+    sx={{
+      display: "flex",
+      alignItems: "center",
+      justifyContent: "center",
+      gap: 3,
+      py: { xs: 2, md: 4 },
+      opacity: 0.45,
+      userSelect: "none",
+    }}
+  >
+    <Box
+      sx={{
+        width: { xs: 40, sm: 80, md: 140 },
+        height: 1,
+        background: "linear-gradient(90deg, transparent, rgba(56, 189, 248, 0.4))",
+      }}
+    />
+    <Typography
+      sx={{
+        fontFamily: "'Geist Mono', monospace",
+        fontSize: "0.65rem",
+        color: "#9292A8",
+        letterSpacing: 2,
+        textTransform: "uppercase",
+      }}
+    >
+      {label}
+    </Typography>
+    <Box
+      sx={{
+        width: { xs: 40, sm: 80, md: 140 },
+        height: 1,
+        background: "linear-gradient(90deg, rgba(56, 189, 248, 0.4), transparent)",
+      }}
+    />
+  </Box>
+);
 
 // Scroll reveal component for celestial transitions
 const SectionReveal = ({ children, id }) => {
@@ -32,11 +75,11 @@ const SectionReveal = ({ children, id }) => {
       initial={
         reduce
           ? false
-          : { opacity: 0, y: 60, scale: 0.98, filter: "blur(8px)" }
+          : { opacity: 0, y: 45, scale: 0.99, filter: "blur(6px)" }
       }
       whileInView={{ opacity: 1, y: 0, scale: 1, filter: "blur(0px)" }}
-      viewport={{ once: true, amount: 0.12, margin: "0px 0px -60px 0px" }}
-      transition={{ duration: 1.1, ease: EASE }}
+      viewport={{ once: true, amount: 0.08, margin: "0px 0px -40px 0px" }}
+      transition={{ duration: 0.85, ease: EASE }}
       style={{ position: "relative" }}
     >
       {children}
@@ -67,7 +110,7 @@ function App() {
           sx={{
             position: "relative",
             minHeight: "100vh",
-            backgroundColor: "#05060A",
+            backgroundColor: "#050510",
             overflowX: "hidden",
           }}
         >
@@ -88,10 +131,13 @@ function App() {
               height: 2.5,
               zIndex: 1400,
               background:
-                "linear-gradient(90deg, #60A5FA 0%, #8B5CF6 50%, #A78BFA 100%)",
-              boxShadow: "0 0 10px rgba(96, 165, 250, 0.7)",
+                "linear-gradient(90deg, #8B5CF6 0%, #38BDF8 50%, #D946EF 100%)",
+              boxShadow: "0 0 12px rgba(56, 189, 248, 0.7)",
             }}
           />
+
+          {/* Floating Orbital Sector Waypoint HUD (Desktop) */}
+          <SectorTracker />
 
           {/* Foreground Universe Content */}
           <Box sx={{ position: "relative", zIndex: 2 }}>
@@ -103,25 +149,30 @@ function App() {
               sx={{
                 display: "flex",
                 flexDirection: "column",
-                gap: { xs: 8, md: 14 },
+                gap: { xs: 6, md: 10 },
               }}
             >
+              <OrbitalDivider label="ORBITAL THRESHOLD // ORIGIN SECTOR" />
               <SectionReveal id="about">
                 <About />
               </SectionReveal>
 
-              <SectionReveal id="experience">
-                <Experience />
-              </SectionReveal>
-
-              <SectionReveal id="projects">
-                <Projects />
-              </SectionReveal>
-
+              <OrbitalDivider label="ORBITAL THRESHOLD // TECHNOLOGICAL GALAXY" />
               <SectionReveal id="skills">
                 <Skills />
               </SectionReveal>
 
+              <OrbitalDivider label="ORBITAL THRESHOLD // EXPEDITION ARCHIVES" />
+              <SectionReveal id="projects">
+                <Projects />
+              </SectionReveal>
+
+              <OrbitalDivider label="ORBITAL THRESHOLD // CHRONOLOGICAL TRAJECTORY" />
+              <SectionReveal id="experience">
+                <Experience />
+              </SectionReveal>
+
+              <OrbitalDivider label="ORBITAL THRESHOLD // DIRECT FREQUENCY" />
               <SectionReveal id="contact">
                 <Contact />
               </SectionReveal>

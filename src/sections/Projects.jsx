@@ -12,685 +12,589 @@ import {
 import {
   GitHub,
   Launch,
-  Code,
-  AutoAwesome,
+  RocketLaunch,
+  CheckCircle,
+  Speed,
   Memory,
   Tune,
-  CheckCircle,
-  TrendingUp,
-  Schedule,
+  NorthEast,
 } from "@mui/icons-material";
 import { motion, useReducedMotion } from "framer-motion";
 import { projectsData } from "../data/projects";
+import MissionTelemetryVisualizer from "../components/3d/MissionTelemetryVisualizer.jsx";
+import MagneticButton from "../components/common/MagneticButton.jsx";
 
 const Projects = () => {
   const reduce = useReducedMotion();
-  const [activeProjectTab, setActiveProjectTab] = useState("overview");
+  const [filter, setFilter] = useState("all");
 
-  const featuredProject = projectsData[0]; // Expense Tracker
-  const otherProjects = projectsData.slice(1);
+  const filterOptions = [
+    { id: "all", label: "ALL MISSIONS" },
+    { id: "automation", label: "AUTOMATION & SCRAPING" },
+    { id: "web", label: "FULL-STACK & INTERACTIVE" },
+    { id: "ai", label: "WORKFLOWS & AI" },
+  ];
+
+  const filteredProjects = projectsData.filter((p) => {
+    if (filter === "all") return true;
+    if (filter === "automation") return p.category.includes("Automation");
+    if (filter === "web") return p.category.includes("Full-Stack");
+    if (filter === "ai") return p.category.includes("Workflow") || p.category.includes("AI");
+    return true;
+  });
 
   return (
     <Box
       id="projects"
       component="section"
       sx={{
-        py: { xs: 10, md: 18 },
+        py: { xs: 12, md: 18 },
         position: "relative",
         overflow: "hidden",
       }}
     >
       <Container maxWidth="lg" sx={{ position: "relative", zIndex: 1 }}>
         {/* Section Header */}
-        <Box sx={{ mb: { xs: 8, md: 12 } }}>
+        <Box sx={{ mb: { xs: 7, md: 9 } }}>
           <Stack direction="row" alignItems="center" spacing={1.5} sx={{ mb: 1.5 }}>
-            <Box sx={{ width: 24, height: 1, backgroundColor: "#60A5FA" }} />
+            <Box
+              sx={{
+                width: 24,
+                height: 2,
+                backgroundColor: "#D946EF",
+                boxShadow: "0 0 10px #D946EF",
+              }}
+            />
             <Typography
               sx={{
                 fontFamily: "'Geist Mono', monospace",
                 fontSize: "0.75rem",
-                color: "#60A5FA",
+                color: "#D946EF",
                 letterSpacing: 3,
                 textTransform: "uppercase",
                 fontWeight: 600,
               }}
             >
-              03 // STELLAR ARTIFACTS
+              03 // EXPEDITIONS & ARTIFACTS
             </Typography>
           </Stack>
 
           <Typography
             variant="h2"
             sx={{
-              fontSize: { xs: "2rem", sm: "3rem", md: "3.6rem" },
+              fontSize: { xs: "clamp(2rem, 5vw, 3.8rem)" },
               fontWeight: 800,
-              lineHeight: 1.1,
+              lineHeight: 1.08,
               letterSpacing: "-0.03em",
-              color: "#F8FAFC",
+              color: "#F5F5FA",
+              maxWidth: "850px",
             }}
           >
-            The Stars of My{" "}
-            <span
-              style={{
-                background: "linear-gradient(90deg, #60A5FA, #A78BFA)",
+            MISSIONS{" "}
+            <Box
+              component="span"
+              sx={{
+                background: "linear-gradient(90deg, #D946EF, #8B5CF6, #38BDF8)",
                 WebkitBackgroundClip: "text",
                 WebkitTextFillColor: "transparent",
               }}
             >
-              Universe.
-            </span>
+              COMPLETED.
+            </Box>
           </Typography>
+
           <Typography
             sx={{
-              color: "#94A3B8",
-              fontSize: { xs: "0.95rem", sm: "1.05rem" },
-              mt: 1.5,
-              maxWidth: "650px",
+              color: "#9292A8",
+              fontSize: { xs: "0.98rem", sm: "1.1rem" },
+              mt: 1.8,
+              maxWidth: "680px",
+              lineHeight: 1.7,
             }}
           >
-            Each project is engineered as an autonomous discovery within my technical
-            orbit, solving real-world data, automation, and interface challenges.
+            Each project is engineered as an autonomous space exploration mission,
+            solving tangible problems across production automation, database architectures,
+            and high-performance digital experiences.
           </Typography>
-        </Box>
 
-        {/* 1. HERO FEATURED PROJECT: EXPENSE TRACKER */}
-        <motion.div
-          initial={reduce ? false : { opacity: 0, y: 35 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, amount: 0.15 }}
-          transition={{ duration: 0.9, ease: [0.16, 1, 0.3, 1] }}
-        >
+          {/* Mission Filter Tabs */}
           <Box
             sx={{
-              p: { xs: 3.5, md: 5 },
-              borderRadius: "28px",
-              backgroundColor: "rgba(16, 21, 34, 0.75)",
-              border: "1px solid rgba(96, 165, 250, 0.2)",
-              backdropFilter: "blur(16px)",
-              position: "relative",
-              overflow: "hidden",
-              boxShadow:
-                "0 25px 60px -15px rgba(0, 0, 0, 0.8), 0 0 40px rgba(96, 165, 250, 0.08)",
-              mb: 6,
-              transition: "border-color 0.3s ease",
-              "&:hover": {
-                borderColor: "rgba(96, 165, 250, 0.4)",
-              },
+              display: "flex",
+              flexWrap: "wrap",
+              gap: 1.2,
+              mt: 4,
             }}
           >
-            {/* Ambient corner glow */}
-            <Box
-              sx={{
-                position: "absolute",
-                top: 0,
-                right: 0,
-                width: "400px",
-                height: "400px",
-                background:
-                  "radial-gradient(circle at top right, rgba(96, 165, 250, 0.12) 0%, transparent 70%)",
-                pointerEvents: "none",
-              }}
-            />
-
-            {/* Top Bar with Codename & External Links */}
-            <Box
-              sx={{
-                display: "flex",
-                flexWrap: "wrap",
-                alignItems: "center",
-                justifyContent: "space-between",
-                gap: 2,
-                pb: 3,
-                borderBottom: "1px solid rgba(255, 255, 255, 0.06)",
-                mb: 4,
-              }}
-            >
-              <Box sx={{ display: "flex", alignItems: "center", gap: 1.5 }}>
-                <Box
+            {filterOptions.map((opt) => {
+              const isActive = filter === opt.id;
+              return (
+                <Button
+                  key={opt.id}
+                  onClick={() => setFilter(opt.id)}
                   sx={{
-                    px: 1.5,
-                    py: 0.4,
-                    borderRadius: "6px",
-                    backgroundColor: "rgba(96, 165, 250, 0.12)",
-                    border: "1px solid rgba(96, 165, 250, 0.3)",
-                    color: "#60A5FA",
-                    fontFamily: "'Geist Mono', monospace",
-                    fontSize: "0.72rem",
-                    fontWeight: 600,
-                    letterSpacing: 1.5,
-                  }}
-                >
-                  {featuredProject.codename}
-                </Box>
-                <Typography
-                  sx={{
+                    px: 2.5,
+                    py: 0.8,
+                    borderRadius: "999px",
                     fontFamily: "'Geist Mono', monospace",
                     fontSize: "0.75rem",
-                    color: "#94A3B8",
-                    letterSpacing: 1,
-                  }}
-                >
-                  {featuredProject.subtitle}
-                </Typography>
-              </Box>
-
-              <Box sx={{ display: "flex", alignItems: "center", gap: 1.5 }}>
-                <Button
-                  variant="outlined"
-                  size="small"
-                  startIcon={<GitHub />}
-                  href={featuredProject.github}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  sx={{
-                    borderRadius: "10px",
-                    borderColor: "rgba(255, 255, 255, 0.12)",
-                    color: "#F8FAFC",
-                    fontSize: "0.82rem",
+                    letterSpacing: 1.2,
                     fontWeight: 600,
-                    fontFamily: "'Space Grotesk', sans-serif",
-                    "&:hover": {
-                      borderColor: "#60A5FA",
-                      backgroundColor: "rgba(96, 165, 250, 0.08)",
-                    },
-                  }}
-                >
-                  Source Code
-                </Button>
-              </Box>
-            </Box>
-
-            <Grid container spacing={4} alignItems="center">
-              {/* Left Column: Project Identity & Interactive View Tabs */}
-              <Grid size={{ xs: 12, md: 7 }}>
-                <Typography
-                  variant="h3"
-                  sx={{
-                    fontFamily: "'Space Grotesk', sans-serif",
-                    fontSize: { xs: "1.8rem", sm: "2.4rem", md: "2.8rem" },
-                    fontWeight: 800,
-                    color: "#F8FAFC",
-                    letterSpacing: "-0.03em",
-                    mb: 1.5,
-                  }}
-                >
-                  {featuredProject.title}
-                </Typography>
-
-                <Typography
-                  sx={{
-                    color: "#94A3B8",
-                    fontSize: "1.05rem",
-                    lineHeight: 1.7,
-                    mb: 3,
-                  }}
-                >
-                  {featuredProject.description}
-                </Typography>
-
-                {/* Sub-Tabs: Overview vs Technical Challenges vs Key Features */}
-                <Box
-                  sx={{
-                    display: "flex",
-                    gap: 1,
-                    p: 0.6,
-                    backgroundColor: "rgba(5, 6, 10, 0.6)",
-                    borderRadius: "12px",
-                    width: "fit-content",
-                    border: "1px solid rgba(255, 255, 255, 0.06)",
-                    mb: 3,
-                  }}
-                >
-                  {[
-                    { id: "overview", label: "Overview" },
-                    { id: "challenges", label: "Challenges Solved" },
-                    { id: "features", label: "Key Features" },
-                  ].map((tab) => {
-                    const isActive = activeProjectTab === tab.id;
-                    return (
-                      <Box
-                        key={tab.id}
-                        onClick={() => setActiveProjectTab(tab.id)}
-                        sx={{
-                          px: 2,
-                          py: 0.6,
-                          borderRadius: "8px",
-                          cursor: "pointer",
-                          userSelect: "none",
-                          fontFamily: "'Space Grotesk', sans-serif",
-                          fontSize: "0.82rem",
-                          fontWeight: isActive ? 700 : 500,
-                          color: isActive ? "#F8FAFC" : "#94A3B8",
-                          backgroundColor: isActive
-                            ? "rgba(96, 165, 250, 0.16)"
-                            : "transparent",
-                          border: "1px solid",
-                          borderColor: isActive
-                            ? "rgba(96, 165, 250, 0.35)"
-                            : "transparent",
-                          transition: "all 0.2s ease",
-                        }}
-                      >
-                        {tab.label}
-                      </Box>
-                    );
-                  })}
-                </Box>
-
-                {/* Dynamic Content Based on Tab */}
-                <Box sx={{ minHeight: "130px", mb: 3 }}>
-                  {activeProjectTab === "overview" && (
-                    <Box sx={{ display: "flex", flexWrap: "wrap", gap: 3 }}>
-                      <Box>
-                        <Typography
-                          sx={{
-                            fontFamily: "'Space Grotesk', sans-serif",
-                            fontSize: "1.4rem",
-                            fontWeight: 700,
-                            color: "#60A5FA",
-                          }}
-                        >
-                          PostgreSQL
-                        </Typography>
-                        <Typography
-                          sx={{
-                            fontFamily: "'Geist Mono', monospace",
-                            fontSize: "0.68rem",
-                            color: "#64748B",
-                            letterSpacing: 1.5,
-                          }}
-                        >
-                          RELATIONAL PERSISTENCE
-                        </Typography>
-                      </Box>
-                      <Box>
-                        <Typography
-                          sx={{
-                            fontFamily: "'Space Grotesk', sans-serif",
-                            fontSize: "1.4rem",
-                            fontWeight: 700,
-                            color: "#F8FAFC",
-                          }}
-                        >
-                          &lt;15ms
-                        </Typography>
-                        <Typography
-                          sx={{
-                            fontFamily: "'Geist Mono', monospace",
-                            fontSize: "0.68rem",
-                            color: "#64748B",
-                            letterSpacing: 1.5,
-                          }}
-                        >
-                          QUERY OPTIMIZATION
-                        </Typography>
-                      </Box>
-                      <Box>
-                        <Typography
-                          sx={{
-                            fontFamily: "'Space Grotesk', sans-serif",
-                            fontSize: "1.4rem",
-                            fontWeight: 700,
-                            color: "#A78BFA",
-                          }}
-                        >
-                          Modular Python
-                        </Typography>
-                        <Typography
-                          sx={{
-                            fontFamily: "'Geist Mono', monospace",
-                            fontSize: "0.68rem",
-                            color: "#64748B",
-                            letterSpacing: 1.5,
-                          }}
-                        >
-                          CORE ARCHITECTURE
-                        </Typography>
-                      </Box>
-                    </Box>
-                  )}
-
-                  {activeProjectTab === "challenges" && (
-                    <Stack spacing={1}>
-                      {featuredProject.challenges.map((c, i) => (
-                        <Box key={i} sx={{ display: "flex", alignItems: "flex-start", gap: 1.2 }}>
-                          <Box
-                            sx={{
-                              width: 5,
-                              height: 5,
-                              borderRadius: "50%",
-                              backgroundColor: "#60A5FA",
-                              mt: "8px",
-                              flexShrink: 0,
-                            }}
-                          />
-                          <Typography sx={{ color: "#CBD5E1", fontSize: "0.9rem", lineHeight: 1.6 }}>
-                            {c}
-                          </Typography>
-                        </Box>
-                      ))}
-                    </Stack>
-                  )}
-
-                  {activeProjectTab === "features" && (
-                    <Stack spacing={1}>
-                      {featuredProject.features.map((f, i) => (
-                        <Box key={i} sx={{ display: "flex", alignItems: "flex-start", gap: 1.2 }}>
-                          <CheckCircle sx={{ fontSize: "1rem", color: "#10B981", mt: "3px", flexShrink: 0 }} />
-                          <Typography sx={{ color: "#CBD5E1", fontSize: "0.9rem", lineHeight: 1.6 }}>
-                            {f}
-                          </Typography>
-                        </Box>
-                      ))}
-                    </Stack>
-                  )}
-                </Box>
-
-                {/* Tech Chips */}
-                <Box sx={{ display: "flex", flexWrap: "wrap", gap: 1 }}>
-                  {featuredProject.technologies.map((t) => (
-                    <Chip
-                      key={t}
-                      label={t}
-                      size="small"
-                      sx={{
-                        backgroundColor: "rgba(96, 165, 250, 0.08)",
-                        border: "1px solid rgba(96, 165, 250, 0.25)",
-                        color: "#93C5FD",
-                        fontFamily: "'Geist Mono', monospace",
-                        fontSize: "0.78rem",
-                        borderRadius: "8px",
-                      }}
-                    />
-                  ))}
-                </Box>
-              </Grid>
-
-              {/* Right Column: Visual Telemetry Card / Architecture HUD */}
-              <Grid size={{ xs: 12, md: 5 }}>
-                <Box
-                  sx={{
-                    p: 3,
-                    borderRadius: "20px",
-                    backgroundColor: "rgba(5, 6, 10, 0.7)",
-                    border: "1px solid rgba(255, 255, 255, 0.08)",
-                    fontFamily: "'Geist Mono', monospace",
-                  }}
-                >
-                  <Box
-                    sx={{
-                      display: "flex",
-                      alignItems: "center",
-                      justifyContent: "space-between",
-                      pb: 2,
-                      borderBottom: "1px solid rgba(255, 255, 255, 0.06)",
-                      mb: 2,
-                    }}
-                  >
-                    <Typography sx={{ fontSize: "0.72rem", color: "#60A5FA", letterSpacing: 1.5 }}>
-                      SYSTEM TELEMETRY
-                    </Typography>
-                    <Box
-                      sx={{
-                        width: 7,
-                        height: 7,
-                        borderRadius: "50%",
-                        backgroundColor: "#10B981",
-                        boxShadow: "0 0 6px #10B981",
-                      }}
-                    />
-                  </Box>
-
-                  <Box sx={{ color: "#94A3B8", fontSize: "0.8rem", lineHeight: 1.8 }}>
-                    <div>&gt; initialize_service(&quot;expense_tracker&quot;)</div>
-                    <div>&gt; db.connect(&quot;postgresql://...&quot;) [OK]</div>
-                    <div>&gt; active_ledger_workers: 4</div>
-                    <div>&gt; analytic_aggregations: realtime</div>
-                    <div>&gt; integrity_check: 100% verified</div>
-                  </Box>
-
-                  <Box
-                    sx={{
-                      mt: 3,
-                      pt: 2,
-                      borderTop: "1px dashed rgba(255, 255, 255, 0.08)",
-                      display: "flex",
-                      alignItems: "center",
-                      justifyContent: "space-between",
-                    }}
-                  >
-                    <Typography sx={{ fontSize: "0.7rem", color: "#64748B" }}>
-                      STATUS: PRODUCTION STABLE
-                    </Typography>
-                    <Button
-                      size="small"
-                      href={featuredProject.github}
-                      target="_blank"
-                      endIcon={<Launch sx={{ fontSize: "0.85rem !important" }} />}
-                      sx={{
-                        color: "#60A5FA",
-                        fontFamily: "'Space Grotesk', sans-serif",
-                        fontSize: "0.8rem",
-                        p: 0,
-                        "&:hover": { color: "#93C5FD", background: "none" },
-                      }}
-                    >
-                      Explore Repo
-                    </Button>
-                  </Box>
-                </Box>
-              </Grid>
-            </Grid>
-          </Box>
-        </motion.div>
-
-        {/* 2. OTHER DISCOVERIES: ASYMMETRIC GRID */}
-        <Grid container spacing={3.5}>
-          {otherProjects.map((project, idx) => (
-            <Grid
-              item
-              xs={12}
-              md={project.inDevelopment ? 4 : 4}
-              key={project.id}
-            >
-              <motion.div
-                initial={reduce ? false : { opacity: 0, y: 30 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, amount: 0.15 }}
-                transition={{ duration: 0.8, delay: idx * 0.15 }}
-                style={{ height: "100%" }}
-              >
-                <Box
-                  sx={{
-                    p: { xs: 3, md: 3.5 },
-                    height: "100%",
-                    display: "flex",
-                    flexDirection: "column",
-                    justifyContent: "space-between",
-                    borderRadius: "24px",
-                    backgroundColor: "rgba(16, 21, 34, 0.6)",
+                    color: isActive ? "#F5F5FA" : "#9292A8",
+                    backgroundColor: isActive
+                      ? "rgba(217, 70, 239, 0.18)"
+                      : "rgba(255, 255, 255, 0.02)",
                     border: "1px solid",
-                    borderColor: project.inDevelopment
-                      ? "rgba(96, 165, 250, 0.25)"
+                    borderColor: isActive
+                      ? "rgba(217, 70, 239, 0.5)"
                       : "rgba(255, 255, 255, 0.07)",
-                    backdropFilter: "blur(12px)",
-                    transition: "all 0.35s ease",
+                    backdropFilter: "blur(10px)",
+                    transition: "all 0.25s ease",
                     "&:hover": {
-                      transform: "translateY(-4px)",
-                      borderColor: project.accent,
-                      boxShadow: `0 15px 35px -10px rgba(0, 0, 0, 0.6), 0 0 20px ${project.accent}15`,
+                      borderColor: "#D946EF",
+                      backgroundColor: "rgba(217, 70, 239, 0.12)",
+                      color: "#F5F5FA",
                     },
                   }}
                 >
-                  <Box>
-                    {/* Header */}
+                  {opt.label}
+                </Button>
+              );
+            })}
+          </Box>
+        </Box>
+
+        {/* Space Mission Cards Stack */}
+        <Stack spacing={{ xs: 6, md: 8 }}>
+          {filteredProjects.map((mission, index) => (
+            <motion.div
+              key={mission.id}
+              initial={reduce ? false : { opacity: 0, y: 35 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, amount: 0.12 }}
+              transition={{ duration: 0.85, delay: index * 0.1 }}
+            >
+              <Box
+                sx={{
+                  p: { xs: 3.5, sm: 4.5, md: 5.5 },
+                  borderRadius: "28px",
+                  backgroundColor: "rgba(16, 16, 38, 0.72)",
+                  border: "1px solid",
+                  borderColor: "rgba(255, 255, 255, 0.08)",
+                  backdropFilter: "blur(20px)",
+                  position: "relative",
+                  overflow: "hidden",
+                  boxShadow:
+                    "0 25px 60px -15px rgba(0, 0, 0, 0.8), 0 0 35px rgba(139, 92, 246, 0.06)",
+                  transition: "all 0.35s cubic-bezier(0.16, 1, 0.3, 1)",
+                  "&:hover": {
+                    borderColor: mission.accent,
+                    boxShadow: `0 30px 70px -15px rgba(0, 0, 0, 0.9), 0 0 45px ${mission.glow}`,
+                    transform: "translateY(-4px)",
+                  },
+                }}
+              >
+                {/* Ambient Radial Flare in corner */}
+                <Box
+                  sx={{
+                    position: "absolute",
+                    top: 0,
+                    right: 0,
+                    width: 380,
+                    height: 380,
+                    background: `radial-gradient(circle at top right, ${mission.accent}18 0%, transparent 70%)`,
+                    pointerEvents: "none",
+                  }}
+                />
+
+                {/* Top Dossier Header Bar */}
+                <Box
+                  sx={{
+                    display: "flex",
+                    flexWrap: "wrap",
+                    alignItems: "center",
+                    justifyContent: "space-between",
+                    gap: 2,
+                    pb: 3,
+                    mb: 3.5,
+                    borderBottom: "1px solid rgba(255, 255, 255, 0.07)",
+                  }}
+                >
+                  <Box sx={{ display: "flex", alignItems: "center", gap: 1.8 }}>
                     <Box
                       sx={{
-                        display: "flex",
-                        alignItems: "center",
-                        justifyContent: "space-between",
-                        mb: 2,
+                        width: 10,
+                        height: 10,
+                        borderRadius: "50%",
+                        backgroundColor: mission.accent,
+                        boxShadow: `0 0 12px ${mission.accent}`,
                       }}
-                    >
-                      <Typography
-                        sx={{
-                          fontFamily: "'Geist Mono', monospace",
-                          fontSize: "0.72rem",
-                          color: project.accent,
-                          letterSpacing: 1.5,
-                          fontWeight: 600,
-                        }}
-                      >
-                        {project.codename}
-                      </Typography>
-
-                      <Box sx={{ display: "flex", gap: 1 }}>
-                        {project.github && (
-                          <IconButton
-                            size="small"
-                            href={project.github}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            sx={{
-                              color: "rgba(255, 255, 255, 0.4)",
-                              "&:hover": { color: "#F8FAFC" },
-                            }}
-                          >
-                            <GitHub fontSize="small" />
-                          </IconButton>
-                        )}
-                        {project.demo && (
-                          <IconButton
-                            size="small"
-                            href={project.demo}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            sx={{
-                              color: "rgba(255, 255, 255, 0.4)",
-                              "&:hover": { color: "#60A5FA" },
-                            }}
-                          >
-                            <Launch fontSize="small" />
-                          </IconButton>
-                        )}
-                      </Box>
-                    </Box>
-
-                    {/* Title */}
+                    />
                     <Typography
-                      variant="h4"
                       sx={{
-                        fontFamily: "'Space Grotesk', sans-serif",
-                        fontSize: "1.45rem",
+                        fontFamily: "'Geist Mono', monospace",
+                        fontSize: "0.82rem",
                         fontWeight: 700,
-                        color: "#F8FAFC",
-                        mb: 1,
+                        color: mission.accent,
+                        letterSpacing: 2,
                       }}
                     >
-                      {project.title}
+                      {mission.codename}
                     </Typography>
-
                     <Typography
                       sx={{
-                        color: "#94A3B8",
-                        fontSize: "0.9rem",
-                        lineHeight: 1.65,
-                        mb: 3,
+                        fontFamily: "'Geist Mono', monospace",
+                        fontSize: "0.72rem",
+                        color: "#9292A8",
+                        display: { xs: "none", sm: "block" },
                       }}
                     >
-                      {project.description}
+                      // {mission.sector}
                     </Typography>
-
-                    {/* Technical challenge highlight */}
-                    <Box
-                      sx={{
-                        p: 2,
-                        borderRadius: "12px",
-                        backgroundColor: "rgba(5, 6, 10, 0.5)",
-                        border: "1px solid rgba(255, 255, 255, 0.05)",
-                        mb: 3,
-                      }}
-                    >
-                      <Typography
-                        sx={{
-                          fontFamily: "'Geist Mono', monospace",
-                          fontSize: "0.68rem",
-                          color: "#60A5FA",
-                          letterSpacing: 1,
-                          mb: 0.5,
-                        }}
-                      >
-                        // KEY CHALLENGE
-                      </Typography>
-                      <Typography sx={{ fontSize: "0.82rem", color: "#CBD5E1", lineHeight: 1.5 }}>
-                        {project.challenges[0]}
-                      </Typography>
-                    </Box>
                   </Box>
 
-                  {/* Tech stack footer */}
-                  <Box>
-                    <Box sx={{ display: "flex", flexWrap: "wrap", gap: 0.8, mb: 2 }}>
-                      {project.technologies.slice(0, 4).map((tech) => (
-                        <Chip
-                          key={tech}
-                          label={tech}
-                          size="small"
+                  {/* Mission Status Badge */}
+                  <Box
+                    sx={{
+                      display: "flex",
+                      alignItems: "center",
+                      gap: 1,
+                      px: 2,
+                      py: 0.5,
+                      borderRadius: "999px",
+                      backgroundColor: "rgba(255, 255, 255, 0.04)",
+                      border: "1px solid rgba(255, 255, 255, 0.08)",
+                    }}
+                  >
+                    <Box
+                      sx={{
+                        width: 6,
+                        height: 6,
+                        borderRadius: "50%",
+                        backgroundColor: mission.inDevelopment ? "#FACC15" : "#10B981",
+                        boxShadow: mission.inDevelopment
+                          ? "0 0 8px #FACC15"
+                          : "0 0 8px #10B981",
+                      }}
+                    />
+                    <Typography
+                      sx={{
+                        fontFamily: "'Geist Mono', monospace",
+                        fontSize: "0.68rem",
+                        fontWeight: 600,
+                        color: "#F5F5FA",
+                        letterSpacing: 1,
+                      }}
+                    >
+                      {mission.status}
+                    </Typography>
+                  </Box>
+                </Box>
+
+                {/* Main Content Split: Details Left, Problem & Features Right */}
+                <Grid container spacing={{ xs: 4, md: 6 }}>
+                  {/* Left Column: Title, Subtitle, Description, Live Telemetry Canvas & Action Links */}
+                  <Grid size={{ xs: 12, md: 6 }}>
+                    <Box sx={{ display: "flex", flexDirection: "column", height: "100%", justifyContent: "space-between" }}>
+                      <Box>
+                        <Typography
+                          variant="h3"
                           sx={{
-                            backgroundColor: "rgba(255, 255, 255, 0.03)",
-                            border: "1px solid rgba(255, 255, 255, 0.07)",
-                            color: "#CBD5E1",
+                            fontFamily: "'Space Grotesk', sans-serif",
+                            fontSize: { xs: "1.8rem", sm: "2.3rem", md: "2.6rem" },
+                            fontWeight: 800,
+                            letterSpacing: "-0.025em",
+                            color: "#F5F5FA",
+                            lineHeight: 1.15,
+                            mb: 1,
+                          }}
+                        >
+                          {mission.title}
+                        </Typography>
+
+                        <Typography
+                          sx={{
+                            fontFamily: "'Geist Mono', monospace",
+                            fontSize: "0.85rem",
+                            color: mission.accent,
+                            letterSpacing: 1.2,
+                            fontWeight: 600,
+                            mb: 2,
+                          }}
+                        >
+                          {mission.subtitle}
+                        </Typography>
+
+                        <Typography
+                          sx={{
+                            color: "#9292A8",
+                            fontSize: "0.98rem",
+                            lineHeight: 1.8,
+                            mb: 3,
+                          }}
+                        >
+                          {mission.description}
+                        </Typography>
+
+                        {/* Interactive Live Mission Telemetry Feed Visualizer */}
+                        <Box sx={{ mb: 3.5 }}>
+                          <MissionTelemetryVisualizer
+                            missionId={mission.id}
+                            accentColor={mission.accent}
+                          />
+                        </Box>
+
+                        {/* Technology Stack Badges */}
+                        <Box sx={{ mb: 4 }}>
+                          <Typography
+                            sx={{
+                              fontFamily: "'Geist Mono', monospace",
+                              fontSize: "0.68rem",
+                              color: "#9292A8",
+                              letterSpacing: 1.5,
+                              textTransform: "uppercase",
+                              mb: 1.2,
+                            }}
+                          >
+                            MISSION TECH STACK:
+                          </Typography>
+                          <Box sx={{ display: "flex", flexWrap: "wrap", gap: 1 }}>
+                            {mission.technologies.map((tech) => (
+                              <Box
+                                key={tech}
+                                sx={{
+                                  px: 1.6,
+                                  py: 0.5,
+                                  borderRadius: "8px",
+                                  backgroundColor: "rgba(255, 255, 255, 0.04)",
+                                  border: "1px solid rgba(255, 255, 255, 0.09)",
+                                  fontFamily: "'Geist Mono', monospace",
+                                  fontSize: "0.75rem",
+                                  color: "#F5F5FA",
+                                  fontWeight: 500,
+                                }}
+                              >
+                                {tech}
+                              </Box>
+                            ))}
+                          </Box>
+                        </Box>
+                      </Box>
+
+                      {/* External Mission Action Links */}
+                      <Stack direction={{ xs: "column", sm: "row" }} spacing={2} sx={{ mt: 2 }}>
+                        {mission.github && (
+                          <MagneticButton>
+                            <Button
+                              variant="outlined"
+                              href={mission.github}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              startIcon={<GitHub />}
+                              sx={{
+                                px: 3.2,
+                                py: 1.3,
+                                borderRadius: "12px",
+                                fontFamily: "'Space Grotesk', sans-serif",
+                                fontWeight: 700,
+                                fontSize: "0.88rem",
+                                letterSpacing: "0.02em",
+                                color: "#F5F5FA",
+                                borderColor: "rgba(255, 255, 255, 0.15)",
+                                backgroundColor: "rgba(255, 255, 255, 0.03)",
+                                "&:hover": {
+                                  borderColor: mission.accent,
+                                  backgroundColor: "rgba(255, 255, 255, 0.08)",
+                                  transform: "translateY(-2px)",
+                                },
+                                transition: "all 0.25s ease",
+                              }}
+                            >
+                              MISSION REPO
+                            </Button>
+                          </MagneticButton>
+                        )}
+
+                        {mission.demo && (
+                          <MagneticButton>
+                            <Button
+                              variant="contained"
+                              href={mission.demo}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              endIcon={<NorthEast sx={{ fontSize: "1rem !important" }} />}
+                              sx={{
+                                px: 3.2,
+                                py: 1.3,
+                                borderRadius: "12px",
+                                fontFamily: "'Space Grotesk', sans-serif",
+                                fontWeight: 700,
+                                fontSize: "0.88rem",
+                                letterSpacing: "0.02em",
+                                color: "#FFFFFF",
+                                backgroundColor: mission.accent,
+                                boxShadow: `0 0 20px ${mission.glow}`,
+                                "&:hover": {
+                                  backgroundColor: mission.accent,
+                                  filter: "brightness(1.15)",
+                                  boxShadow: `0 0 30px ${mission.glow}`,
+                                  transform: "translateY(-2px)",
+                                },
+                                transition: "all 0.25s ease",
+                              }}
+                            >
+                              LIVE DEMO
+                            </Button>
+                          </MagneticButton>
+                        )}
+                      </Stack>
+                    </Box>
+                  </Grid>
+
+                  {/* Right Column: Problem Solved & Key Features */}
+                  <Grid size={{ xs: 12, md: 6 }}>
+                    <Stack spacing={3}>
+                      {/* Problem Solved Container */}
+                      <Box
+                        sx={{
+                          p: 3.2,
+                          borderRadius: "18px",
+                          backgroundColor: "rgba(5, 5, 16, 0.78)",
+                          border: `1px solid ${mission.accent}35`,
+                        }}
+                      >
+                        <Typography
+                          sx={{
                             fontFamily: "'Geist Mono', monospace",
                             fontSize: "0.72rem",
-                            borderRadius: "6px",
+                            color: mission.accent,
+                            letterSpacing: 2,
+                            fontWeight: 700,
+                            textTransform: "uppercase",
+                            mb: 1.2,
                           }}
-                        />
-                      ))}
-                    </Box>
+                        >
+                          // PROBLEM SOLVED
+                        </Typography>
+                        <Typography
+                          sx={{
+                            fontSize: "0.94rem",
+                            color: "#E2E8F0",
+                            lineHeight: 1.75,
+                          }}
+                        >
+                          {mission.problemSolved}
+                        </Typography>
+                      </Box>
 
-                    {project.inDevelopment ? (
+                      {/* Key Features Container */}
                       <Box
                         sx={{
-                          display: "inline-flex",
-                          alignItems: "center",
-                          gap: 1,
-                          px: 1.5,
-                          py: 0.4,
-                          borderRadius: "999px",
-                          backgroundColor: "rgba(96, 165, 250, 0.1)",
-                          border: "1px solid rgba(96, 165, 250, 0.3)",
-                          color: "#60A5FA",
-                          fontFamily: "'Geist Mono', monospace",
-                          fontSize: "0.68rem",
-                          letterSpacing: 1,
+                          p: 3.2,
+                          borderRadius: "18px",
+                          backgroundColor: "rgba(5, 5, 16, 0.58)",
+                          border: "1px solid rgba(255, 255, 255, 0.08)",
                         }}
                       >
-                        <Schedule sx={{ fontSize: "0.85rem" }} />
-                        IN ACTIVE ORBIT // ALPHA
+                        <Typography
+                          sx={{
+                            fontFamily: "'Geist Mono', monospace",
+                            fontSize: "0.72rem",
+                            color: "#9292A8",
+                            letterSpacing: 2,
+                            fontWeight: 700,
+                            textTransform: "uppercase",
+                            mb: 2,
+                          }}
+                        >
+                          // KEY MISSION ARCHITECTURES
+                        </Typography>
+
+                        <Stack spacing={1.5}>
+                          {mission.keyFeatures.map((feature, fIdx) => (
+                            <Box
+                              key={fIdx}
+                              sx={{
+                                display: "flex",
+                                alignItems: "flex-start",
+                                gap: 1.5,
+                              }}
+                            >
+                              <Box
+                                sx={{
+                                  width: 6,
+                                  height: 6,
+                                  borderRadius: "50%",
+                                  backgroundColor: mission.accent,
+                                  mt: 0.8,
+                                  flexShrink: 0,
+                                }}
+                              />
+                              <Typography
+                                sx={{
+                                  fontSize: "0.88rem",
+                                  color: "#9292A8",
+                                  lineHeight: 1.6,
+                                }}
+                              >
+                                {feature}
+                              </Typography>
+                            </Box>
+                          ))}
+                        </Stack>
                       </Box>
-                    ) : (
-                      <Button
-                        size="small"
-                        href={project.github}
-                        target="_blank"
-                        endIcon={<Launch sx={{ fontSize: "0.85rem !important" }} />}
+
+                      {/* Mission Telemetry Stats */}
+                      <Box
                         sx={{
-                          p: 0,
-                          color: "#94A3B8",
-                          fontFamily: "'Space Grotesk', sans-serif",
-                          fontSize: "0.82rem",
-                          "&:hover": { color: "#60A5FA", background: "none" },
+                          display: "flex",
+                          flexWrap: "wrap",
+                          gap: 2,
+                          pt: 1,
                         }}
                       >
-                        View Project Repository
-                      </Button>
-                    )}
-                  </Box>
-                </Box>
-              </motion.div>
-            </Grid>
+                        {Object.entries(mission.stats).map(([k, v]) => (
+                          <Box
+                            key={k}
+                            sx={{
+                              px: 2.2,
+                              py: 1.2,
+                              borderRadius: "12px",
+                              backgroundColor: "rgba(255, 255, 255, 0.03)",
+                              border: "1px solid rgba(255, 255, 255, 0.07)",
+                            }}
+                          >
+                            <Typography
+                              sx={{
+                                fontFamily: "'Geist Mono', monospace",
+                                fontSize: "0.62rem",
+                                color: "#9292A8",
+                                textTransform: "uppercase",
+                                letterSpacing: 1.2,
+                              }}
+                            >
+                              {k}
+                            </Typography>
+                            <Typography
+                              sx={{
+                                fontFamily: "'Space Grotesk', sans-serif",
+                                fontSize: "1rem",
+                                fontWeight: 700,
+                                color: "#F5F5FA",
+                              }}
+                            >
+                              {v}
+                            </Typography>
+                          </Box>
+                        ))}
+                      </Box>
+                    </Stack>
+                  </Grid>
+                </Grid>
+              </Box>
+            </motion.div>
           ))}
-        </Grid>
+        </Stack>
       </Container>
     </Box>
   );

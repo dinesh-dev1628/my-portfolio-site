@@ -1,26 +1,36 @@
 :root {
-  --bg-primary: #05060A;
-  --bg-secondary: #0A0D16;
-  --bg-surface: #101522;
-  --bg-surface-elevated: #161D30;
+  /* Cinematic Universe Color Palette */
+  --bg-space: #050510;
+  --bg-primary: #050510;
+  --bg-secondary: #0A0A18;
+  --bg-surface: #101026;
+  --bg-surface-elevated: #161632;
   
-  --accent-blue: #60A5FA;
-  --accent-blue-glow: rgba(96, 165, 250, 0.35);
-  --accent-violet: #8B5CF6;
-  --accent-violet-glow: rgba(139, 92, 246, 0.35);
-  --accent-nebula: #A78BFA;
-  
-  --text-primary: #F8FAFC;
-  --text-secondary: #94A3B8;
-  --text-muted: #64748B;
+  /* Primary & Accent Spectrum */
+  --primary-violet: #8B5CF6;
+  --primary-violet-glow: rgba(139, 92, 246, 0.4);
+  --secondary-blue: #38BDF8;
+  --secondary-blue-glow: rgba(56, 189, 248, 0.4);
+  --accent-pink: #D946EF;
+  --accent-pink-glow: rgba(217, 70, 239, 0.35);
 
-  --border-subtle: rgba(255, 255, 255, 0.07);
-  --border-accent: rgba(96, 165, 250, 0.3);
-  --border-glow: rgba(139, 92, 246, 0.25);
+  /* Typography Colors */
+  --text-white: #F5F5FA;
+  --text-primary: #F5F5FA;
+  --text-muted: #9292A8;
+  --text-subtle: #676780;
 
+  /* Glassmorphism & Borders */
+  --border-subtle: rgba(255, 255, 255, 0.08);
+  --border-hover: rgba(56, 189, 248, 0.3);
+  --border-violet: rgba(139, 92, 246, 0.3);
+  --glass-bg: rgba(16, 16, 38, 0.6);
+  --glass-bg-hover: rgba(22, 22, 50, 0.75);
+
+  /* Fonts */
   --font-display: 'Space Grotesk', -apple-system, BlinkMacSystemFont, sans-serif;
   --font-body: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-  --font-mono: 'Geist Mono', monospace, monospace;
+  --font-mono: 'Geist Mono', monospace;
 }
 
 *, *::before, *::after {
@@ -29,8 +39,8 @@
 
 html {
   scroll-behavior: smooth;
-  background-color: var(--bg-primary);
-  color: var(--text-primary);
+  background-color: var(--bg-space);
+  color: var(--text-white);
   font-family: var(--font-body);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
@@ -40,44 +50,45 @@ html {
 body {
   margin: 0;
   padding: 0;
-  background-color: var(--bg-primary);
-  color: var(--text-primary);
+  background-color: var(--bg-space);
+  color: var(--text-white);
   overflow-x: hidden;
   min-height: 100vh;
 }
 
-/* Custom Cosmic Selection */
+/* Cosmic Glow Selection */
 ::selection {
-  background: rgba(96, 165, 250, 0.25);
+  background: rgba(139, 92, 246, 0.3);
   color: #FFFFFF;
-  text-shadow: 0 0 8px rgba(96, 165, 250, 0.6);
+  text-shadow: 0 0 10px rgba(56, 189, 248, 0.6);
 }
 
-/* Modern Cosmic Scrollbar */
+/* Futuristic Cosmic Scrollbar */
 ::-webkit-scrollbar {
-  width: 7px;
+  width: 6px;
 }
 
 ::-webkit-scrollbar-track {
-  background: #05060A;
+  background: #050510;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: rgba(255, 255, 255, 0.12);
+  background: rgba(139, 92, 246, 0.3);
   border-radius: 999px;
   border: 1px solid rgba(255, 255, 255, 0.05);
-  transition: background 0.2s ease;
+  transition: background 0.25s ease;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: rgba(96, 165, 250, 0.4);
+  background: rgba(56, 189, 248, 0.6);
+  box-shadow: 0 0 8px rgba(56, 189, 248, 0.5);
 }
 
-/* Typography Helpers */
+/* Typography Hierarchy */
 h1, h2, h3, h4, h5, h6 {
   font-family: var(--font-display);
   letter-spacing: -0.03em;
-  color: var(--text-primary);
+  color: var(--text-white);
   margin: 0;
 }
 
@@ -89,7 +100,7 @@ code, .font-mono {
   font-family: var(--font-mono);
 }
 
-/* Subtle Cosmic Noise / Grain Effect */
+/* Cosmic Grain Filter */
 .cosmic-grain {
   position: fixed;
   top: 0;
@@ -98,41 +109,59 @@ code, .font-mono {
   height: 100%;
   pointer-events: none;
   z-index: 999;
-  opacity: 0.025;
-  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+  opacity: 0.02;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
 }
 
-/* Orbit Animation */
+/* Orbital Keyframe Animations */
 @keyframes celestial-orbit {
-  0% {
-    transform: rotate(0deg);
-  }
-  100% {
-    transform: rotate(360deg);
-  }
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
 }
 
 @keyframes celestial-orbit-reverse {
-  0% {
-    transform: rotate(360deg);
-  }
-  100% {
-    transform: rotate(0deg);
-  }
+  0% { transform: rotate(360deg); }
+  100% { transform: rotate(0deg); }
 }
 
-@keyframes pulse-glow {
+@keyframes pulse-nebula {
   0%, 100% {
-    opacity: 0.4;
+    opacity: 0.35;
     transform: scale(1);
   }
   50% {
-    opacity: 0.8;
-    transform: scale(1.05);
+    opacity: 0.7;
+    transform: scale(1.08);
   }
 }
 
-/* Accessibility: Reduced Motion */
+@keyframes cosmic-shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+/* Magnetic Button Utility */
+.magnetic-wrap {
+  display: inline-block;
+  position: relative;
+}
+
+/* Glassmorphism Classes */
+.glass-panel {
+  background: var(--glass-bg);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid var(--border-subtle);
+  border-radius: 20px;
+  transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.glass-panel:hover {
+  border-color: var(--border-hover);
+  box-shadow: 0 20px 40px -15px rgba(0, 0, 0, 0.7), 0 0 25px rgba(56, 189, 248, 0.12);
+}
+
+/* Reduced Motion Override */
 @media (prefers-reduced-motion: reduce) {
   html {
     scroll-behavior: auto;
