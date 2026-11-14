@@ -13,6 +13,7 @@ import Starfield from "./components/layout/Starfield.jsx";
 import CosmicAmbience from "./components/layout/CosmicAmbience.jsx";
 import SectorTracker from "./components/layout/SectorTracker.jsx";
 import Footer from "./components/layout/Footer.jsx";
+import BackToTop from "./components/common/BackToTop.jsx";
 
 import Hero from "./sections/Hero.jsx";
 import About from "./sections/About.jsx";
@@ -172,13 +173,14 @@ function App() {
                 <Experience />
               </SectionReveal>
 
-              <OrbitalDivider label="ORBITAL THRESHOLD // DIRECT FREQUENCY" />
+              <OrbitalDivider label="ORBITAL THRESHOLD // CONNECT & COLLABORATE" />
               <SectionReveal id="contact">
                 <Contact />
               </SectionReveal>
             </Box>
 
             <Footer />
+            <BackToTop />
           </Box>
         </Box>
       )}

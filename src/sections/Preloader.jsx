@@ -1,815 +1,415 @@
-import React, { useEffect, useMemo, useState } from "react";
-import { Box, Typography } from "@mui/material";
-import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
+import React, { useEffect, useRef, useState, useCallback } from "react";
+import { Box, Typography, Button, IconButton } from "@mui/material";
+import { FastForward } from "@mui/icons-material";
+import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
+import MyProfilePic from "../components/asset/IMG-20240604-WA0002.jpg";
 
-const MotionBox = motion.create ? motion.create(Box) : motion(Box);
+const MIN_DISPLAY_MS = 2800; // Minimum time to enjoy cinematic warp sequence
+const MAX_TIMEOUT_MS = 6000; // Safety fallback timeout
 
-// Generate deterministic radial stars for true 3D depth projection
-const generateStars = (count) =>
-  Array.from({ length: count }, (_, i) => {
-    const angle = (i * 137.508) * (Math.PI / 180); // Golden angle distribution
-    const radius = 8 + ((i * 29) % 44); // Keep center clear for singularity
-    return {
-      id: i,
-      angle,
-      x: 50 + Math.cos(angle) * radius,
-      y: 50 + Math.sin(angle) * radius,
-      dx: Math.cos(angle),
-      dy: Math.sin(angle),
-      size: i % 11 === 0 ? 3 : i % 4 === 0 ? 2 : 1.2,
-      delay: (i % 15) * 0.15,
-      duration: 2.2 + (i % 4) * 0.6,
-      color: i % 7 === 0 ? "#38BDF8" : i % 5 === 0 ? "#C084FC" : "#FFFFFF",
+export default function Preloader({ setLoading }) {
+  const canvasRef = useRef(null);
+  const animFrameRef = useRef(null);
+  const startTimeRef = useRef(null);
+  const reduceMotion = useReducedMotion();
+
+  const [phase, setPhase] = useState("cruising"); // 'cruising' | 'warp' | 'burst' | 'complete'
+  const [percent, setPercent] = useState(0);
+  const [telemetryText, setTelemetryText] = useState("WARP DRIVE CHARGING");
+
+  const finishLoading = useCallback(() => {
+    setPhase("complete");
+    setTimeout(() => {
+      setLoading(false);
+    }, 600); // Allow exit zoom fade to finish
+  }, [setLoading]);
+
+  // Asset preloading & minimum display duration
+  useEffect(() => {
+    startTimeRef.current = Date.now();
+    let isCancelled = false;
+
+    // Preload critical images & fonts
+    const preloadAssets = async () => {
+      const img1 = new Image();
+      img1.src = MyProfilePic;
+      const img2 = new Image();
+      img2.src = "/code.png";
+
+      const imgPromises = [
+        new Promise((res) => { img1.onload = img1.onerror = res; }),
+        new Promise((res) => { img2.onload = img2.onerror = res; }),
+      ];
+
+      if (document.fonts?.ready) {
+        imgPromises.push(document.fonts.ready);
+      }
+
+      await Promise.all(imgPromises);
     };
-  });
 
-// Radial hyperspace streaks aligned with the center vanishing point
-const generateWarpStreaks = (count) =>
-  Array.from({ length: count }, (_, i) => {
-    const angleDeg = (360 / count) * i + (i % 3) * 4;
-    const angleRad = (angleDeg * Math.PI) / 180;
-    return {
-      id: i,
-      angleDeg,
-      dx: Math.cos(angleRad),
-      dy: Math.sin(angleRad),
-      delay: (i % 8) * 0.08,
-      duration: 0.45 + (i % 4) * 0.08,
-      length: 70 + (i % 5) * 35,
+    preloadAssets();
+
+    // Progress and phase driver
+    const interval = setInterval(() => {
+      if (isCancelled) return;
+      const elapsed = Date.now() - startTimeRef.current;
+      const progress = Math.min(100, Math.floor((elapsed / MIN_DISPLAY_MS) * 100));
+      setPercent(progress);
+
+      if (elapsed < 1100) {
+        setPhase("cruising");
+        setTelemetryText("ORBITAL CALIBRATION INITIATED");
+      } else if (elapsed < 2300) {
+        setPhase("warp");
+        setTelemetryText("HYPERSPACE ACCELERATION ENGAGED");
+      } else if (elapsed < MIN_DISPLAY_MS) {
+        setPhase("burst");
+        setTelemetryText("GALAXY HORIZON BREACH");
+      } else {
+        clearInterval(interval);
+        finishLoading();
+      }
+    }, 40);
+
+    // Hard safety timeout
+    const safetyTimer = setTimeout(() => {
+      if (!isCancelled) {
+        finishLoading();
+      }
+    }, MAX_TIMEOUT_MS);
+
+    // Keyboard 'Escape' listener to skip
+    const handleKeyDown = (e) => {
+      if (e.key === "Escape") {
+        finishLoading();
+      }
     };
-  });
+    window.addEventListener("keydown", handleKeyDown);
 
-function Spaceship({ reduce, entering, progress }) {
-  // Subtle thrust intensity scales with loading progress
-  const thrustScale = 0.8 + (progress / 100) * 0.8;
+    return () => {
+      isCancelled = true;
+      clearInterval(interval);
+      clearTimeout(safetyTimer);
+      window.removeEventListener("keydown", handleKeyDown);
+      if (animFrameRef.current) {
+        cancelAnimationFrame(animFrameRef.current);
+      }
+    };
+  }, [finishLoading]);
+
+  // Canvas 3D Starfield & Hyperspace Warp
+  useEffect(() => {
+    if (reduceMotion) return; // Skip heavy canvas animation if reduced motion is requested
+
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+    const ctx = canvas.getContext("2d");
+    if (!ctx) return;
+
+    let width = (canvas.width = window.innerWidth);
+    let height = (canvas.height = window.innerHeight);
+
+    const handleResize = () => {
+      width = canvas.width = window.innerWidth;
+      height = canvas.height = window.innerHeight;
+    };
+    window.addEventListener("resize", handleResize);
+
+    const STAR_COUNT = 650;
+    const FOV = 280;
+
+    // Generate stars with 3D coordinates
+    const stars = Array.from({ length: STAR_COUNT }, () => ({
+      x: (Math.random() - 0.5) * width * 2,
+      y: (Math.random() - 0.5) * height * 2,
+      z: Math.random() * width,
+      pz: Math.random() * width,
+      color:
+        Math.random() > 0.8
+          ? "#38BDF8"
+          : Math.random() > 0.6
+          ? "#8B5CF6"
+          : Math.random() > 0.5
+          ? "#D946EF"
+          : "#FFFFFF",
+    }));
+
+    let currentSpeed = 3;
+    let targetSpeed = 3;
+
+    const render = () => {
+      const elapsed = Date.now() - (startTimeRef.current || Date.now());
+
+      // Dynamic speed scaling through warp phases
+      if (elapsed < 1100) {
+        targetSpeed = 4; // Cruising
+      } else if (elapsed < 2300) {
+        targetSpeed = 42; // Hyperspace streaks
+      } else {
+        targetSpeed = 85; // Galaxy burst break
+      }
+
+      // Smooth acceleration easing
+      currentSpeed += (targetSpeed - currentSpeed) * 0.08;
+
+      // Translucent clear for motion blur trail streaks
+      ctx.fillStyle = currentSpeed > 20 ? "rgba(5, 5, 16, 0.28)" : "rgba(5, 5, 16, 0.7)";
+      ctx.fillRect(0, 0, width, height);
+
+      const cx = width / 2;
+      const cy = height / 2;
+
+      for (let i = 0; i < STAR_COUNT; i++) {
+        const star = stars[i];
+
+        star.pz = star.z;
+        star.z -= currentSpeed;
+
+        // Recycle star when passing viewer
+        if (star.z <= 0) {
+          star.x = (Math.random() - 0.5) * width * 2;
+          star.y = (Math.random() - 0.5) * height * 2;
+          star.z = width;
+          star.pz = width;
+        }
+
+        const k = FOV / star.z;
+        const px = star.x * k + cx;
+        const py = star.y * k + cy;
+
+        if (px >= 0 && px <= width && py >= 0 && py <= height) {
+          const prevK = FOV / star.pz;
+          const prevX = star.x * prevK + cx;
+          const prevY = star.y * prevK + cy;
+
+          const size = Math.max(1, (1 - star.z / width) * 3.5);
+          const alpha = Math.min(1, (1 - star.z / width) * 1.3);
+
+          ctx.beginPath();
+          if (currentSpeed > 10) {
+            // Draw hyperspace warp streaks
+            ctx.strokeStyle = star.color;
+            ctx.lineWidth = size * 0.8;
+            ctx.globalAlpha = alpha;
+            ctx.moveTo(prevX, prevY);
+            ctx.lineTo(px, py);
+            ctx.stroke();
+          } else {
+            // Draw cruising point star
+            ctx.fillStyle = star.color;
+            ctx.globalAlpha = alpha;
+            ctx.arc(px, py, size / 2, 0, Math.PI * 2);
+            ctx.fill();
+          }
+        }
+      }
+
+      ctx.globalAlpha = 1.0;
+      animFrameRef.current = requestAnimationFrame(render);
+    };
+
+    render();
+
+    return () => {
+      window.removeEventListener("resize", handleResize);
+      if (animFrameRef.current) {
+        cancelAnimationFrame(animFrameRef.current);
+      }
+    };
+  }, [reduceMotion]);
 
   return (
-    <MotionBox
-      animate={
-        reduce
-          ? {}
-          : entering
-          ? {
-              y: [0, 14, -45],
-              scale: [1, 1.08, 0.02],
-              opacity: [1, 1, 0],
-              rotate: [0, -1.5, 0],
-            }
-          : {
-              y: [0, -8, 0],
-              x: [-2, 2, -2],
-              rotate: [-1.2, 1.2, -1.2],
-            }
-      }
-      transition={
-        entering
-          ? {
-              duration: 1.45,
-              times: [0, 0.25, 1],
-              ease: [0.65, 0, 0.2, 1],
-            }
-          : {
-              duration: 3.6,
-              repeat: Infinity,
-              ease: "easeInOut",
-            }
-      }
-      sx={{
-        position: "absolute",
-        left: "50%",
-        top: "52%",
-        width: { xs: 110, sm: 138, md: 156 },
-        height: 130,
-        zIndex: 12,
-        marginLeft: { xs: "-55px", sm: "-69px", md: "-78px" },
-        marginTop: "-65px",
-        pointerEvents: "none",
-      }}
-    >
-      {/* TWIN ION THRUSTER PLUMES */}
-      <MotionBox
-        animate={
-          reduce
-            ? {}
-            : {
-                scaleY: entering ? [1, 2.8, 0] : [0.85, 1.25, 0.9],
-                opacity: entering ? [1, 1, 0] : [0.75, 1, 0.8],
-              }
-        }
-        transition={{
-          duration: entering ? 1.1 : 0.16,
-          repeat: entering ? 0 : Infinity,
-        }}
-        sx={{
-          position: "absolute",
-          bottom: -14,
-          left: "50%",
-          transform: `translateX(-50%) scale(${thrustScale})`,
-          transformOrigin: "top center",
-          width: 48,
-          height: 36,
-          display: "flex",
-          justifyContent: "space-between",
-          px: "8px",
-        }}
-      >
-        {/* Left Thruster */}
-        <Box
-          sx={{
-            width: 10,
-            height: "100%",
-            borderRadius: "50%",
-            background:
-              "linear-gradient(180deg, #FFFFFF 0%, #38BDF8 40%, #8B5CF6 80%, transparent 100%)",
-            filter: "blur(3px)",
-          }}
-        />
-        {/* Right Thruster */}
-        <Box
-          sx={{
-            width: 10,
-            height: "100%",
-            borderRadius: "50%",
-            background:
-              "linear-gradient(180deg, #FFFFFF 0%, #38BDF8 40%, #8B5CF6 80%, transparent 100%)",
-            filter: "blur(3px)",
-          }}
-        />
-      </MotionBox>
-
-      {/* SLEEK INTERSTELLAR STARFIGHTER SVG */}
-      <svg
-        viewBox="0 0 200 170"
-        width="100%"
-        height="100%"
-        fill="none"
+    <AnimatePresence>
+      <motion.div
+        initial={{ opacity: 1 }}
+        animate={{ opacity: phase === "complete" ? 0 : 1 }}
+        exit={{ opacity: 0, scale: 1.08 }}
+        transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
         style={{
-          overflow: "visible",
-          filter: "drop-shadow(0 12px 24px rgba(56, 189, 248, 0.45))",
-        }}
-      >
-        <defs>
-          <linearGradient id="hullMain" x1="100" y1="10" x2="100" y2="150" gradientUnits="userSpaceOnUse">
-            <stop offset="0%" stopColor="#F8FAFC" />
-            <stop offset="45%" stopColor="#94A3B8" />
-            <stop offset="100%" stopColor="#1E293B" />
-          </linearGradient>
-          <linearGradient id="wingGrad" x1="20" y1="70" x2="180" y2="140" gradientUnits="userSpaceOnUse">
-            <stop offset="0%" stopColor="#38BDF8" />
-            <stop offset="50%" stopColor="#6366F1" />
-            <stop offset="100%" stopColor="#312E81" />
-          </linearGradient>
-          <linearGradient id="canopyGrad" x1="100" y1="40" x2="100" y2="95" gradientUnits="userSpaceOnUse">
-            <stop offset="0%" stopColor="#E0F2FE" />
-            <stop offset="40%" stopColor="#0284C7" />
-            <stop offset="100%" stopColor="#0F172A" />
-          </linearGradient>
-        </defs>
-
-        {/* Outer Swept Wings */}
-        <path
-          d="M100 52 L14 122 L26 136 L82 112 Z"
-          fill="url(#wingGrad)"
-          stroke="#7DD3FC"
-          strokeWidth="1.2"
-        />
-        <path
-          d="M100 52 L186 122 L174 136 L118 112 Z"
-          fill="url(#wingGrad)"
-          stroke="#7DD3FC"
-          strokeWidth="1.2"
-        />
-
-        {/* Wingtip Nav Lights */}
-        <circle cx="16" cy="123" r="2.2" fill="#F43F5E" />
-        <circle cx="184" cy="123" r="2.2" fill="#38BDF8" />
-
-        {/* Twin Engine Nacelles */}
-        <rect x="74" y="96" width="14" height="44" rx="4" fill="#0F172A" stroke="#38BDF8" strokeWidth="1.2" />
-        <rect x="112" y="96" width="14" height="44" rx="4" fill="#0F172A" stroke="#38BDF8" strokeWidth="1.2" />
-
-        {/* Central Fuselage */}
-        <path
-          d="M100 8 C84 34 76 68 78 126 L100 146 L122 126 C124 68 116 34 100 8 Z"
-          fill="url(#hullMain)"
-          stroke="#E2E8F0"
-          strokeWidth="1.5"
-        />
-
-        {/* Armored Panel Lines */}
-        <path
-          d="M84 82 L42 118 M116 82 L158 118"
-          stroke="#BAE6FD"
-          strokeOpacity="0.65"
-          strokeWidth="1.5"
-        />
-
-        {/* Cockpit Canopy */}
-        <path
-          d="M100 42 C91 54 89 72 91 90 L100 98 L109 90 C111 72 109 54 100 42 Z"
-          fill="url(#canopyGrad)"
-          stroke="#FFFFFF"
-          strokeOpacity="0.85"
-          strokeWidth="1.2"
-        />
-
-        {/* Thruster Core Glow Rings */}
-        <circle cx="81" cy="140" r="4" fill="#FFFFFF" />
-        <circle cx="119" cy="140" r="4" fill="#FFFFFF" />
-      </svg>
-    </MotionBox>
-  );
-}
-
-const Preloader = ({ setLoading }) => {
-  const [progress, setProgress] = useState(0);
-  const reduce = useReducedMotion();
-
-  const stars = useMemo(() => generateStars(75), []);
-  const warpStreaks = useMemo(() => generateWarpStreaks(32), []);
-
-  const entering = progress >= 88;
-  const finished = progress >= 100;
-
-  // Dynamic telemetry values
-  const warpVelocity = entering
-    ? "9.98c"
-    : `${((progress / 100) * 4.2).toFixed(2)}c`;
-
-  useEffect(() => {
-    if (reduce) {
-      setLoading(false);
-      return;
-    }
-
-    let current = 0;
-    const interval = window.setInterval(() => {
-      // Realistic non-linear loading curve: fast initial boot, brief calibration, rapid warp surge
-      const step = current < 40 ? 2 : current < 75 ? 1 : 3;
-      current = Math.min(100, current + step);
-      setProgress(current);
-
-      if (current >= 100) {
-        window.clearInterval(interval);
-      }
-    }, 32);
-
-    return () => window.clearInterval(interval);
-  }, [reduce, setLoading]);
-
-  useEffect(() => {
-    if (!finished) return;
-
-    const timer = window.setTimeout(() => {
-      setLoading(false);
-    }, 1150);
-
-    return () => window.clearTimeout(timer);
-  }, [finished, setLoading]);
-
-  const phaseText = entering
-    ? finished
-      ? "SINGULARITY BREACHED // WELCOME"
-      : "ENGAGING QUANTUM WORMHOLE DRIVE"
-    : progress > 60
-    ? "GRAVITATIONAL LENS LOCKED"
-    : progress > 30
-    ? "ALIGNING NAVIGATIONAL THRUSTERS"
-    : "INITIALIZING DEEP SPACE TELEMETRY";
-
-  return (
-    <MotionBox
-      initial={{ opacity: 1 }}
-      exit={{
-        opacity: 0,
-        scale: 1.15,
-        transition: { duration: 0.85, ease: [0.22, 1, 0.36, 1] },
-      }}
-      role="status"
-      aria-label={`Entering Dinesh Digital Universe, ${progress}%`}
-      sx={{
-        position: "fixed",
-        inset: 0,
-        zIndex: 99999,
-        overflow: "hidden",
-        minHeight: "100dvh",
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
-        flexDirection: "column",
-        background:
-          "radial-gradient(circle at 50% 46%, #130B2E 0%, #060714 52%, #010104 100%)",
-        color: "#FFFFFF",
-        isolation: "isolate",
-        userSelect: "none",
-        pointerEvents: finished ? "none" : "auto",
-      }}
-    >
-      {/* SUBTLE CINEMATIC FILM GRAIN & SCANLINE OVERLAY */}
-      <Box
-        sx={{
-          position: "absolute",
+          position: "fixed",
           inset: 0,
-          opacity: 0.04,
-          backgroundImage:
-            "repeating-linear-gradient(0deg, #fff, #fff 1px, transparent 1px, transparent 3px)",
-          pointerEvents: "none",
-          zIndex: 20,
-        }}
-      />
-
-      {/* COCKPIT HUD CORNER BRACKETS */}
-      <Box
-        sx={{
-          position: "absolute",
-          inset: { xs: 16, sm: 28, md: 40 },
-          pointerEvents: "none",
-          zIndex: 15,
-          opacity: entering ? 0.25 : 0.75,
-          transition: "opacity 0.6s ease",
+          zIndex: 9999,
+          backgroundColor: "#050510",
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+          justifyContent: "center",
+          overflow: "hidden",
         }}
       >
-        {/* Top Left HUD */}
-        <Box sx={{ position: "absolute", top: 0, left: 0 }}>
-          <Box
-            sx={{
-              width: 24,
-              height: 24,
-              borderTop: "1.5px solid rgba(56, 189, 248, 0.6)",
-              borderLeft: "1.5px solid rgba(56, 189, 248, 0.6)",
-            }}
-          />
-          <Typography
-            sx={{
-              mt: 1,
-              fontFamily: "monospace",
-              fontSize: { xs: 9, sm: 10 },
-              letterSpacing: 1.5,
-              color: "#64748B",
-            }}
-          >
-            SYS.NODE // <Box component="span" sx={{ color: "#38BDF8" }}>ORION-09</Box>
-          </Typography>
-        </Box>
-
-        {/* Top Right HUD */}
-        <Box sx={{ position: "absolute", top: 0, right: 0, textAlign: "right" }}>
-          <Box
-            sx={{
-              ml: "auto",
-              width: 24,
-              height: 24,
-              borderTop: "1.5px solid rgba(56, 189, 248, 0.6)",
-              borderRight: "1.5px solid rgba(56, 189, 248, 0.6)",
-            }}
-          />
-          <Typography
-            sx={{
-              mt: 1,
-              fontFamily: "monospace",
-              fontSize: { xs: 9, sm: 10 },
-              letterSpacing: 1.5,
-              color: "#64748B",
-            }}
-          >
-            VELOCITY // <Box component="span" sx={{ color: "#A78BFA" }}>{warpVelocity}</Box>
-          </Typography>
-        </Box>
-
-        {/* Bottom Left Bracket */}
-        <Box
-          sx={{
-            position: "absolute",
-            bottom: 0,
-            left: 0,
-            width: 24,
-            height: 24,
-            borderBottom: "1.5px solid rgba(167, 139, 250, 0.45)",
-            borderLeft: "1.5px solid rgba(167, 139, 250, 0.45)",
-          }}
-        />
-
-        {/* Bottom Right Bracket */}
-        <Box
-          sx={{
-            position: "absolute",
-            bottom: 0,
-            right: 0,
-            width: 24,
-            height: 24,
-            borderBottom: "1.5px solid rgba(167, 139, 250, 0.45)",
-            borderRight: "1.5px solid rgba(167, 139, 250, 0.45)",
-          }}
-        />
-      </Box>
-
-      {/* DEEP SPACE NEBULA GLOW */}
-      <MotionBox
-        animate={
-          reduce
-            ? {}
-            : {
-                scale: [1, 1.18, 1],
-                rotate: [0, 12, 0],
-                opacity: [0.4, 0.75, 0.4],
-              }
-        }
-        transition={{ duration: 12, repeat: Infinity, ease: "easeInOut" }}
-        sx={{
-          position: "absolute",
-          width: { xs: 380, md: 780 },
-          height: { xs: 380, md: 780 },
-          borderRadius: "50%",
-          background:
-            "radial-gradient(circle, rgba(124,58,237,0.24) 0%, rgba(56,189,248,0.12) 42%, rgba(217,70,239,0.06) 65%, transparent 75%)",
-          filter: "blur(45px)",
-          zIndex: -2,
-        }}
-      />
-
-      {/* 3D PERSPECTIVE STARFIELD */}
-      <Box sx={{ position: "absolute", inset: 0, zIndex: -1 }}>
-        {stars.map((star) => (
-          <MotionBox
-            key={star.id}
-            animate={
-              reduce
-                ? {}
-                : entering
-                ? {
-                    x: [0, star.dx * 320],
-                    y: [0, star.dy * 320],
-                    opacity: [0.9, 1, 0],
-                    scale: [1, 2.8],
-                  }
-                : {
-                    opacity: [0.2, 0.95, 0.2],
-                    scale: [0.8, 1.3, 0.8],
-                  }
-            }
-            transition={
-              entering
-                ? {
-                    duration: 0.75,
-                    repeat: Infinity,
-                    delay: star.delay * 0.15,
-                    ease: "easeIn",
-                  }
-                : {
-                    duration: star.duration,
-                    repeat: Infinity,
-                    delay: star.delay,
-                  }
-            }
-            sx={{
-              position: "absolute",
-              left: `${star.x}%`,
-              top: `${star.y}%`,
-              width: star.size,
-              height: star.size,
-              borderRadius: "50%",
-              background: star.color,
-              boxShadow: `0 0 8px ${star.color}`,
-            }}
-          />
-        ))}
-      </Box>
-
-      {/* RADIAL HYPERSPACE STREAKS (ON WORMHOLE ENTRY) */}
-      <AnimatePresence>
-        {entering && (
-          <Box
-            sx={{
+        {/* Hyperspace Warp Canvas */}
+        {!reduceMotion && (
+          <canvas
+            ref={canvasRef}
+            style={{
               position: "absolute",
               inset: 0,
+              width: "100%",
+              height: "100%",
               pointerEvents: "none",
-              overflow: "hidden",
-              zIndex: 8,
             }}
-          >
-            {warpStreaks.map((streak) => (
-              <MotionBox
-                key={streak.id}
-                initial={{ opacity: 0, scaleX: 0.1 }}
-                animate={{
-                  opacity: [0, 0.95, 0],
-                  scaleX: [0.2, 2.4, 4.5],
-                  x: [0, streak.dx * 480],
-                  y: [0, streak.dy * 480],
-                }}
-                transition={{
-                  duration: streak.duration,
-                  repeat: Infinity,
-                  delay: streak.delay,
-                  ease: "easeIn",
-                }}
-                sx={{
-                  position: "absolute",
-                  left: "50%",
-                  top: "46%",
-                  width: streak.length,
-                  height: 1.5,
-                  transformOrigin: "left center",
-                  rotate: `${streak.angleDeg}deg`,
-                  background:
-                    "linear-gradient(90deg, transparent, #38BDF8 45%, #FFFFFF 100%)",
-                  boxShadow: "0 0 10px #38BDF8",
-                }}
-              />
-            ))}
-          </Box>
+          />
         )}
-      </AnimatePresence>
 
-      {/* WORMHOLE & SINGULARITY STAGE */}
-      <MotionBox
-        animate={
-          entering
-            ? { scale: [1, 1.25, 2.6], rotate: [0, 15, 45] }
-            : { scale: [1, 1.03, 1] }
-        }
-        transition={
-          entering
-            ? { duration: 1.55, ease: [0.7, 0, 0.2, 1] }
-            : { duration: 4.5, repeat: Infinity, ease: "easeInOut" }
-        }
-        sx={{
-          position: "relative",
-          width: { xs: 280, sm: 360, md: 430 },
-          height: { xs: 280, sm: 360, md: 430 },
-          display: "grid",
-          placeItems: "center",
-          mb: { xs: 2, md: 3 },
-        }}
-      >
-        {/* OUTER TELEMETRY ORBIT RING */}
-        <MotionBox
-          animate={reduce ? {} : { rotate: 360 }}
-          transition={{ duration: 32, repeat: Infinity, ease: "linear" }}
-          sx={{
-            position: "absolute",
-            inset: 0,
-            borderRadius: "50%",
-            border: "1px solid rgba(56, 189, 248, 0.25)",
-            "&::after": {
-              content: '""',
-              position: "absolute",
-              width: 8,
-              height: 8,
-              top: "14%",
-              left: "14%",
-              borderRadius: "50%",
-              background: "#38BDF8",
-              boxShadow: "0 0 18px #38BDF8, 0 0 32px #38BDF8",
-            },
+        {/* Hyperspace Burst Flash Overlay */}
+        <motion.div
+          animate={{
+            opacity: phase === "burst" ? [0, 0.65, 0] : 0,
+            scale: phase === "burst" ? [0.6, 1.8] : 0.6,
           }}
-        />
-
-        {/* TILTED 3D ACCRETION DISK (INTERSTELLAR EFFECT) */}
-        <MotionBox
-          animate={reduce ? {} : { rotate: -360 }}
-          transition={{ duration: 14, repeat: Infinity, ease: "linear" }}
-          sx={{
+          transition={{ duration: 0.65, ease: "easeOut" }}
+          style={{
             position: "absolute",
-            width: "96%",
-            height: "36%",
+            width: "100vw",
+            height: "100vh",
             borderRadius: "50%",
-            border: "2px solid rgba(56, 189, 248, 0.45)",
             background:
-              "radial-gradient(ellipse at center, transparent 48%, rgba(139, 92, 246, 0.28) 68%, rgba(56, 189, 248, 0.15) 85%, transparent 100%)",
-            boxShadow: "0 0 40px rgba(56, 189, 248, 0.25)",
-            transform: "rotate(-18deg)",
+              "radial-gradient(circle, rgba(56, 189, 248, 0.8) 0%, rgba(139, 92, 246, 0.5) 40%, transparent 70%)",
+            filter: "blur(40px)",
             pointerEvents: "none",
           }}
         />
 
-        {/* COUNTER-ROTATING QUANTUM RING */}
-        <MotionBox
-          animate={reduce ? {} : { rotate: -360 }}
-          transition={{ duration: 18, repeat: Infinity, ease: "linear" }}
+        {/* Top Skip Button */}
+        <Box
           sx={{
             position: "absolute",
-            inset: "12%",
-            borderRadius: "50%",
-            border: "1px dashed rgba(192, 132, 252, 0.5)",
-          }}
-        />
-
-        {/* GRAVITATIONAL LENSING HALO */}
-        <MotionBox
-          animate={
-            reduce
-              ? {}
-              : {
-                  rotate: [0, 360],
-                  scale: [0.96, 1.04, 0.96],
-                }
-          }
-          transition={{
-            rotate: { duration: 9, repeat: Infinity, ease: "linear" },
-            scale: { duration: 3.5, repeat: Infinity, ease: "easeInOut" },
-          }}
-          sx={{
-            width: "52%",
-            height: "52%",
-            borderRadius: "50%",
-            padding: "4px",
-            background:
-              "conic-gradient(from 0deg, #7C3AED, #38BDF8, #FFFFFF, #E879F9, #7C3AED)",
-            boxShadow:
-              "0 0 35px rgba(124, 58, 237, 0.75), 0 0 80px rgba(56, 189, 248, 0.4)",
+            top: { xs: 20, sm: 30 },
+            right: { xs: 20, sm: 30 },
+            zIndex: 10,
           }}
         >
-          {/* EVENT HORIZON SINGULARITY CORE */}
-          <Box
+          <Button
+            size="small"
+            onClick={finishLoading}
+            endIcon={<FastForward sx={{ fontSize: 16 }} />}
             sx={{
-              width: "100%",
-              height: "100%",
-              borderRadius: "50%",
-              background:
-                "radial-gradient(circle at 50% 50%, #000000 42%, #0B071E 68%, #3B82F6 96%, #FFFFFF 100%)",
-              boxShadow: "inset 0 0 28px #000000, inset 0 0 14px #8B5CF6",
-              display: "grid",
-              placeItems: "center",
+              fontFamily: "'Geist Mono', monospace",
+              fontSize: "0.72rem",
+              letterSpacing: 1.5,
+              color: "#94A3B8",
+              backgroundColor: "rgba(255, 255, 255, 0.04)",
+              border: "1px solid rgba(255, 255, 255, 0.1)",
+              backdropFilter: "blur(12px)",
+              borderRadius: "999px",
+              px: 2,
+              py: 0.6,
+              "&:hover": {
+                color: "#F8FAFC",
+                borderColor: "#38BDF8",
+                backgroundColor: "rgba(56, 189, 248, 0.15)",
+              },
             }}
-          />
-        </MotionBox>
+          >
+            SKIP [ESC]
+          </Button>
+        </Box>
 
-        {/* STARFIGHTER */}
-        <Spaceship reduce={reduce} entering={entering} progress={progress} />
-      </MotionBox>
-
-      {/* BRAND IDENTITY & MISSION STATUS */}
-      <MotionBox
-        animate={entering ? { opacity: 0, y: -20 } : { opacity: 1, y: 0 }}
-        transition={{ duration: 0.45 }}
-        sx={{
-          position: "relative",
-          zIndex: 10,
-          textAlign: "center",
-          width: "min(92%, 540px)",
-        }}
-      >
-        <Typography
+        {/* Center Brand Identity & Warp Telemetry */}
+        <Box
           sx={{
-            fontFamily: "'Space Grotesk', sans-serif",
-            fontSize: { xs: 16, sm: 20 },
-            fontWeight: 900,
-            letterSpacing: { xs: 3, sm: 5 },
-            textShadow: "0 0 24px rgba(56, 189, 248, 0.45)",
+            position: "relative",
+            zIndex: 5,
+            textAlign: "center",
+            px: 3,
+            maxWidth: 580,
           }}
         >
-          DINESH
-          <Box component="span" sx={{ color: "#38BDF8", mx: 1.2 }}>
-            //
+          {/* Brand Line */}
+          <motion.div
+            initial={{ opacity: 0, y: 15 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.7 }}
+          >
+            <Typography
+              sx={{
+                fontFamily: "'Geist Mono', monospace",
+                fontSize: { xs: "0.8rem", sm: "0.95rem" },
+                letterSpacing: { xs: 3, sm: 4.5 },
+                color: "#38BDF8",
+                fontWeight: 700,
+                textTransform: "uppercase",
+                mb: 1.5,
+                textShadow: "0 0 15px rgba(56, 189, 248, 0.5)",
+              }}
+            >
+              Dinesh // Digital Universe
+            </Typography>
+
+            <Typography
+              sx={{
+                fontFamily: "'Space Grotesk', sans-serif",
+                fontSize: { xs: "2.2rem", sm: "3.2rem" },
+                fontWeight: 800,
+                letterSpacing: "-0.03em",
+                color: "#F8FAFC",
+                lineHeight: 1.1,
+              }}
+            >
+              WARPING INTO GALAXY
+            </Typography>
+          </motion.div>
+
+          {/* Progress Bar & Telemetry Status */}
+          <Box sx={{ mt: 4, width: "100%", maxWidth: 360, mx: "auto" }}>
+            {/* Minimal glowing track */}
+            <Box
+              sx={{
+                width: "100%",
+                height: 3,
+                backgroundColor: "rgba(255, 255, 255, 0.08)",
+                borderRadius: "999px",
+                overflow: "hidden",
+                position: "relative",
+              }}
+            >
+              <motion.div
+                style={{
+                  height: "100%",
+                  width: `${percent}%`,
+                  background:
+                    "linear-gradient(90deg, #8B5CF6, #38BDF8, #D946EF)",
+                  boxShadow: "0 0 12px #38BDF8",
+                  borderRadius: "999px",
+                }}
+              />
+            </Box>
+
+            {/* Telemetry info row */}
+            <Box
+              sx={{
+                display: "flex",
+                justifyContent: "space-between",
+                alignItems: "center",
+                mt: 1.8,
+              }}
+            >
+              <Typography
+                sx={{
+                  fontFamily: "'Geist Mono', monospace",
+                  fontSize: "0.68rem",
+                  color: "#94A3B8",
+                  letterSpacing: 1.5,
+                }}
+              >
+                {telemetryText}
+              </Typography>
+              <Typography
+                sx={{
+                  fontFamily: "'Geist Mono', monospace",
+                  fontSize: "0.72rem",
+                  color: "#38BDF8",
+                  fontWeight: 700,
+                  letterSpacing: 1,
+                }}
+              >
+                {percent}%
+              </Typography>
+            </Box>
           </Box>
-          DIGITAL UNIVERSE
-        </Typography>
-
-        <Typography
-          sx={{
-            mt: 1.2,
-            color: entering ? "#38BDF8" : "#A78BFA",
-            fontFamily: "'Geist Mono', monospace",
-            fontSize: { xs: 9.5, sm: 10.5 },
-            letterSpacing: { xs: 1.5, sm: 2.5 },
-            transition: "color 0.35s ease",
-          }}
-        >
-          {phaseText}
-        </Typography>
-      </MotionBox>
-
-      {/* PRECISION WARP PROGRESS BAR */}
-      <MotionBox
-        animate={entering ? { opacity: 0, scale: 0.9 } : { opacity: 1, scale: 1 }}
-        sx={{
-          width: { xs: "72%", sm: 320 },
-          mt: 3,
-          position: "relative",
-          zIndex: 10,
-        }}
-      >
-        <Box
-          sx={{
-            height: 3,
-            borderRadius: 6,
-            overflow: "hidden",
-            background: "rgba(255, 255, 255, 0.08)",
-            boxShadow: "inset 0 0 6px rgba(0,0,0,0.8)",
-          }}
-        >
-          <MotionBox
-            sx={{
-              height: "100%",
-              width: `${progress}%`,
-              borderRadius: 6,
-              background:
-                "linear-gradient(90deg, #7C3AED 0%, #38BDF8 65%, #FFFFFF 100%)",
-              boxShadow: "0 0 16px #38BDF8",
-            }}
-          />
         </Box>
-
-        <Box
-          sx={{
-            display: "flex",
-            justifyContent: "space-between",
-            alignItems: "center",
-            mt: 1.2,
-          }}
-        >
-          <Typography
-            sx={{
-              color: "#64748B",
-              fontSize: 9,
-              letterSpacing: 1.8,
-              fontFamily: "monospace",
-            }}
-          >
-            WARP CAPACITOR
-          </Typography>
-
-          <Typography
-            sx={{
-              color: "#E2E8F0",
-              fontSize: 11,
-              fontWeight: 800,
-              fontFamily: "monospace",
-              fontVariantNumeric: "tabular-nums",
-            }}
-          >
-            {String(progress).padStart(3, "0")}%
-          </Typography>
-        </Box>
-      </MotionBox>
-
-      {/* BOTTOM TELEMETRY FOOTER */}
-      <MotionBox
-        animate={entering ? { opacity: 0 } : { opacity: 1 }}
-        sx={{
-          position: "absolute",
-          bottom: { xs: 20, sm: 30 },
-          display: "flex",
-          gap: 2,
-          alignItems: "center",
-          justifyContent: "center",
-          px: 2,
-        }}
-      >
-        <Typography
-          sx={{
-            fontSize: 9,
-            color: "#64748B",
-            letterSpacing: 2,
-            fontFamily: "monospace",
-          }}
-        >
-          SECTOR 07E // MILKY WAY
-        </Typography>
-
-        <Box
-          sx={{
-            width: 5,
-            height: 5,
-            borderRadius: "50%",
-            background: "#38BDF8",
-            boxShadow: "0 0 10px #38BDF8",
-          }}
-        />
-
-        <Typography
-          sx={{
-            fontSize: 9,
-            color: "#64748B",
-            letterSpacing: 2,
-            fontFamily: "monospace",
-          }}
-        >
-          SINGULARITY READY
-        </Typography>
-      </MotionBox>
-
-      {/* CINEMATIC HYPERSPACE FLASH AT 100% */}
-      <AnimatePresence>
-        {finished && (
-          <MotionBox
-            initial={{ opacity: 0 }}
-            animate={{ opacity: [0, 0.95, 0] }}
-            transition={{ duration: 1.05, times: [0, 0.35, 1], ease: "easeInOut" }}
-            sx={{
-              position: "fixed",
-              inset: 0,
-              zIndex: 999999,
-              pointerEvents: "none",
-              background:
-                "radial-gradient(circle at center, #FFFFFF 0%, #BAE6FD 45%, #38BDF8 100%)",
-            }}
-          />
-        )}
-      </AnimatePresence>
-    </MotionBox>
+      </motion.div>
+    </AnimatePresence>
   );
-};
-
-export default Preloader;
+}

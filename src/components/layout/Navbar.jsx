@@ -7,20 +7,29 @@ import {
   List,
   ListItem,
   ListItemButton,
-  ListItemText,
   Button,
   Typography,
+  Stack,
+  Tooltip,
 } from "@mui/material";
-import { Menu as MenuIcon, Close, NorthEast } from "@mui/icons-material";
+import {
+  Menu as MenuIcon,
+  Close,
+  NorthEast,
+  GitHub,
+  LinkedIn,
+  Instagram,
+  Email,
+} from "@mui/icons-material";
 import { motion, AnimatePresence } from "framer-motion";
 
 const navLinks = [
-  { id: "home", label: "HOME" },
-  { id: "about", label: "ABOUT" },
-  { id: "skills", label: "SKILLS" },
-  { id: "projects", label: "PROJECTS" },
-  { id: "experience", label: "EXPERIENCE" },
-  { id: "contact", label: "CONTACT" },
+  { id: "home", label: "HOME", sector: "ORBITAL CORE" },
+  { id: "about", label: "ABOUT", sector: "ORIGIN & BIO" },
+  { id: "skills", label: "SKILLS", sector: "TECH ARSENAL" },
+  { id: "projects", label: "PROJECTS", sector: "SPACE MISSIONS" },
+  { id: "experience", label: "EXPERIENCE", sector: "CHRONOLOGY" },
+  { id: "contact", label: "CONNECT", sector: "NEXUS CHANNELS" },
 ];
 
 const Navbar = () => {
@@ -148,9 +157,9 @@ const Navbar = () => {
                   sx={{
                     fontFamily: "'Geist Mono', monospace",
                     fontSize: "0.62rem",
-                    letterSpacing: 2,
                     color: "#9292A8",
-                    lineHeight: 1,
+                    letterSpacing: "0.15em",
+                    textTransform: "uppercase",
                   }}
                 >
                   DIGITAL UNIVERSE
@@ -160,83 +169,81 @@ const Navbar = () => {
 
             {/* Desktop Navigation Links */}
             <Box
+              component="nav"
               sx={{
                 display: { xs: "none", md: "flex" },
                 alignItems: "center",
-                gap: 0.5,
-                backgroundColor: "rgba(255, 255, 255, 0.02)",
-                p: 0.5,
-                borderRadius: "999px",
-                border: "1px solid rgba(255, 255, 255, 0.05)",
+                gap: 0.8,
               }}
             >
               {navLinks.map((link) => {
                 const isActive = activeSection === link.id;
                 return (
-                  <Box
+                  <Button
                     key={link.id}
                     onClick={() => scrollTo(link.id)}
                     sx={{
                       position: "relative",
-                      px: 2.2,
+                      px: 2,
                       py: 0.8,
                       borderRadius: "999px",
-                      cursor: "pointer",
-                      userSelect: "none",
-                      transition: "color 0.25s ease",
+                      fontFamily: "'Space Grotesk', sans-serif",
+                      fontSize: "0.82rem",
+                      fontWeight: 600,
+                      letterSpacing: "0.06em",
+                      color: isActive ? "#F5F5FA" : "#9292A8",
+                      transition: "all 0.25s ease",
+                      "&:hover": {
+                        color: "#F5F5FA",
+                        backgroundColor: "rgba(255, 255, 255, 0.05)",
+                      },
                     }}
                   >
+                    {link.label}
+
+                    {/* Active Animated Glowing Indicator */}
                     {isActive && (
                       <motion.div
-                        layoutId="active-nav-glow"
-                        transition={{ type: "spring", stiffness: 380, damping: 30 }}
+                        layoutId="activeNavIndicator"
                         style={{
                           position: "absolute",
-                          inset: 0,
-                          borderRadius: "999px",
-                          backgroundColor: "rgba(139, 92, 246, 0.16)",
-                          border: "1px solid rgba(56, 189, 248, 0.4)",
-                          boxShadow: "0 0 16px rgba(56, 189, 248, 0.25)",
+                          bottom: 4,
+                          left: "25%",
+                          right: "25%",
+                          height: 2,
+                          borderRadius: 2,
+                          background:
+                            "linear-gradient(90deg, #38BDF8, #8B5CF6, #D946EF)",
+                          boxShadow: "0 0 10px #38BDF8",
+                        }}
+                        transition={{
+                          type: "spring",
+                          stiffness: 380,
+                          damping: 30,
                         }}
                       />
                     )}
-                    <Typography
-                      sx={{
-                        position: "relative",
-                        zIndex: 1,
-                        fontFamily: "'Geist Mono', monospace",
-                        fontSize: "0.75rem",
-                        fontWeight: isActive ? 600 : 500,
-                        letterSpacing: 1.5,
-                        color: isActive ? "#F5F5FA" : "#9292A8",
-                        transition: "color 0.2s ease",
-                        "&:hover": {
-                          color: "#F5F5FA",
-                        },
-                      }}
-                    >
-                      {link.label}
-                    </Typography>
-                  </Box>
+                  </Button>
                 );
               })}
             </Box>
 
-            {/* Right Action: CV / Live Terminal Link */}
+            {/* Right Side: Resume Button & Hamburger */}
             <Box sx={{ display: "flex", alignItems: "center", gap: 1.5 }}>
               <Button
                 variant="outlined"
+                size="small"
                 onClick={handleResumeClick}
-                endIcon={<NorthEast sx={{ fontSize: "0.95rem !important" }} />}
+                endIcon={<NorthEast sx={{ fontSize: "0.85rem !important" }} />}
                 sx={{
-                  display: { xs: "none", sm: "inline-flex" },
-                  py: 0.8,
+                  display: { xs: "none", sm: "flex" },
                   px: 2.2,
+                  py: 0.7,
                   borderRadius: "999px",
-                  fontSize: "0.78rem",
-                  fontFamily: "'Geist Mono', monospace",
-                  fontWeight: 600,
-                  letterSpacing: 1,
+                  fontFamily: "'Space Grotesk', sans-serif",
+                  fontSize: "0.8rem",
+                  fontWeight: 700,
+                  letterSpacing: "0.04em",
                   color: "#38BDF8",
                   borderColor: "rgba(56, 189, 248, 0.35)",
                   backgroundColor: "rgba(56, 189, 248, 0.05)",
@@ -254,95 +261,142 @@ const Navbar = () => {
                 RESUME
               </Button>
 
-              {/* Mobile Hamburger Menu Toggle */}
+              {/* Modern Mobile Hamburger Menu Toggle Button */}
               <IconButton
                 aria-label="open mobile navigation"
                 onClick={() => setMobileOpen(true)}
                 sx={{
                   display: { xs: "flex", md: "none" },
-                  color: "#F5F5FA",
-                  backgroundColor: "rgba(255, 255, 255, 0.05)",
-                  border: "1px solid rgba(255, 255, 255, 0.1)",
-                  p: 1,
+                  color: "#38BDF8",
+                  backgroundColor: "rgba(56, 189, 248, 0.08)",
+                  border: "1px solid rgba(56, 189, 248, 0.3)",
+                  borderRadius: "14px",
+                  p: 1.1,
+                  transition: "all 0.25s ease",
                   "&:hover": {
-                    backgroundColor: "rgba(255, 255, 255, 0.1)",
+                    backgroundColor: "rgba(56, 189, 248, 0.2)",
+                    borderColor: "#38BDF8",
+                    boxShadow: "0 0 16px rgba(56, 189, 248, 0.4)",
                   },
                 }}
               >
-                <MenuIcon sx={{ fontSize: "1.25rem" }} />
+                <MenuIcon sx={{ fontSize: "1.35rem" }} />
               </IconButton>
             </Box>
           </Box>
         </Container>
       </Box>
 
-      {/* Mobile Celestial Navigation Drawer */}
+      {/* Modern Interactive Mobile Celestial Navigation Drawer */}
       <Drawer
         anchor="right"
         open={mobileOpen}
         onClose={() => setMobileOpen(false)}
         PaperProps={{
           sx: {
-            width: "82%",
-            maxWidth: "340px",
-            backgroundColor: "rgba(5, 5, 16, 0.95)",
-            backdropFilter: "blur(24px)",
-            WebkitBackdropFilter: "blur(24px)",
-            borderLeft: "1px solid rgba(139, 92, 246, 0.25)",
-            p: 3,
+            width: { xs: "86%", sm: "360px" },
+            maxWidth: "380px",
+            backgroundColor: "rgba(7, 7, 24, 0.95)",
+            backdropFilter: "blur(28px)",
+            WebkitBackdropFilter: "blur(28px)",
+            borderLeft: "1px solid rgba(56, 189, 248, 0.25)",
+            boxShadow: "-15px 0 50px rgba(0, 0, 0, 0.9)",
+            p: { xs: 2.8, sm: 3.5 },
             display: "flex",
             flexDirection: "column",
             justifyContent: "space-between",
+            position: "relative",
+            overflow: "hidden",
           },
         }}
       >
-        <Box>
+        {/* Ambient Top Nebula Glow in Drawer */}
+        <Box
+          aria-hidden="true"
+          sx={{
+            position: "absolute",
+            top: "-10%",
+            right: "-15%",
+            width: 240,
+            height: 240,
+            borderRadius: "50%",
+            background: "radial-gradient(circle, rgba(139, 92, 246, 0.22) 0%, transparent 70%)",
+            filter: "blur(40px)",
+            pointerEvents: "none",
+          }}
+        />
+
+        <Box sx={{ position: "relative", zIndex: 1 }}>
           {/* Drawer Header */}
           <Box
             sx={{
               display: "flex",
               alignItems: "center",
               justifyContent: "space-between",
-              pb: 3,
+              pb: 2.5,
               borderBottom: "1px solid rgba(255, 255, 255, 0.08)",
               mb: 3,
             }}
           >
-            <Box sx={{ display: "flex", alignItems: "center", gap: 1.2 }}>
-              <Box
-                sx={{
-                  width: 8,
-                  height: 8,
-                  borderRadius: "50%",
-                  backgroundColor: "#38BDF8",
-                  boxShadow: "0 0 10px #38BDF8",
-                }}
-              />
+            <Box>
+              <Stack direction="row" alignItems="center" spacing={1.2}>
+                <Box
+                  sx={{
+                    width: 8,
+                    height: 8,
+                    borderRadius: "50%",
+                    backgroundColor: "#10B981",
+                    boxShadow: "0 0 10px #10B981",
+                  }}
+                />
+                <Typography
+                  sx={{
+                    fontFamily: "'Space Grotesk', sans-serif",
+                    fontWeight: 800,
+                    fontSize: "1rem",
+                    color: "#F5F5FA",
+                    letterSpacing: "0.06em",
+                  }}
+                >
+                  DINESH // UNIVERSE
+                </Typography>
+              </Stack>
               <Typography
                 sx={{
-                  fontFamily: "'Space Grotesk', sans-serif",
-                  fontWeight: 800,
-                  fontSize: "1rem",
-                  color: "#F5F5FA",
-                  letterSpacing: "0.06em",
+                  fontFamily: "'Geist Mono', monospace",
+                  fontSize: "0.62rem",
+                  color: "#38BDF8",
+                  letterSpacing: 1.5,
+                  mt: 0.4,
+                  pl: 2.2,
                 }}
               >
-                NAVIGATION
+                TELEMETRY READY
               </Typography>
             </Box>
 
             <IconButton
               onClick={() => setMobileOpen(false)}
+              aria-label="close mobile menu"
               sx={{
                 color: "#9292A8",
-                "&:hover": { color: "#F5F5FA" },
+                backgroundColor: "rgba(255, 255, 255, 0.04)",
+                border: "1px solid rgba(255, 255, 255, 0.08)",
+                borderRadius: "12px",
+                p: 0.8,
+                transition: "all 0.2s ease",
+                "&:hover": {
+                  color: "#F5F5FA",
+                  borderColor: "#38BDF8",
+                  backgroundColor: "rgba(56, 189, 248, 0.15)",
+                },
               }}
             >
-              <Close />
+              <Close sx={{ fontSize: 20 }} />
             </IconButton>
           </Box>
 
-          {/* Links List */}
+          {/* Links List with Staggered Cosmic Items */}
           <List sx={{ p: 0 }}>
             {navLinks.map((link, idx) => {
               const isActive = activeSection === link.id;
@@ -351,78 +405,221 @@ const Navbar = () => {
                   <ListItemButton
                     onClick={() => scrollTo(link.id)}
                     sx={{
-                      py: 1.6,
+                      py: 1.4,
                       px: 2,
-                      borderRadius: "14px",
+                      borderRadius: "16px",
                       backgroundColor: isActive
-                        ? "rgba(139, 92, 246, 0.15)"
-                        : "transparent",
+                        ? "rgba(56, 189, 248, 0.12)"
+                        : "rgba(255, 255, 255, 0.02)",
                       border: "1px solid",
                       borderColor: isActive
-                        ? "rgba(56, 189, 248, 0.35)"
-                        : "transparent",
+                        ? "rgba(56, 189, 248, 0.45)"
+                        : "rgba(255, 255, 255, 0.05)",
+                      boxShadow: isActive ? "0 0 20px rgba(56, 189, 248, 0.15)" : "none",
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "space-between",
+                      transition: "all 0.25s cubic-bezier(0.16, 1, 0.3, 1)",
                       "&:hover": {
-                        backgroundColor: "rgba(255, 255, 255, 0.05)",
+                        backgroundColor: "rgba(56, 189, 248, 0.08)",
+                        borderColor: "rgba(56, 189, 248, 0.3)",
+                        transform: "translateX(4px)",
                       },
                     }}
                   >
-                    <Typography
-                      sx={{
-                        fontFamily: "'Geist Mono', monospace",
-                        fontSize: "0.7rem",
-                        color: isActive ? "#38BDF8" : "#676780",
-                        width: "28px",
-                      }}
-                    >
-                      0{idx + 1}
-                    </Typography>
-                    <ListItemText
-                      primary={link.label}
-                      primaryTypographyProps={{
-                        fontFamily: "'Space Grotesk', sans-serif",
-                        fontWeight: 700,
-                        fontSize: "1.05rem",
-                        color: isActive ? "#F5F5FA" : "#9292A8",
-                        letterSpacing: "0.04em",
-                      }}
-                    />
+                    <Box sx={{ display: "flex", alignItems: "center", gap: 1.8 }}>
+                      <Typography
+                        sx={{
+                          fontFamily: "'Geist Mono', monospace",
+                          fontSize: "0.72rem",
+                          color: isActive ? "#38BDF8" : "#64748B",
+                          fontWeight: 700,
+                          width: "22px",
+                        }}
+                      >
+                        0{idx + 1}
+                      </Typography>
+                      <Box>
+                        <Typography
+                          sx={{
+                            fontFamily: "'Space Grotesk', sans-serif",
+                            fontWeight: 700,
+                            fontSize: "1rem",
+                            color: isActive ? "#FFFFFF" : "#CBD5E1",
+                            letterSpacing: "0.02em",
+                            lineHeight: 1.2,
+                          }}
+                        >
+                          {link.label}
+                        </Typography>
+                        <Typography
+                          sx={{
+                            fontFamily: "'Geist Mono', monospace",
+                            fontSize: "0.62rem",
+                            color: isActive ? "#38BDF8" : "#9292A8",
+                            letterSpacing: 1,
+                            mt: 0.2,
+                          }}
+                        >
+                          {link.sector}
+                        </Typography>
+                      </Box>
+                    </Box>
+
+                    {isActive && (
+                      <Box
+                        sx={{
+                          width: 7,
+                          height: 7,
+                          borderRadius: "50%",
+                          backgroundColor: "#38BDF8",
+                          boxShadow: "0 0 10px #38BDF8",
+                        }}
+                      />
+                    )}
                   </ListItemButton>
                 </ListItem>
               );
             })}
           </List>
+
+          {/* Platform Quick Access Dock */}
+          <Box sx={{ mt: 3, pt: 2.5, borderTop: "1px solid rgba(255, 255, 255, 0.06)" }}>
+            <Typography
+              sx={{
+                fontFamily: "'Geist Mono', monospace",
+                fontSize: "0.65rem",
+                color: "#8B5CF6",
+                letterSpacing: 1.5,
+                fontWeight: 700,
+                mb: 1.5,
+                textTransform: "uppercase",
+              }}
+            >
+              ORBITAL CHANNELS:
+            </Typography>
+            <Stack direction="row" spacing={1.2}>
+              <Tooltip title="GitHub" arrow>
+                <IconButton
+                  href="https://github.com/dinesh-dev1628"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  sx={{
+                    p: 1.2,
+                    borderRadius: "12px",
+                    backgroundColor: "rgba(255, 255, 255, 0.04)",
+                    border: "1px solid rgba(255, 255, 255, 0.08)",
+                    color: "#8B5CF6",
+                    "&:hover": {
+                      borderColor: "#8B5CF6",
+                      backgroundColor: "rgba(139, 92, 246, 0.15)",
+                      color: "#FFFFFF",
+                    },
+                  }}
+                >
+                  <GitHub sx={{ fontSize: 18 }} />
+                </IconButton>
+              </Tooltip>
+
+              <Tooltip title="LinkedIn" arrow>
+                <IconButton
+                  href="https://www.linkedin.com/in/dineshm-dev/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  sx={{
+                    p: 1.2,
+                    borderRadius: "12px",
+                    backgroundColor: "rgba(255, 255, 255, 0.04)",
+                    border: "1px solid rgba(255, 255, 255, 0.08)",
+                    color: "#38BDF8",
+                    "&:hover": {
+                      borderColor: "#38BDF8",
+                      backgroundColor: "rgba(56, 189, 248, 0.15)",
+                      color: "#FFFFFF",
+                    },
+                  }}
+                >
+                  <LinkedIn sx={{ fontSize: 18 }} />
+                </IconButton>
+              </Tooltip>
+
+              <Tooltip title="Instagram" arrow>
+                <IconButton
+                  href="https://www.instagram.com/dinesh.genz/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  sx={{
+                    p: 1.2,
+                    borderRadius: "12px",
+                    backgroundColor: "rgba(255, 255, 255, 0.04)",
+                    border: "1px solid rgba(255, 255, 255, 0.08)",
+                    color: "#D946EF",
+                    "&:hover": {
+                      borderColor: "#D946EF",
+                      backgroundColor: "rgba(217, 70, 239, 0.15)",
+                      color: "#FFFFFF",
+                    },
+                  }}
+                >
+                  <Instagram sx={{ fontSize: 18 }} />
+                </IconButton>
+              </Tooltip>
+
+              <Tooltip title="Email" arrow>
+                <IconButton
+                  href="mailto:dineshm2816@gmail.com"
+                  sx={{
+                    p: 1.2,
+                    borderRadius: "12px",
+                    backgroundColor: "rgba(255, 255, 255, 0.04)",
+                    border: "1px solid rgba(255, 255, 255, 0.08)",
+                    color: "#2DD4BF",
+                    "&:hover": {
+                      borderColor: "#2DD4BF",
+                      backgroundColor: "rgba(45, 212, 191, 0.15)",
+                      color: "#FFFFFF",
+                    },
+                  }}
+                >
+                  <Email sx={{ fontSize: 18 }} />
+                </IconButton>
+              </Tooltip>
+            </Stack>
+          </Box>
         </Box>
 
         {/* Drawer Footer CTA */}
-        <Box sx={{ pt: 3, borderTop: "1px solid rgba(255, 255, 255, 0.08)" }}>
+        <Box sx={{ pt: 2.5, borderTop: "1px solid rgba(255, 255, 255, 0.08)", position: "relative", zIndex: 1 }}>
           <Button
             fullWidth
             variant="contained"
             onClick={handleResumeClick}
-            endIcon={<NorthEast />}
+            endIcon={<NorthEast sx={{ fontSize: 16 }} />}
             sx={{
-              py: 1.4,
-              borderRadius: "12px",
-              backgroundColor: "rgba(56, 189, 248, 0.15)",
-              border: "1px solid rgba(56, 189, 248, 0.4)",
-              color: "#F5F5FA",
+              py: 1.5,
+              borderRadius: "14px",
+              background: "linear-gradient(90deg, #1976D2, #38BDF8)",
+              color: "#FFFFFF",
               fontWeight: 700,
               fontFamily: "'Space Grotesk', sans-serif",
+              fontSize: "0.92rem",
+              boxShadow: "0 0 25px rgba(56, 189, 248, 0.3)",
               "&:hover": {
-                backgroundColor: "rgba(56, 189, 248, 0.25)",
+                background: "linear-gradient(90deg, #1565C0, #0284C7)",
+                boxShadow: "0 0 35px rgba(56, 189, 248, 0.5)",
               },
             }}
           >
-            VIEW RESUME
+            VIEW RESUME CV
           </Button>
           <Typography
             sx={{
               textAlign: "center",
-              mt: 2,
+              mt: 1.8,
               fontFamily: "'Geist Mono', monospace",
-              fontSize: "0.65rem",
+              fontSize: "0.62rem",
               color: "#9292A8",
-              letterSpacing: 1,
+              letterSpacing: 1.2,
             }}
           >
             SECTOR 0x7E // COSMIC EDITION

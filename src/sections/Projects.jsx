@@ -8,6 +8,7 @@ import {
   Stack,
   IconButton,
   Chip,
+  Skeleton,
 } from "@mui/material";
 import {
   GitHub,
@@ -18,15 +19,17 @@ import {
   Memory,
   Tune,
   NorthEast,
+  Refresh,
 } from "@mui/icons-material";
 import { motion, useReducedMotion } from "framer-motion";
-import { projectsData } from "../data/projects";
+import { useProjects } from "../hooks/useProjects";
 import MissionTelemetryVisualizer from "../components/3d/MissionTelemetryVisualizer.jsx";
 import MagneticButton from "../components/common/MagneticButton.jsx";
 
 const Projects = () => {
   const reduce = useReducedMotion();
   const [filter, setFilter] = useState("all");
+  const { projects, loading, error, refetch } = useProjects();
 
   const filterOptions = [
     { id: "all", label: "ALL MISSIONS" },
@@ -35,11 +38,11 @@ const Projects = () => {
     { id: "ai", label: "WORKFLOWS & AI" },
   ];
 
-  const filteredProjects = projectsData.filter((p) => {
+  const filteredProjects = projects.filter((p) => {
     if (filter === "all") return true;
-    if (filter === "automation") return p.category.includes("Automation");
-    if (filter === "web") return p.category.includes("Full-Stack");
-    if (filter === "ai") return p.category.includes("Workflow") || p.category.includes("AI");
+    if (filter === "automation") return p.category?.includes("Automation");
+    if (filter === "web") return p.category?.includes("Full-Stack");
+    if (filter === "ai") return p.category?.includes("Workflow") || p.category?.includes("AI");
     return true;
   });
 
@@ -164,9 +167,108 @@ const Projects = () => {
           </Box>
         </Box>
 
+        {/* Error Fallback Banner */}
+        {error && (
+          <Box
+            sx={{
+              mb: 4,
+              p: 2.5,
+              borderRadius: "16px",
+              border: "1px solid rgba(239, 68, 68, 0.35)",
+              background: "rgba(239, 68, 68, 0.08)",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "space-between",
+              flexWrap: "wrap",
+              gap: 2,
+            }}
+          >
+            <Box>
+              <Typography
+                sx={{
+                  fontFamily: "'Geist Mono', monospace",
+                  color: "#FCA5A5",
+                  fontWeight: 700,
+                  fontSize: "0.85rem",
+                  letterSpacing: 1,
+                }}
+              >
+                [SUPABASE TELEMETRY OFFLINE // RENDERING CACHED MISSIONS]
+              </Typography>
+              <Typography sx={{ color: "#94A3B8", fontSize: "0.8rem", mt: 0.5 }}>
+                {error?.message || "Using local fallback data."}
+              </Typography>
+            </Box>
+            <Button
+              size="small"
+              variant="outlined"
+              onClick={refetch}
+              startIcon={<Refresh />}
+              sx={{
+                borderColor: "#F87171",
+                color: "#FCA5A5",
+                fontFamily: "'Geist Mono', monospace",
+                fontSize: "0.75rem",
+                "&:hover": { borderColor: "#EF4444", background: "rgba(239, 68, 68, 0.15)" },
+              }}
+            >
+              Retry Uplink
+            </Button>
+          </Box>
+        )}
+
         {/* Space Mission Cards Stack */}
-        <Stack spacing={{ xs: 6, md: 8 }}>
-          {filteredProjects.map((mission, index) => (
+        {loading ? (
+          <Stack spacing={{ xs: 6, md: 8 }}>
+            {[1, 2].map((sk) => (
+              <Box
+                key={sk}
+                sx={{
+                  p: { xs: 3.5, sm: 4.5, md: 5.5 },
+                  borderRadius: "28px",
+                  backgroundColor: "rgba(16, 16, 38, 0.5)",
+                  border: "1px solid rgba(255, 255, 255, 0.08)",
+                  backdropFilter: "blur(20px)",
+                }}
+              >
+                <Stack spacing={2.5}>
+                  <Box sx={{ display: "flex", justifyContent: "space-between" }}>
+                    <Skeleton variant="text" width={180} height={24} sx={{ bgcolor: "rgba(255, 255, 255, 0.08)" }} />
+                    <Skeleton variant="rounded" width={120} height={28} sx={{ bgcolor: "rgba(255, 255, 255, 0.08)", borderRadius: "999px" }} />
+                  </Box>
+                  <Skeleton variant="text" width="60%" height={48} sx={{ bgcolor: "rgba(255, 255, 255, 0.08)" }} />
+                  <Skeleton variant="text" width="40%" height={24} sx={{ bgcolor: "rgba(255, 255, 255, 0.08)" }} />
+                  <Skeleton variant="rounded" width="100%" height={100} sx={{ bgcolor: "rgba(255, 255, 255, 0.05)", borderRadius: "14px" }} />
+                  <Box sx={{ display: "flex", gap: 1 }}>
+                    {[1, 2, 3, 4].map((t) => (
+                      <Skeleton key={t} variant="rounded" width={75} height={28} sx={{ bgcolor: "rgba(255, 255, 255, 0.08)", borderRadius: "8px" }} />
+                    ))}
+                  </Box>
+                </Stack>
+              </Box>
+            ))}
+          </Stack>
+        ) : filteredProjects.length === 0 ? (
+          <Box
+            sx={{
+              p: { xs: 6, md: 8 },
+              textAlign: "center",
+              borderRadius: "24px",
+              border: "1px dashed rgba(255, 255, 255, 0.12)",
+              background: "rgba(16, 16, 38, 0.3)",
+            }}
+          >
+            <RocketLaunch sx={{ fontSize: 44, color: "#8B5CF6", mb: 2, opacity: 0.8 }} />
+            <Typography sx={{ color: "#F5F5FA", fontWeight: 700, fontSize: "1.2rem", mb: 1 }}>
+              No missions found in this orbital sector
+            </Typography>
+            <Typography sx={{ color: "#9292A8", fontSize: "0.9rem" }}>
+              Select "ALL MISSIONS" or another sector filter above.
+            </Typography>
+          </Box>
+        ) : (
+          <Stack spacing={{ xs: 6, md: 8 }}>
+            {filteredProjects.map((mission, index) => (
             <motion.div
               key={mission.id}
               initial={reduce ? false : { opacity: 0, y: 35 }}
@@ -359,7 +461,7 @@ const Projects = () => {
                             MISSION TECH STACK:
                           </Typography>
                           <Box sx={{ display: "flex", flexWrap: "wrap", gap: 1 }}>
-                            {mission.technologies.map((tech) => (
+                            {(mission.technologies || []).map((tech) => (
                               <Box
                                 key={tech}
                                 sx={{
@@ -511,7 +613,7 @@ const Projects = () => {
                         </Typography>
 
                         <Stack spacing={1.5}>
-                          {mission.keyFeatures.map((feature, fIdx) => (
+                          {(mission.keyFeatures || []).map((feature, fIdx) => (
                             <Box
                               key={fIdx}
                               sx={{
@@ -553,7 +655,7 @@ const Projects = () => {
                           pt: 1,
                         }}
                       >
-                        {Object.entries(mission.stats).map(([k, v]) => (
+                        {Object.entries(mission.stats || {}).map(([k, v]) => (
                           <Box
                             key={k}
                             sx={{
@@ -595,6 +697,7 @@ const Projects = () => {
             </motion.div>
           ))}
         </Stack>
+      )}
       </Container>
     </Box>
   );

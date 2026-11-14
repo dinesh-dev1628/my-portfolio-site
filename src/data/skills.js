@@ -10,7 +10,7 @@ export const solarSystems = [
       {
         name: "Python",
         level: "Core Architecture",
-        experience: "3+ Years",
+        experience: "1.6 Year",
         size: 26,
         orbitRadius: 90,
         orbitDuration: 18,
@@ -21,8 +21,8 @@ export const solarSystems = [
       },
       {
         name: "JavaScript",
-        level: "Advanced",
-        experience: "3+ Years",
+        level: "Intermediate",
+        experience: "1 Year",
         size: 20,
         orbitRadius: 135,
         orbitDuration: 24,
@@ -34,7 +34,7 @@ export const solarSystems = [
       {
         name: "React",
         level: "Specialist",
-        experience: "2+ Years",
+        experience: "1 Year",
         size: 24,
         orbitRadius: 180,
         orbitDuration: 30,
@@ -46,7 +46,7 @@ export const solarSystems = [
       {
         name: "Next.js",
         level: "Production",
-        experience: "2+ Years",
+        experience: "1 Year",
         size: 22,
         orbitRadius: 225,
         orbitDuration: 38,
@@ -58,7 +58,7 @@ export const solarSystems = [
       {
         name: "FastAPI",
         level: "High-Throughput",
-        experience: "2+ Years",
+        experience: "1.4+ Year",
         size: 22,
         orbitRadius: 270,
         orbitDuration: 46,
@@ -80,7 +80,7 @@ export const solarSystems = [
       {
         name: "Playwright",
         level: "Specialist",
-        experience: "2+ Years",
+        experience: "1.6 Year",
         size: 26,
         orbitRadius: 90,
         orbitDuration: 20,
@@ -90,21 +90,9 @@ export const solarSystems = [
         highlights: ["Headless Multi-Browser", "Smart State Waiting", "Zero-Flakiness Testing"]
       },
       {
-        name: "n8n",
-        level: "Workflow Orchestration",
-        experience: "1+ Years",
-        size: 20,
-        orbitRadius: 135,
-        orbitDuration: 26,
-        color: "#F43F5E",
-        glow: "rgba(244, 63, 94, 0.65)",
-        description: "Self-hosted workflow automation connecting webhook triggers, data transformations, external APIs, and notification systems.",
-        highlights: ["Event-Driven Triggers", "Complex Branching Nodes", "Webhook Data Routing"]
-      },
-      {
         name: "AI Agents",
         level: "Modern Systems",
-        experience: "1+ Years",
+        experience: "1 Year",
         size: 24,
         orbitRadius: 180,
         orbitDuration: 32,
@@ -116,7 +104,7 @@ export const solarSystems = [
       {
         name: "API Automation",
         level: "Production",
-        experience: "2+ Years",
+        experience: "1 Year",
         size: 22,
         orbitRadius: 225,
         orbitDuration: 40,
@@ -128,7 +116,7 @@ export const solarSystems = [
       {
         name: "Workflow Automation",
         level: "Enterprise",
-        experience: "2+ Years",
+        experience: "1 Year",
         size: 21,
         orbitRadius: 270,
         orbitDuration: 48,
@@ -150,7 +138,7 @@ export const solarSystems = [
       {
         name: "Docker",
         level: "Containerization",
-        experience: "2+ Years",
+        experience: "1 Year",
         size: 25,
         orbitRadius: 90,
         orbitDuration: 19,
@@ -162,7 +150,7 @@ export const solarSystems = [
       {
         name: "PostgreSQL",
         level: "Advanced",
-        experience: "2+ Years",
+        experience: "1 Year",
         size: 24,
         orbitRadius: 135,
         orbitDuration: 25,
@@ -174,7 +162,7 @@ export const solarSystems = [
       {
         name: "Google Cloud",
         level: "Cloud Infrastructure",
-        experience: "1+ Years",
+        experience: "1 Year",
         size: 22,
         orbitRadius: 180,
         orbitDuration: 34,
@@ -186,7 +174,7 @@ export const solarSystems = [
       {
         name: "Git & GitHub",
         level: "Workflow Architecture",
-        experience: "3+ Years",
+        experience: "1.6 Year",
         size: 21,
         orbitRadius: 225,
         orbitDuration: 42,
@@ -195,18 +183,6 @@ export const solarSystems = [
         description: "Branching strategies, collaborative pull requests, GitHub Actions continuous integration, and disciplined semantic versioning.",
         highlights: ["Branch Strategies", "GitHub Actions CI", "Code Review & Quality"]
       },
-      {
-        name: "Redis",
-        level: "In-Memory Caching",
-        experience: "1+ Years",
-        size: 20,
-        orbitRadius: 270,
-        orbitDuration: 50,
-        color: "#EF4444",
-        glow: "rgba(239, 68, 68, 0.7)",
-        description: "Ultra-fast in-memory caching layers, session stores, rate-limiting counters, and publish/subscribe messaging queues.",
-        highlights: ["Sub-Millisecond Cache", "Key-Value Storage", "Distributed Rate Limits"]
-      }
     ]
   }
 ];

@@ -1,10 +1,12 @@
 import React from "react";
-import { Box, Typography, Container, Stack, Chip, Grid } from "@mui/material";
+import { Box, Typography, Container, Stack, Skeleton, Button } from "@mui/material";
+import { Refresh, Explore } from "@mui/icons-material";
 import { motion, useReducedMotion } from "framer-motion";
-import { timelineData } from "../data/experience";
+import { useExperience } from "../hooks/useExperience.js";
 
 const Experience = () => {
   const reduce = useReducedMotion();
+  const { experience, loading, error, refetch, isEmpty } = useExperience();
 
   return (
     <Box
@@ -79,6 +81,58 @@ const Experience = () => {
           </Typography>
         </Box>
 
+        {/* Error Fallback Banner */}
+        {error && (
+          <Box
+            sx={{
+              maxWidth: "980px",
+              mx: "auto",
+              mb: 5,
+              p: 2.5,
+              borderRadius: "16px",
+              border: "1px solid rgba(239, 68, 68, 0.35)",
+              background: "rgba(239, 68, 68, 0.08)",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "space-between",
+              flexWrap: "wrap",
+              gap: 2,
+            }}
+          >
+            <Box>
+              <Typography
+                sx={{
+                  fontFamily: "'Geist Mono', monospace",
+                  color: "#FCA5A5",
+                  fontWeight: 700,
+                  fontSize: "0.85rem",
+                  letterSpacing: 1,
+                }}
+              >
+                [SUPABASE TRAJECTORY OFFLINE // RENDERING CACHED CHECKPOINTS]
+              </Typography>
+              <Typography sx={{ color: "#94A3B8", fontSize: "0.8rem", mt: 0.5 }}>
+                {error?.message || "Using local fallback timeline."}
+              </Typography>
+            </Box>
+            <Button
+              size="small"
+              variant="outlined"
+              onClick={refetch}
+              startIcon={<Refresh />}
+              sx={{
+                borderColor: "#F87171",
+                color: "#FCA5A5",
+                fontFamily: "'Geist Mono', monospace",
+                fontSize: "0.75rem",
+                "&:hover": { borderColor: "#EF4444", background: "rgba(239, 68, 68, 0.15)" },
+              }}
+            >
+              Retry Trajectory
+            </Button>
+          </Box>
+        )}
+
         {/* Space-Themed Vertical Timeline */}
         <Box
           sx={{
@@ -102,228 +156,280 @@ const Experience = () => {
             }}
           />
 
-          <Stack spacing={{ xs: 6, md: 8 }}>
-            {timelineData.map((milestone, index) => (
-              <motion.div
-                key={milestone.checkpoint}
-                initial={reduce ? false : { opacity: 0, x: 35 }}
-                whileInView={{ opacity: 1, x: 0 }}
-                viewport={{ once: true, amount: 0.18 }}
-                transition={{ duration: 0.85, delay: index * 0.12 }}
-              >
-                <Box sx={{ position: "relative" }}>
-                  {/* Orbital Checkpoint Marker Node */}
-                  <Box
-                    sx={{
-                      position: "absolute",
-                      left: { xs: "-32px", md: "-46px" },
-                      top: "6px",
-                      width: { xs: 18, md: 24 },
-                      height: { xs: 18, md: 24 },
-                      borderRadius: "50%",
-                      backgroundColor: "#050510",
-                      border: "2px solid",
-                      borderColor: milestone.accent,
-                      boxShadow: `0 0 16px ${milestone.accent}`,
-                      display: "flex",
-                      alignItems: "center",
-                      justifyContent: "center",
-                      zIndex: 2,
-                    }}
-                  >
-                    <Box
-                      sx={{
-                        width: { xs: 6, md: 8 },
-                        height: { xs: 6, md: 8 },
-                        borderRadius: "50%",
-                        backgroundColor: milestone.accent,
-                      }}
-                    />
-                  </Box>
-
-                  {/* Checkpoint Dossier Card */}
+          {loading ? (
+            <Stack spacing={{ xs: 6, md: 8 }}>
+              {[1, 2].map((sk) => (
+                <Box key={sk} sx={{ position: "relative" }}>
                   <Box
                     sx={{
                       p: { xs: 3.5, sm: 4.5 },
                       borderRadius: "24px",
-                      backgroundColor: "rgba(16, 16, 38, 0.65)",
+                      backgroundColor: "rgba(16, 16, 38, 0.5)",
                       border: "1px solid rgba(255, 255, 255, 0.08)",
                       backdropFilter: "blur(18px)",
-                      transition: "all 0.3s ease",
-                      "&:hover": {
-                        borderColor: milestone.accent,
-                        boxShadow: `0 20px 50px -15px rgba(0, 0, 0, 0.8), 0 0 25px ${milestone.accent}20`,
-                        transform: "translateY(-3px)",
-                      },
                     }}
                   >
-                    {/* Top Row: Checkpoint Code, Period, Type */}
-                    <Box
-                      sx={{
-                        display: "flex",
-                        flexWrap: "wrap",
-                        alignItems: "center",
-                        justifyContent: "space-between",
-                        gap: 2,
-                        mb: 2,
-                      }}
-                    >
-                      <Box sx={{ display: "flex", alignItems: "center", gap: 1.5 }}>
-                        <Typography
-                          sx={{
-                            fontFamily: "'Geist Mono', monospace",
-                            fontSize: "0.78rem",
-                            fontWeight: 700,
-                            color: milestone.accent,
-                            letterSpacing: 1.5,
-                          }}
-                        >
-                          {milestone.checkpoint}
-                        </Typography>
-                        <Box
-                          sx={{
-                            px: 1.5,
-                            py: 0.3,
-                            borderRadius: "999px",
-                            backgroundColor: "rgba(255, 255, 255, 0.04)",
-                            border: "1px solid rgba(255, 255, 255, 0.08)",
-                          }}
-                        >
-                          <Typography
-                            sx={{
-                              fontFamily: "'Geist Mono', monospace",
-                              fontSize: "0.68rem",
-                              color: "#F5F5FA",
-                              fontWeight: 600,
-                            }}
-                          >
-                            {milestone.type}
-                          </Typography>
-                        </Box>
-                      </Box>
-
-                      <Typography
-                        sx={{
-                          fontFamily: "'Geist Mono', monospace",
-                          fontSize: "0.78rem",
-                          color: "#9292A8",
-                          letterSpacing: 1,
-                        }}
-                      >
-                        {milestone.period}
-                      </Typography>
-                    </Box>
-
-                    {/* Role & Entity */}
-                    <Typography
-                      variant="h3"
-                      sx={{
-                        fontFamily: "'Space Grotesk', sans-serif",
-                        fontSize: { xs: "1.5rem", sm: "1.85rem" },
-                        fontWeight: 800,
-                        color: "#F5F5FA",
-                        mb: 0.5,
-                      }}
-                    >
-                      {milestone.role}
-                    </Typography>
-
-                    <Typography
-                      sx={{
-                        fontFamily: "'Space Grotesk', sans-serif",
-                        fontSize: "1rem",
-                        color: "#38BDF8",
-                        fontWeight: 600,
-                        mb: 2,
-                      }}
-                    >
-                      {milestone.entity}
-                    </Typography>
-
-                    <Typography
-                      sx={{
-                        fontSize: "0.95rem",
-                        color: "#9292A8",
-                        lineHeight: 1.8,
-                        mb: 3,
-                      }}
-                    >
-                      {milestone.description}
-                    </Typography>
-
-                    {/* Responsibilities & Achievements */}
-                    <Box sx={{ mb: 3 }}>
-                      <Typography
-                        sx={{
-                          fontFamily: "'Geist Mono', monospace",
-                          fontSize: "0.68rem",
-                          color: "#9292A8",
-                          letterSpacing: 1.5,
-                          textTransform: "uppercase",
-                          mb: 1.5,
-                        }}
-                      >
-                        ORBITAL ACHIEVEMENTS:
-                      </Typography>
-                      <Stack spacing={1.2}>
-                        {milestone.responsibilities.map((r, rIdx) => (
-                          <Box
-                            key={rIdx}
-                            sx={{
-                              display: "flex",
-                              alignItems: "flex-start",
-                              gap: 1.5,
-                            }}
-                          >
-                            <Box
-                              sx={{
-                                width: 5,
-                                height: 5,
-                                borderRadius: "50%",
-                                backgroundColor: milestone.accent,
-                                mt: 0.8,
-                                flexShrink: 0,
-                              }}
-                            />
-                            <Typography
-                              sx={{
-                                fontSize: "0.88rem",
-                                color: "#E2E8F0",
-                                lineHeight: 1.6,
-                              }}
-                            >
-                              {r}
-                            </Typography>
-                          </Box>
-                        ))}
-                      </Stack>
-                    </Box>
-
-                    {/* Checkpoint Tech Badges */}
-                    <Box sx={{ display: "flex", flexWrap: "wrap", gap: 1 }}>
-                      {milestone.technologies.map((tech) => (
-                        <Box
-                          key={tech}
-                          sx={{
-                            px: 1.4,
-                            py: 0.4,
-                            borderRadius: "6px",
-                            backgroundColor: "rgba(255, 255, 255, 0.04)",
-                            border: "1px solid rgba(255, 255, 255, 0.08)",
-                            fontFamily: "'Geist Mono', monospace",
-                            fontSize: "0.72rem",
-                            color: "#9292A8",
-                          }}
-                        >
-                          {tech}
-                        </Box>
+                    <Skeleton variant="text" width="30%" height={24} sx={{ bgcolor: "rgba(255, 255, 255, 0.08)" }} />
+                    <Skeleton variant="text" width="60%" height={40} sx={{ bgcolor: "rgba(255, 255, 255, 0.08)", my: 1 }} />
+                    <Skeleton variant="text" width="40%" height={24} sx={{ bgcolor: "rgba(255, 255, 255, 0.08)" }} />
+                    <Skeleton variant="rectangular" width="100%" height={80} sx={{ bgcolor: "rgba(255, 255, 255, 0.05)", borderRadius: "12px", my: 2 }} />
+                    <Box sx={{ display: "flex", gap: 1 }}>
+                      {[1, 2, 3, 4].map((t) => (
+                        <Skeleton key={t} variant="rounded" width={80} height={26} sx={{ bgcolor: "rgba(255, 255, 255, 0.08)", borderRadius: "6px" }} />
                       ))}
                     </Box>
                   </Box>
                 </Box>
-              </motion.div>
-            ))}
-          </Stack>
+              ))}
+            </Stack>
+          ) : isEmpty ? (
+            <Box
+              sx={{
+                p: { xs: 6, md: 8 },
+                textAlign: "center",
+                borderRadius: "24px",
+                border: "1px dashed rgba(255, 255, 255, 0.12)",
+                background: "rgba(16, 16, 38, 0.3)",
+              }}
+            >
+              <Explore sx={{ fontSize: 44, color: "#38BDF8", mb: 2, opacity: 0.8 }} />
+              <Typography sx={{ color: "#F5F5FA", fontWeight: 700, fontSize: "1.2rem", mb: 1 }}>
+                No Trajectory Checkpoints Found
+              </Typography>
+              <Typography sx={{ color: "#9292A8", fontSize: "0.9rem" }}>
+                Checkpoints are being calibrated in the central telemetry ledger.
+              </Typography>
+            </Box>
+          ) : (
+            <Stack spacing={{ xs: 6, md: 8 }}>
+              {experience.map((milestone, index) => (
+                <motion.div
+                  key={milestone.id || milestone.checkpoint || index}
+                  initial={reduce ? false : { opacity: 0, x: 35 }}
+                  whileInView={{ opacity: 1, x: 0 }}
+                  viewport={{ once: true, amount: 0.18 }}
+                  transition={{ duration: 0.85, delay: index * 0.12 }}
+                >
+                  <Box sx={{ position: "relative" }}>
+                    {/* Orbital Checkpoint Marker Node */}
+                    <Box
+                      sx={{
+                        position: "absolute",
+                        left: { xs: "-32px", md: "-46px" },
+                        top: "6px",
+                        width: { xs: 18, md: 24 },
+                        height: { xs: 18, md: 24 },
+                        borderRadius: "50%",
+                        backgroundColor: "#050510",
+                        border: "2px solid",
+                        borderColor: milestone.accent || "#8B5CF6",
+                        boxShadow: `0 0 16px ${milestone.accent || "#8B5CF6"}`,
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                        zIndex: 2,
+                      }}
+                    >
+                      <Box
+                        sx={{
+                          width: { xs: 6, md: 8 },
+                          height: { xs: 6, md: 8 },
+                          borderRadius: "50%",
+                          backgroundColor: milestone.accent || "#8B5CF6",
+                        }}
+                      />
+                    </Box>
+
+                    {/* Checkpoint Dossier Card */}
+                    <Box
+                      sx={{
+                        p: { xs: 3.5, sm: 4.5 },
+                        borderRadius: "24px",
+                        backgroundColor: "rgba(16, 16, 38, 0.65)",
+                        border: "1px solid rgba(255, 255, 255, 0.08)",
+                        backdropFilter: "blur(18px)",
+                        transition: "all 0.3s ease",
+                        "&:hover": {
+                          borderColor: milestone.accent || "#8B5CF6",
+                          boxShadow: `0 20px 50px -15px rgba(0, 0, 0, 0.8), 0 0 25px ${milestone.accent || "#8B5CF6"}20`,
+                          transform: "translateY(-3px)",
+                        },
+                      }}
+                    >
+                      {/* Top Row: Checkpoint Code, Period, Type */}
+                      <Box
+                        sx={{
+                          display: "flex",
+                          flexWrap: "wrap",
+                          alignItems: "center",
+                          justifyContent: "space-between",
+                          gap: 2,
+                          mb: 2,
+                        }}
+                      >
+                        <Box sx={{ display: "flex", alignItems: "center", gap: 1.5 }}>
+                          <Typography
+                            sx={{
+                              fontFamily: "'Geist Mono', monospace",
+                              fontSize: "0.78rem",
+                              fontWeight: 700,
+                              color: milestone.accent || "#8B5CF6",
+                              letterSpacing: 1.5,
+                            }}
+                          >
+                            {milestone.checkpoint}
+                          </Typography>
+                          {milestone.type && (
+                            <Box
+                              sx={{
+                                px: 1.5,
+                                py: 0.3,
+                                borderRadius: "999px",
+                                backgroundColor: "rgba(255, 255, 255, 0.04)",
+                                border: "1px solid rgba(255, 255, 255, 0.08)",
+                              }}
+                            >
+                              <Typography
+                                sx={{
+                                  fontFamily: "'Geist Mono', monospace",
+                                  fontSize: "0.68rem",
+                                  color: "#F5F5FA",
+                                  fontWeight: 600,
+                                }}
+                              >
+                                {milestone.type}
+                              </Typography>
+                            </Box>
+                          )}
+                        </Box>
+
+                        <Typography
+                          sx={{
+                            fontFamily: "'Geist Mono', monospace",
+                            fontSize: "0.78rem",
+                            color: "#9292A8",
+                            letterSpacing: 1,
+                          }}
+                        >
+                          {milestone.period}
+                        </Typography>
+                      </Box>
+
+                      {/* Role & Entity */}
+                      <Typography
+                        variant="h3"
+                        sx={{
+                          fontFamily: "'Space Grotesk', sans-serif",
+                          fontSize: { xs: "1.5rem", sm: "1.85rem" },
+                          fontWeight: 800,
+                          color: "#F5F5FA",
+                          mb: 0.5,
+                        }}
+                      >
+                        {milestone.role}
+                      </Typography>
+
+                      <Typography
+                        sx={{
+                          fontFamily: "'Space Grotesk', sans-serif",
+                          fontSize: "1rem",
+                          color: "#38BDF8",
+                          fontWeight: 600,
+                          mb: 2,
+                        }}
+                      >
+                        {milestone.entity}
+                      </Typography>
+
+                      <Typography
+                        sx={{
+                          fontSize: "0.95rem",
+                          color: "#9292A8",
+                          lineHeight: 1.8,
+                          mb: 3,
+                        }}
+                      >
+                        {milestone.description}
+                      </Typography>
+
+                      {/* Responsibilities & Achievements */}
+                      {(milestone.responsibilities || []).length > 0 && (
+                        <Box sx={{ mb: 3 }}>
+                          <Typography
+                            sx={{
+                              fontFamily: "'Geist Mono', monospace",
+                              fontSize: "0.68rem",
+                              color: "#9292A8",
+                              letterSpacing: 1.5,
+                              textTransform: "uppercase",
+                              mb: 1.5,
+                            }}
+                          >
+                            ORBITAL ACHIEVEMENTS:
+                          </Typography>
+                          <Stack spacing={1.2}>
+                            {(milestone.responsibilities || []).map((r, rIdx) => (
+                              <Box
+                                key={rIdx}
+                                sx={{
+                                  display: "flex",
+                                  alignItems: "flex-start",
+                                  gap: 1.5,
+                                }}
+                              >
+                                <Box
+                                  sx={{
+                                    width: 5,
+                                    height: 5,
+                                    borderRadius: "50%",
+                                    backgroundColor: milestone.accent || "#8B5CF6",
+                                    mt: 0.8,
+                                    flexShrink: 0,
+                                  }}
+                                />
+                                <Typography
+                                  sx={{
+                                    fontSize: "0.88rem",
+                                    color: "#E2E8F0",
+                                    lineHeight: 1.6,
+                                  }}
+                                >
+                                  {r}
+                                </Typography>
+                              </Box>
+                            ))}
+                          </Stack>
+                        </Box>
+                      )}
+
+                      {/* Checkpoint Tech Badges */}
+                      {(milestone.technologies || []).length > 0 && (
+                        <Box sx={{ display: "flex", flexWrap: "wrap", gap: 1 }}>
+                          {(milestone.technologies || []).map((tech) => (
+                            <Box
+                              key={tech}
+                              sx={{
+                                px: 1.4,
+                                py: 0.4,
+                                borderRadius: "6px",
+                                backgroundColor: "rgba(255, 255, 255, 0.04)",
+                                border: "1px solid rgba(255, 255, 255, 0.08)",
+                                fontFamily: "'Geist Mono', monospace",
+                                fontSize: "0.72rem",
+                                color: "#9292A8",
+                              }}
+                            >
+                              {tech}
+                            </Box>
+                          ))}
+                        </Box>
+                      )}
+                    </Box>
+                  </Box>
+                </motion.div>
+              ))}
+            </Stack>
+          )}
         </Box>
       </Container>
     </Box>
